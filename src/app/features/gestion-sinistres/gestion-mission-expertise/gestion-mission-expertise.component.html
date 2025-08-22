@@ -1,0 +1,123 @@
+<div class="container ">
+    <div class="header">
+
+        <h2 class="title-table">
+            <mat-icon aria-hidden="false"
+                aria-label="ajouter pack "
+                class="material-symbols-outlined" matTooltip="Retour"
+                matTooltipPosition="left"                
+                [routerLink]="['/gestion-sinistre/'+sinistre?.produit.codeProduit+'/'+produit]">arrow_circle_left</mat-icon>
+            Listes des Missions d'expertises</h2>
+
+        <button class="btn btn-secondary" style="display: flex;
+            align-items: center;" (click)="addMissionExpertise()"
+            *ngIf="this.statutSinistre!='CP355'||this.statutSinistre!='CP415' || this.statutSinistre!='CP524'  || this.statutSinistre!='CP525'|| this.statutSinistre!='CP526' ">
+
+            <mat-icon aria-hidden="false" aria-label="ajouter pack "
+                class="material-symbols-outlined">add_circle</mat-icon>
+
+            Ajouter une mission d'expertise
+        </button>
+    </div>
+    <mat-divider></mat-divider>
+
+    <table mat-table [dataSource]="dataSource" class="gestion-table">
+
+        <!--  numMission -->
+        <ng-container matColumnDef="numMission">
+            <th mat-header-cell *matHeaderCellDef> N° Mission d'expertise </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.numMission}}
+            </td>
+        </ng-container>
+
+        <!-- typeExpertise Column -->
+        <ng-container matColumnDef="typeExpertise">
+            <th mat-header-cell *matHeaderCellDef> Type Expertise </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.typeExpertise.description}}
+            </td>
+        </ng-container>
+        <!-- modeExpertise Column -->
+        <ng-container matColumnDef="modeExpertise">
+            <th mat-header-cell *matHeaderCellDef> Mode Expertise </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.modeExpertise.description}}
+            </td>
+        </ng-container>
+        <!-- Expert Column -->
+        <ng-container matColumnDef="expert">
+            <th mat-header-cell *matHeaderCellDef> Expert </th>
+            <td mat-cell *matCellDef="let element"> {{element.idexpert }}</td>
+        </ng-container>
+        <!--  dateMission Column -->
+        <ng-container matColumnDef="dateMission">
+            <th mat-header-cell *matHeaderCellDef> Date mission d'expertise
+            </th>
+            <td mat-cell *matCellDef="let element"> {{element.dateMission |
+                dateFormatPipe }} </td>
+        </ng-container>
+        <!-- statut Column -->
+        <ng-container matColumnDef="statut">
+            <th mat-header-cell *matHeaderCellDef> Statut </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.statutMission.description}}
+            </td>
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let element">
+
+                <button mat-icon-button
+                    type="button"
+                    [matMenuTriggerFor]="menu"
+                    aria-label="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu"
+                    xPosition="after"
+                    class="menu-formule">
+                    <button mat-menu-item
+                        (click)="goTo(element.idMissionExpertise)"
+                        type="button">
+                        <mat-icon>zoom_in</mat-icon>
+                        <span>Consulter</span>
+                    </button>
+                    <button mat-menu-item
+                        (click)="openConfirmation(element.idMissionExpertise,'S11')"
+                        [disabled]="(element.statutMission.code!='S10' || this.statutSinistre=='CP355'|| this.statutSinistre=='CP415' || this.statutSinistre=='CP524'  || statutSinistre =='CP525' || statutSinistre =='CP526' ) && hasRights"
+                        type="button">
+                        <mat-icon>close</mat-icon>
+                        <span>Rejet</span>
+                    </button>
+                    <button mat-menu-item
+                        (click)="openConfirmation(element.idMissionExpertise,'S13')"
+                        [disabled]="(element.statutMission.code!='S10' || this.statutSinistre=='CP355' || statutSinistre =='CP524'  || statutSinistre =='CP525' || statutSinistre =='CP526' ) && hasRights"
+                        type="button">
+                        <mat-icon>cancel</mat-icon>
+                        <span>Annuler</span>
+                    </button>
+                    <button mat-menu-item
+                        [disabled]="element.statutMission.code == 'S11' || element.statutMission.code == 'S13'"
+                        (click)="printMission(element.idMissionExpertise)"
+                        type="button">
+                        <mat-icon>print</mat-icon>
+                        <span>Imprimer</span>
+                    </button>
+                </mat-menu>
+
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"
+            class="example-second-header-row">
+        </tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10]"
+        aria-label="Select page of users"></mat-paginator>
+
+</div>

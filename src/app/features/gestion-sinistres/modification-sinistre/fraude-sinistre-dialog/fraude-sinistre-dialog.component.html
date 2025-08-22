@@ -1,0 +1,43 @@
+<h2 class="heading">Fraude et contentieux </h2>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mat-typography">
+    <!-- <p>Etes-vous sur de vouloir supprimer ce tier de ce sinistre.</p> 
+     <mat-progress-bar mode="indeterminate" *ngIf="!loadListFraudes"></mat-progress-bar>-->
+   
+    <div class="content">
+        <form #formDirective="ngForm" [formGroup]="formFraude"
+            (ngSubmit)="submit()">
+            <mat-form-field class="col-md-12" appearance="outline">
+                <mat-label>Fraude </mat-label>
+                <mat-select formControlName="fraude" appearance="outline">
+                    <ng-container *ngFor="let statut of fraudesArray">
+                        <mat-option
+                            [value]="statut.idParam">
+                            {{statut.description}}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-md-12" appearance="outline">
+                <mat-label>Contentieux </mat-label>
+                <mat-select formControlName="contentieux" appearance="outline">
+                    <ng-container *ngFor="let statut of contentieuxArray">
+                        <mat-option
+                            [value]="statut.idParam">
+                            {{statut.description}}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+            </mat-form-field>
+            <div class="button-row"> 
+                <button class="btn btn-cancel" [mat-dialog-close]="false" type="button">Retour</button>
+                <button class="btn btn-delete" type="submit" *ngIf="data.statutSinistre !== 'CP355' && data.statutSinistre !== 'CP415' && data.statutSinistre !== 'CP524'">Enregistrer</button>
+            </div>
+            <div *ngIf="data.statutSinistre === 'CP415' || data.statutSinistre === 'CP524'">
+                <p>Fiche pas disponible pour modification.</p>
+            </div>
+            
+        </form>
+    </div>
+</mat-dialog-content>

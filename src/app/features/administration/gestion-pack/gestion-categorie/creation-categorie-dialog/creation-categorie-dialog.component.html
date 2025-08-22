@@ -1,0 +1,138 @@
+<div mat-dialog-title class="dialog-header">
+    <span class="heading">Ajout de paramétres</span>
+
+    <mat-icon class="btn btn-cross" mat-dialog-close >close</mat-icon>
+</div>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mat-typography">
+    <div class="alert alert-success" *ngIf="alertSuccess &&
+        categoryOf=='garantie'"> les parametres ont
+        été ajoutés à la garantie N° {{data.idGarantie}} avec succés
+    </div>
+    <div class="alert alert-success" *ngIf="alertSuccess && categoryOf=='pack'">
+        les parametres ont
+        été ajoutés au pack avec succés
+    </div>
+    <div class="alert alert-success" *ngIf="alertSuccess &&
+        categoryOf=='sousGarantie'"> les parametres ont
+        été ajoutés à la sous garantie avec succés
+    </div>
+    <!-- <div class="alert alert-warning" *ngIf="dangerClosing ">
+        <div style="display: flex;"><mat-icon
+                aria-hidden="false"
+                aria-label="warning"
+                class="material-symbols-outlined"
+                style="margin-right:1rem">warning</mat-icon> Toute catégorie
+            ajoutée ne serait pas prie en charge, Êtes-vous sûr de vouloir
+            fermer cette fenêtre ? </div>
+        <button class="btn btn-alert" (click)="saveTabCategory()">Oui je
+            confirme </button>
+
+    </div> -->
+    <form #formDirective="ngForm" [formGroup]="FormCreationCategory"
+        (ngSubmit)="submitCreationPGF(formDirective)" class="creation-form">
+        <div class="row">
+            <div class="col-md-7 col-field">
+                <!--id garantie-->
+                <mat-form-field *ngIf="idGarantie!=null"
+                    appearance="outline">
+                    <mat-label>Id garantie</mat-label>
+                    <input type="text" matInput
+                        formControlName="idGarantie">
+                    <mat-error
+                        *ngIf="FormCreationCategory.controls.idGarantie.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="FormCreationCategory.controls.idGarantie.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+                <!-- Categorie de valeur -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Categorie de valeur</mat-label>
+                    <mat-select formControlName="categorieValeur"
+                        (selectionChange)="getAllSousCategories($event.value)">
+                        <mat-option *ngFor="let categorie of categorieValeur"
+                            [value]="categorie">
+                            {{categorie.description}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="FormCreationCategory.controls.categorieValeur.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="FormCreationCategory.controls.categorieValeur.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+                <!-- Sous Categorie de valeur -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Sous categorie de valeur</mat-label>
+                    <mat-select formControlName="souscategories">
+                        <mat-option *ngFor="let sousCategorie of
+                            sousCategorieValeur"
+                            [value]="sousCategorie">
+                            {{sousCategorie.description}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="FormCreationCategory.controls.souscategories.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="FormCreationCategory.controls.souscategories.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+                <!-- Type Valeur -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Type Valeur</mat-label>
+                    <mat-select formControlName="typeValeur">
+                        <mat-option *ngFor="let type of typeValeur"
+                            [value]="type">
+                            {{type.description}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="FormCreationCategory.controls.typeValeur.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="FormCreationCategory.controls.typeValeur.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+
+                <!--Valeur-->
+                <mat-form-field
+                    appearance="outline">
+                    <mat-label>Valeur</mat-label>
+                    <input type="text" matInput
+                        formControlName="valeur">
+                    <mat-error
+                        *ngIf="FormCreationCategory.controls.valeur.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="FormCreationCategory.controls.valeur.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <!-- <div class="col-md-5 col-button-add">
+                <button class="btn btn-action add" matTooltip="Ajouter une
+                    catégorie" matTooltipPosition="right"> <mat-icon
+                        aria-hidden="false"
+                        aria-label="Ajouter une categorie"
+                        class="material-symbols-outlined">add</mat-icon></button>
+            </div> -->
+        </div>
+
+
+
+        <div class="row-button">
+            <button class="btn btn-cancel" mat-dialog-close type="button" >Retour</button>
+            <button class="btn btn-action col-button-add"
+                (click)="saveTabCategory()" type="button">Appliquer et fermer </button>
+            <button class="btn btn-action col-button-add" type="submit">Ajouter </button>
+        </div>
+    </form>
+</mat-dialog-content>

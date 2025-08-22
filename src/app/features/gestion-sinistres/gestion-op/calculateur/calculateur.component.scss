@@ -1,0 +1,117 @@
+@import "../../../../shared/styles/tables-gestions.scss";
+
+.container {
+    background-color: #ffff;
+    padding: 40px 2rem;
+    height: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+h2.header-title {
+    padding: 0 24px;
+    font-size: 21px !important;
+    color: #00008f;
+    font-weight: 600 !important;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+}
+
+h2.header-title .mat-icon {
+    margin-right: 1rem;
+    font-size: 32px;
+    height: fit-content;
+    width: fit-content;
+}
+
+// table 
+table {
+    margin-bottom: 3rem;
+}
+
+table td:not(.generale),
+table th {
+    padding: 10px;
+}
+
+table.generale td {
+    padding: 0px 10px;
+}
+
+table.garanties {
+    width: 46%;
+}
+
+table.generale {
+    width: 30%;
+}
+
+table.typeInfoDecompte {
+    width: 100%;
+}
+
+table.typeInfoDecompte th:not(:first-child),
+table.garanties td,
+table.generale td,
+table.typeInfoDecompte td,
+table.garanties th,
+table.generale th {
+    border: 1px solid rgba(0, 0, 0, .21);
+    border-collapse: collapse;
+}
+
+.disabled-td {
+    background-color: #d7d7d7;
+}
+
+.result-td {
+    background-color: rgb(215 215 215 / 42%);
+    font-weight: 600;
+}
+
+.btn.btn-secondary {
+    float: right;
+}
+
+.header-tr,
+table.typeInfoDecompte th:not(:first-child),
+table.typeInfoDecompte tr td:first-child:not(.disabled-td),
+table.garanties th,
+table.generale td:first-child {
+    color: #00008F;
+    background-color: rgb(247, 247, 249);
+    font-weight: bold;
+}
+
+.form-calculator .mat-form-field {
+    width: 100%;
+}
+
+.mat-menu-item {
+    font-size: 15px;
+
+}
+
+.mat-menu-item .mat-icon {
+    font-size: 18px;
+    height: fit-content;
+}
+
+.mat-menu-item:hover:not([disabled]),
+.mat-menu-item:hover:not([disabled]) .mat-icon {
+    color: #00008f
+}
+
+.button-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+.button-row .btn:first-child{
+    margin-bottom: 2rem;
+}
+// .row-button{
+//     display: flex;
+//     justify-content: center;
+// }

@@ -1,0 +1,103 @@
+<div class="container ">
+    <div class="header">
+      <mat-icon aria-hidden="false"
+        class="material-symbols-outlined"
+        matTooltip="Retour"
+        matTooltipPosition="left"
+        [routerLink]="['/consultation-police/'+contrat?.produit?.codeProduit+'/'+contrat?.produit?.description]">arrow_circle_left</mat-icon>
+
+      <h2 class="title-table">Liste des avenant lié au contrat N° {{ idContrat }}</h2>
+  
+      <button [class]="contrat?.statue?.code=='S01' || contrat?.statue?.code=='S09' ? 'btn btn-disable':'btn btn-secondary'" style="display: flex; align-items: center;" (click)="openDialogAdd()" [disabled]="contrat?.statue?.code=='S01' || contrat?.statue?.code=='S09'">
+  
+        <mat-icon aria-hidden="false" aria-label="ajouter une risque "
+          class="material-symbols-outlined">add_circle</mat-icon>
+  
+        Soumettre un avenant
+      </button>
+    </div>
+    <mat-divider></mat-divider>
+    <table mat-table [dataSource]="dataSource" class="gestion-table">
+      <!-- ID Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let element"> {{element.idContratAvenant}} </td>
+      </ng-container>
+  
+      <!-- typeAvenant Column -->
+      <ng-container matColumnDef="typeAvenant">
+        <th mat-header-cell *matHeaderCellDef> Type avenant </th>
+        <td mat-cell *matCellDef="let element"> {{element.typeAvenant}} </td>
+      </ng-container>
+
+      <!-- dateAvenant Column -->
+      <ng-container matColumnDef="dateAvenant">
+        <th mat-header-cell *matHeaderCellDef> Date et heure </th>
+        <td mat-cell *matCellDef="let element"> {{element.date | date:'dd-MM-yyyy HH:mm:ss'}} </td>
+      </ng-container>
+  
+      <!-- statut Column -->
+      <ng-container matColumnDef="statut">
+        <th mat-header-cell *matHeaderCellDef> Statut </th>
+        <td mat-cell *matCellDef="let element"> 
+          <mat-chip-list aria-label="Fish selection">
+            <mat-chip color="primary">
+                {{ element.statut.description }}
+            </mat-chip>
+        </mat-chip-list>
+       </td>
+      </ng-container>
+
+      <!-- Action Column -->
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+
+        <td mat-cell *matCellDef="let element">
+            <button mat-icon-button
+                type="button"
+                [matMenuTriggerFor]="menu"
+                aria-label="menu contrat list">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="after" class="menu-contrat">
+                <button mat-menu-item
+                    [disabled]="element?.typeAvenant == 'Affaire nouvelle'"
+                    (click)="consulterAvenant(element?.idContratAvenant)"
+                    type="button">
+                    <mat-icon>zoom_in</mat-icon>
+                    <span>Consulter avenant</span>
+                </button>
+                <button mat-menu-item
+                    (click)="consultContratAvenant(element?.idContratAvenant)"
+                    type="button" [disabled]="element.statut.code == 'S05'">
+                    <mat-icon>zoom_in</mat-icon>
+                    <span>Consulter image contrat</span>
+                </button>
+                <button mat-menu-item
+                    (click)="consultQuittance(element?.idQuittance)"
+                    type="button" [disabled]="!element.quittance || element.statut.code == 'S05'">
+                    <mat-icon>zoom_in</mat-icon>
+                    <span>Consulter quittance</span>
+                </button>
+                <button mat-menu-item
+                    (click)="outputAvenant(element)"
+                    type="button" [disabled]="(!element.quittance && !element.cp && !element.attestation) || element.statut.code == 'S05' || element.statut.code == 'S09'">
+                    <mat-icon>print</mat-icon>
+                    <span>Imprimer</span>
+                </button>
+            </mat-menu>
+        </td>
+    </ng-container>
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"
+        class="example-second-header-row">
+      </tr>
+  
+  
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+    </table>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10]" aria-label="Select
+      page of users"></mat-paginator>
+  
+  </div>

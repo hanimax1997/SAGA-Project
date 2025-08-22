@@ -1,0 +1,197 @@
+<div class="rapport-container">
+    <!-- <img src="assets/axa-logo.png" alt="AXA Logo" class="logo" /> -->
+
+    <h2>Rapport Production</h2>
+
+    <form [formGroup]="rapportForm">
+        <!-- Dates -->
+        <div class="form-row date-range-row" [formGroup]="rapportForm">
+            <div class="form-row date-range-row" [formGroup]="rapportForm" class="date-fields">
+                <!-- Date de début -->
+                <!-- Date émission Du -->
+                <mat-form-field appearance="outline" class="date-field">
+                    <mat-label>Date émission Du</mat-label>
+                    <input matInput [matDatepicker]="picker1" formControlName="startDate" [min]="minDate"
+                        [max]="today" />
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+
+                <!-- Date émission Au -->
+                <mat-form-field appearance="outline" class="date-field">
+                    <mat-label>Date émission Au</mat-label>
+                    <input matInput [matDatepicker]="picker2" formControlName="endDate" [min]="startDateValue"
+                        [max]="maxEndDate" [disabled]="!rapportForm.get('startDate')?.value" />
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+
+            </div>
+
+
+        </div>
+
+        <!-- Utilisateur / Agence / Région -->
+        <div class="form-row">
+
+            <div class="form-column">
+                <div *ngIf="role === 'CDC'; else selectEmail">
+                    <mat-form-field appearance="outline" class="full-width-field">
+                        <mat-label>Votre Email CDC</mat-label>
+                        <input matInput [value]="cdcEmail" readonly>
+                    </mat-form-field>
+                </div>
+
+                <ng-template #selectEmail>
+                    <mat-form-field appearance="outline" class="full-width-field">
+                        <mat-label>Sélectionnez un Email CDC</mat-label>
+                        <mat-select>
+                            <mat-option *ngFor="let email of allCdcEmails" [value]="email">
+                                {{ email }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </ng-template>
+            </div>
+
+
+            <div class="form-column">
+                <div *ngIf="agenceUnique && !afficherListeAgences">
+                    <mat-form-field appearance="outline" class="full-width-field">
+                        <input matInput [value]="agenceUnique.codeAgence + ' - ' + agenceUnique.nomAgence" disabled />
+                    </mat-form-field>
+                </div>
+
+                <mat-form-field *ngIf="afficherListeAgences" appearance="outline" class="full-width-field">
+                    <mat-label>Choisissez une agence</mat-label>
+                    <mat-select formControlName="agence">
+                        <mat-option *ngFor="let agence of agencesUtilisateur"
+                            [value]="agence.codeAgence + ' - ' + agence.nomAgence">
+                            {{ agence.codeAgence }} - {{ agence.nomAgence }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="rapportForm.get('agence')?.hasError('required') && rapportForm.get('agence')?.touched">
+                        Le choix d'une agence est <strong>obligatoire</strong>.
+                    </mat-error>
+                </mat-form-field>
+
+                <div *ngIf="aucuneAgence" style="color: red;">
+                    Aucune agence trouvée pour cet utilisateur.
+                </div>
+            </div>
+
+            <div class="form-column">
+                <mat-form-field appearance="outline" class="full-width-field">
+                    <mat-label>Zone</mat-label>
+                    <input matInput [value]="zoneNom" readonly />
+                </mat-form-field>
+            </div>
+
+        </div>
+
+        <!-- Produit / Sous-produit / Pack -->
+        <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Produit</mat-label>
+                <mat-select formControlName="produit">
+                    <mat-option *ngFor="let p of produits" [value]="p.idCodeProduit">
+                        {{ p.description }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- Sous Produit dropdown -->
+            <!-- <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Sous Produit</mat-label>
+                <mat-select formControlName="sousProduit" [disabled]="selectedSousProduits.length === 0">
+                    <mat-option *ngFor="let sp of selectedSousProduits" [value]="sp.idSousProduit">
+                        {{ sp.code }} - {{ sp.description }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field> -->
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Sous Produit</mat-label>
+
+                <mat-select formControlName="sousProduit">
+                    <mat-option *ngFor="let sp of selectedSousProduits" [value]="sp.idSousProduit">
+                        {{ sp.code }} - {{ sp.description }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+
+
+
+            <!-- ✅ Champ pack -->
+            <mat-form-field appearance="outline">
+                <mat-label>Pack</mat-label>
+                <mat-select formControlName="pack">
+                    <mat-option *ngFor="let pack of packs" [value]="pack.description">
+                        {{ pack.description }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+        </div>
+
+        <!-- Police / Avenant / Quittance -->
+        <div class="form-row">
+            <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>N° de Police</mat-label>
+                <input matInput type="text" formControlName="numeroPolice" placeholder="Entrez le numéro de police">
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Avenant</mat-label>
+                <mat-select formControlName="avenant">
+                    <mat-option *ngFor="let av of avenants" [value]="av.typeAvenant">
+                        {{ av.typeAvenant }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Statut Quittance</mat-label>
+                <mat-select formControlName="statutQuittance">
+                    <mat-option *ngFor="let statut of statutsQuittance" [value]="statut">
+                        {{ statut }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+
+        </div>
+        <div class="form-row">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Nom de l’assuré</mat-label>
+                <input matInput formControlName="nomAssure" placeholder="Ex: Dupont" />
+                <mat-error *ngIf="rapportForm.get('nomAssure')?.invalid && rapportForm.get('nomAssure')?.touched">
+                    Veuillez entrer uniquement des lettres (sans espace ni caractères spéciaux).
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Société</mat-label>
+                <mat-select formControlName="societe">
+                    <mat-option *ngFor="let type of societes" [value]="type">
+                        {{ type }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+        </div>
+        <!-- Assuré / Société -->
+
+
+        <!-- Bouton -->
+        <div class="form-row right">
+            <button mat-raised-button class="btn-prod" type="button" (click)="onSubmit()" [disabled]="isLoading">
+                {{ isLoading ? 'Chargement...' : 'Exporter' }}
+                <mat-spinner *ngIf="isLoading" diameter="0" style="margin-left: 8px;"></mat-spinner>
+            </button>
+        </div>
+
+    </form>
+</div>

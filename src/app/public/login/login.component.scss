@@ -1,0 +1,78 @@
+p {
+    font-size: 16px;
+    color: #32403b;
+}
+
+.login {
+    background: #ffffff;
+    align-items: center;
+    align-content: center;
+    // padding: 25px;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+    border-radius: 8px;
+}
+
+.login-title {
+
+    font-weight: 800 !important;
+    font-size: 32px!important;
+    text-align: center;
+    color: #00008F;
+    // text-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.login-text {
+
+    width: 75%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.login-form {
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.login-error {
+    margin-bottom: 2%;
+}
+
+.login-field {
+    box-sizing: border-box;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+
+
+.login-forget-password {
+    padding-left: 15px;
+}
+
+.btn-action {
+    float: right;
+}
+.login-img{
+    display:flex; 
+    justify-content: space-between;
+    background-color: #9190ac;
+}
+.axa-logo {
+    margin-top: 1rem;
+}
+
+
+.login-content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+    // margin: auto;
+}
+
+//input outline color
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline,
+::ng-deep .mat-form-field.mat-focused .mat-form-field-label {
+    color: #00008F // opacity: 1!important;
+}

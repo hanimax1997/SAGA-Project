@@ -1,0 +1,202 @@
+<h2 class="heading">Consulter le risque</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content class="mat-typography">
+    <h3 class="display-title"> Information du risque</h3>
+    <!-- <table>
+        <ng-container *ngFor="let rs of risqueInfo[0], let i = index">
+            <tr>
+                <td>{{ rs.libelle }}</td>
+                <td>{{ risqueInfo[i+1]?.libelle }}</td>
+                <<td class="value"
+                    *ngIf="rs.typeChamp.code !== 'L01' && rs.codeRisque !== 'P25' && rs.codeRisque !== 'P26'">{{
+                    rs.reponse.valeur }}</td>
+                <td class="value"
+                    *ngIf="rs.typeChamp.code === 'L01' && rs.codeRisque !== 'P25' && rs.codeRisque !== 'P26'">{{
+                    rs.reponse.idParamReponse.description }}</td>
+                <td class="value"
+                    *ngIf="rs.typeChamp.code !== 'L01' && (rs.codeRisque === 'P25' || rs.codeRisque === 'P26')">{{
+                    rs.reponse.idParamReponse.description }}</td> 
+
+            </tr>
+        </ng-container>
+    </table>  -->
+    <table class="risque-table">
+        <tr>
+            <td>
+                <ng-container *ngFor="let rs of risqueInfo[0], let i = index">
+                    <!-- <tr>
+                        <td>{{ rs.libelle }}</td>
+                        <td>{{ risqueInfo[i+1]?.libelle }}</td>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.codeRisque=='P25' || rs.codeRisque=='P26'">{{rs.reponse?.idParamReponse?.description}}</div>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp=='date'||rs.typeChamp.code=='L06'">{{rs.reponse?.valeur
+                            | dateFormatPipe}}</div>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp.code=='L03'||rs.typeChamp=='Number' ||rs.typeChamp=='String'|| rs.typeChamp.code=='L02'">{{rs.reponse?.valeur}}</div>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp=='Liste of values'">{{rs.reponse?.idParamReponse?.description}}</div>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp=='From Table'">{{rs.reponse?.description}}</div>
+                            <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp=='Alphanumérique'">{{rs.reponse?.valeur}}</div>
+                        
+
+                    </tr> -->
+                    <tr>
+                        <td>{{ rs.libelle }}</td>
+                        <td>{{ risqueInfo[i+1]?.libelle }}</td>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.codeRisque=='P25' || rs.codeRisque=='P26'">{{rs.reponse?.idParamReponse?.description}}</div>
+
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp=='date'||rs.typeChamp.code=='L06'">{{rs.reponse?.valeur | dateFormatPipe}}</div>  
+
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp.code=='L03'||rs.typeChamp=='Number' ||rs.typeChamp=='String'|| rs.typeChamp.code=='L02' ||rs.typeChamp == 'Alphanumérique'
+                            || rs.typeChamp.description == 'Alphanumérique'">{{rs.reponse?.valeur}}</div>
+
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp=='Liste of values'||rs.typeChamp.code =='L01' ">{{rs.reponse?.idParamReponse?.description}}</div>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp.code =='L08' || rs.typeChamp=='From Table' || rs.typeChamp.description =='From Table'">{{rs.reponse?.description}}</div>
+                            
+                    </tr>
+                </ng-container>
+            </td>
+            <td>
+                <ng-container *ngFor="let rs of risqueInfo[1], let i = index">
+                    <!-- <tr>
+                        <td>{{ rs.libelle }}</td>
+                        <td>{{ risqueInfo[i+1]?.libelle }}</td>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.codeRisque=='P25' || rs.codeRisque=='P26'">{{rs.reponse?.idParamReponse?.description}}</div>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp=='date'||rs.typeChamp.code=='L06'">{{rs.reponse?.valeur
+                            | dateFormatPipe}}</div>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp.code=='L03'||rs.typeChamp=='Number' ||rs.typeChamp=='String' || rs.typeChamp.code=='L02'">{{rs.reponse?.valeur}}</div>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp=='Liste of values'">{{rs.reponse?.idParamReponse?.description}}</div>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp=='From Table'">{{rs.reponse?.description}}</div>
+                            <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp=='Alphanumérique'">{{rs.reponse?.valeur}}</div>
+                       
+                    </tr> -->
+                    <tr>
+                        <td>{{ rs.libelle }}</td>
+                        <td>{{ risqueInfo[i+1]?.libelle }}</td>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.codeRisque=='P25' || rs.codeRisque=='P26'">{{rs.reponse?.idParamReponse?.description}}</div>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp=='date'||rs.typeChamp.code=='L06'">{{rs.reponse?.valeur
+                            | dateFormatPipe}}</div>
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp.code=='L03'||rs.typeChamp=='Number' ||rs.typeChamp=='String' || rs.typeChamp.code=='L02' ||rs.typeChamp == 'Alphanumérique'
+                            || rs.typeChamp.description == 'Alphanumérique'">{{rs.reponse?.valeur}}</div>
+                        
+                        <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp.code =='L08' ||rs.typeChamp=='From Table' || rs.typeChamp.description =='From Table'">{{rs.reponse?.description}}</div>
+                            <div class="col-md-6 value"
+                            *ngIf="rs.typeChamp=='Liste of values'||rs.typeChamp.code =='L01' ">{{rs.reponse?.idParamReponse?.description}}</div>
+                    </tr>
+                </ng-container>
+            </td>
+        </tr>
+    </table>
+
+    <h3 class="display-title">{{'Information du pack '+ namePack}} </h3>
+    <table mat-table [dataSource]="dataSourcePack"
+        class="pack-table" multiTemplateDataRows>
+
+        <!-- description Column -->
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> Garantie</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.description}}
+            </td>
+        </ng-container>
+        <!-- plafond  Column -->
+        <ng-container matColumnDef="plafond">
+            <th mat-header-cell *matHeaderCellDef> Plafond
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.plafond != '0' ? element.plafond : '-'}}
+            </td>
+        </ng-container>
+        <!-- franchise Column -->
+        <ng-container matColumnDef="franchise">
+            <th mat-header-cell *matHeaderCellDef> Franchise
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.franchise}}
+            </td>
+        </ng-container>
+        <!-- formule Column -->
+        <ng-container matColumnDef="formule">
+            <th mat-header-cell *matHeaderCellDef> Formule
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.formule}}
+            </td>
+        </ng-container>
+        <!-- prime Column -->
+        <ng-container matColumnDef="prime">
+            <th mat-header-cell *matHeaderCellDef> Prime
+            </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.prime | number : '1.0-0' | money}}<sup>DA</sup>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsPack"></tr>
+        <tr mat-row
+            *matRowDef="let element; columns: displayedColumnsPack;">
+        </tr>
+    </table>
+    <!-- <div class="row" *ngFor="let rs of risqueInfo, let i = index">
+        <div class="col-md-6 main ">
+            <div class="row">
+                <div class="col-md-6">{{ rs.libelle }}</div>
+                <div class="col-md-6">
+                    <ng-container class="value"
+                        *ngIf="rs.typeChamp.code !== 'L01' && rs.codeRisque !== 'P25' && rs.codeRisque !== 'P26'">{{
+                        rs.reponse.valeur }}</ng-container>
+                    <ng-container class="value"
+                        *ngIf="rs.typeChamp.code === 'L01' && rs.codeRisque !== 'P25' && rs.codeRisque !== 'P26'">{{
+                        rs.reponse.idParamReponse.description }}</ng-container>
+                    <ng-container class="value"
+                        *ngIf="rs.typeChamp.code !== 'L01' && (rs.codeRisque === 'P25' || rs.codeRisque === 'P26')">{{
+                        rs.reponse.idParamReponse.description }}</ng-container>
+                </div>
+            </div>
+        </div>
+        <ng-container
+            *ngIf="(i + 1) % 2 === 0 || i === risqueInfo.length - 1;else col">
+           
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">{{ risqueInfo[i - 1].libelle }}</div>
+                    <div class="col-md-6">
+                        <ng-container class="value"
+                            *ngIf="risqueInfo[i - 1].typeChamp.code !== 'L01' && risqueInfo[i - 1].codeRisque !== 'P25' && risqueInfo[i - 1].codeRisque !== 'P26'">
+                            {{ risqueInfo[i - 1].reponse.valeur }}
+                        </ng-container>
+                        <ng-container class="value"
+                            *ngIf="risqueInfo[i - 1].typeChamp.code === 'L01' && risqueInfo[i - 1].codeRisque !== 'P25' && risqueInfo[i - 1].codeRisque !== 'P26'">{{
+                            risqueInfo[i - 1].reponse.idParamReponse.description
+                            }}</ng-container>
+                        <ng-container class="value"
+                            *ngIf="risqueInfo[i - 1].typeChamp.code !== 'L01' && (risqueInfo[i - 1].codeRisque === 'P25' || risqueInfo[i - 1].codeRisque === 'P26')">{{
+                            risqueInfo[i - 1].reponse.idParamReponse.description
+                            }}</ng-container>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #col>
+            <div class="col-md-6"></div>
+        </ng-template>
+    </div> -->
+</mat-dialog-content>

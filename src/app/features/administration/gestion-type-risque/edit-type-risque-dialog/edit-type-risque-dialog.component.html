@@ -1,0 +1,100 @@
+<h2 class="heading">Modifier un type risque
+    <span style="float: right; font-size: 24px;" >
+        <mat-icon aria-hidden="false" aria-label="" class="material-symbols-outlined"
+                matTooltip="" matTooltipPosition="right" mat-dialog-close> close
+              </mat-icon>
+    </span>
+</h2>
+<mat-divider></mat-divider>
+<div *ngIf="typeRisqueCreationSuccess" class="alert alert-success">Le type risque N°{{idTypeRisque}} a été modifié avec succés</div>
+<div *ngIf="typeRisqueCreationError" class="alert alert-danger"> {{messageError}} </div>
+<mat-dialog-content class="mat-typography">
+    <form #formDirective="ngForm" [formGroup]="formEditTypeRisque"
+        (ngSubmit)="submitEditTypeRisque(formDirective)" class="login-form" *ngIf="formEditTypeRisque">
+
+        <!-- Description -->
+        <mat-form-field appearance="outline" class="col-md-12 login-field">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="description">
+            <mat-error
+                *ngIf="formEditTypeRisque.controls.description.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formEditTypeRisque.controls.description.errors.required">
+                    ce champ est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+
+        <!-- Codification_nationale-->
+        <mat-form-field appearance="outline" class="col-md-6 login-field" style="padding-right: 1%;">
+            <mat-label>Codification nationale</mat-label>
+            <input matInput formControlName="codificationNationale">
+            <mat-error
+                *ngIf="formEditTypeRisque.controls.codificationNationale.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formEditTypeRisque.controls.codificationNationale.errors.required">
+                    ce champ est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <!-- Codification_metier-->
+        <mat-form-field appearance="outline" class="col-md-6 login-field" style="padding-left: 1%;">
+            <mat-label>Codification métier</mat-label>
+            <input matInput formControlName="codificationMetier">
+            <mat-error
+                *ngIf="formEditTypeRisque.controls.codificationMetier.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formEditTypeRisque.controls.codificationMetier.errors.required">
+                    ce champ est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <!-- date debut-->
+        <mat-form-field class="col-md-6" appearance="outline" style="padding-right: 1%;">
+            <mat-label>Date début</mat-label>
+            <input matInput [matDatepicker]="dateDebut"
+                formControlName="dateDebut" (dateChange)="debutDateChange($event.value)">
+            <mat-datepicker-toggle matSuffix [for]="dateDebut"></mat-datepicker-toggle>
+            <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+            <mat-datepicker #dateDebut></mat-datepicker>
+            <mat-error
+            *ngIf="formEditTypeRisque.controls.dateDebut.errors"
+            class="invalid-feedback">
+            <div
+                *ngIf="formEditTypeRisque.controls.dateDebut.errors.required">
+                ce champ est obligatoire</div>
+        </mat-error>
+        </mat-form-field>
+
+        <!-- date Fin -->
+        <!-- date debut-->
+        <mat-form-field class="col-md-6" appearance="outline" style="padding-left: 1%;">
+            <mat-label>Date fin</mat-label>
+            <input matInput [matDatepicker]="dateFin"
+                formControlName="dateFin" [min]="minDate">
+            <mat-datepicker-toggle matSuffix [for]="dateFin"></mat-datepicker-toggle>
+            <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+            <mat-datepicker #dateFin></mat-datepicker>
+            <mat-error *ngIf="formEditTypeRisque.controls.dateFin.hasError('matDatepickerMin')"
+
+            class="invalid-feedback">
+            <div>  Date fin est inférieur à la date début</div>
+              
+
+        </mat-error>
+        </mat-form-field>
+        <div class="row-button">
+            <button  class="btn btn-cancel"
+            mat-dialog-close>Annuler</button>
+            <button class="btn btn-action"
+            type="submit" >Envoyer</button>
+
+        </div>
+    </form>
+</mat-dialog-content>
+<!-- <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions> -->

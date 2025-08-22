@@ -1,0 +1,132 @@
+@import "../../../shared/styles/tables-gestions.scss";
+.container {
+    background-color: #ffff;
+    padding: 40px 2rem;
+    height: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+// .mat-vertical-stepper{
+//     padding: 0rem 2rem !important;
+// }
+::ng-deep.mat-vertical-stepper-header[aria-selected="true"] {
+    background: #7698cb2e;
+
+    .mat-step-text-label {
+        color: #00008f;
+        font-weight: 600;
+        font-size: 17px;
+    }
+}
+::ng-deep .mat-horizontal-stepper-header,::ng-deep .mat-vertical-stepper-header{
+//pointer-events: none 
+pointer-events: none 
+}
+
+.button-row .btn-action{
+    float: right;
+}
+.button-row .btn-cancel{
+    float: left;
+}
+.spinner-btn{
+   padding: 4px 20px;
+}
+::ng-deep.mat-vertical-stepper-header{
+    padding: 11px 24px;
+}
+::ng-deep.mat-step-header .mat-step-icon-state-edit {
+    background-color: rgba(0, 0, 0, .54)
+}
+
+::ng-deep.mat-step-header .mat-step-icon-state-edit .mat-icon {
+    font-size: 14px;
+    height: fit-content;
+    width: fit-content;
+}
+
+h2.header-title {
+    padding: 0 24px;
+    font-size: 21px !important;
+    color: #00008f;
+    font-weight: 600 !important;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+h2.header-title .mat-icon {
+    margin-right: 1rem;
+    font-size: 32px;
+    height: fit-content;
+    width: fit-content;
+}
+
+::ng-deep.timepicker__header,
+::ng-deep.clock-face__clock-hand,
+::ng-deep.clock-face__number>span.active {
+    background-color: #00008f !important;
+
+}
+
+::ng-deep.timepicker-button {
+    color: #00008f !important;
+}
+
+table.infos {
+    margin-top: 2rem;
+    border-collapse: collapse;
+    border-spacing: 0 19px;
+    font-size: 16px;
+    width: 100%;
+}
+
+table.infos.garanties td,
+table.infos.garanties th {
+    border: 1px solid rgba(0, 0, 0, .12);
+
+}
+
+table.infos.garanties tr:nth-child(odd) {
+    background: rgb(247, 247, 249);
+}
+
+table.infos td,
+table.infos th {
+    padding: 12px 19px;
+}
+
+table.infos.garanties caption {
+    caption-side: initial;
+}
+
+.infos .key,
+.infos .value {
+    text-transform: capitalize;
+}
+.infos.resume tr:nth-child(odd) {
+    background-color: rgb(247, 247, 249);
+}
+.mat-radio-group .mat-radio-button {
+    margin-left: 4rem;
+}
+
+.mat-radio-group {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.infos .value {
+    color: #00008F;
+    font-weight: 600;
+}
+.tierExistRadio{
+    margin-top: 3rem;
+}
+.vehiculeAdverse h3,
+.infoSinistre h3{
+    color: #00008F;
+    font-weight: 600!important;
+}

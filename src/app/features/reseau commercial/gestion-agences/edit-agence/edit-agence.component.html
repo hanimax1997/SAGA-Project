@@ -1,0 +1,367 @@
+<div class="container" #containerRef id="containerRef">
+    <div class="header">
+        <mat-icon aria-hidden="false" aria-label=""
+            class="material-symbols-outlined"
+            matTooltip="Retourner vers liste des agences"
+            matTooltipPosition="left"
+            style="margin-right: 14px;" (click)="navigateToAllAgence()">arrow_circle_left</mat-icon>
+        <h2 class="title-form">Modification agence</h2>
+        <button class="btn btn-action" *ngIf="formDisabled" (click)="enableForm()">Modifier</button>
+
+    </div>
+    <div id="" class="alert alert-danger" *ngIf="errorVar">{{errorMessage}}</div>
+    <div id="" class="alert alert-success" *ngIf="successVar">{{successMessage}}</div>
+    <form #formDirective="ngForm" [formGroup]="formCreationAgence"
+        *ngIf="formCreationAgence  "
+        (ngSubmit)="submitAgence(formDirective)">
+        <mat-accordion class="example-headers-align" multi>
+            <!--Info general -->
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Information générales
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row row-fields">
+                    <!-- Code agence-->
+                    <mat-form-field class="col-md-5" appearance="outline">
+                        <mat-label>Code agence</mat-label>
+                        <input type="text" matInput placeholder=""
+                            formControlName="codeAgence">
+                        <mat-error
+                            *ngIf="formCreationAgence.controls.codeAgence.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formCreationAgence.controls.codeAgence.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- nomAgence-->
+                    <mat-form-field class="col-md-5" appearance="outline">
+                        <mat-label>Nom agence</mat-label>
+                        <input type="text" matInput placeholder=""
+                            formControlName="nomAgence">
+                        <mat-error
+                            *ngIf="formCreationAgence.controls.nomAgence.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formCreationAgence.controls.nomAgence.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- réseau de distribution-->
+                    <mat-form-field class="col-md-5" appearance="outline">
+                        <mat-label>réseau de distribution</mat-label>
+                        <mat-select formControlName="reseauDistribution">
+                            <ng-container *ngFor="let reseau of
+                                reseauDistribution">
+                                <mat-option
+                                    [value]="reseau.idReseau">
+                                    {{reseau.description}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formCreationAgence.controls.zone.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formCreationAgence.controls.zone.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- zone-->
+                    <mat-form-field class="col-md-5" appearance="outline">
+                        <mat-label>Zones</mat-label>
+                        <mat-select formControlName="zone">
+                            <ng-container *ngFor="let zone of zones">
+                                <mat-option
+                                    [value]="zone.idParam">
+                                    {{zone.description}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formCreationAgence.controls.zone.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formCreationAgence.controls.zone.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+
+            </mat-expansion-panel>
+            <!--Localisation -->
+            <mat-expansion-panel [expanded]="true">
+
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Localisation
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row row-fields">
+                    <!-- wilaya-->
+                    <mat-form-field class="col-md-5" appearance="outline">
+                        <mat-label>Wilaya</mat-label>
+                        <mat-select formControlName="wilaya"
+                            (selectionChange)="getInfoByWilaya($event.value)">
+                            <ng-container *ngFor="let wilaya of wilayas">
+                                <mat-option
+                                    [value]="wilaya.idWilaya">
+                                    {{wilaya.description}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formCreationAgence.controls.wilaya.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formCreationAgence.controls.wilaya.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- commune-->
+                    <mat-form-field class="col-md-5" appearance="outline">
+                        <mat-label>Commune</mat-label>
+                        <mat-select formControlName="commune">
+                            <ng-container *ngFor="let commune of
+                                communesByWilaya">
+                                <mat-option
+                                    [value]="commune.idCommune">
+                                    {{commune.description}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formCreationAgence.controls.commune.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formCreationAgence.controls.commune.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- adresse-->
+                    <mat-form-field class="col-md-5" appearance="outline">
+                        <mat-label>Adresse</mat-label>
+                        <input type="text" matInput placeholder=""
+                            formControlName="adresse">
+                        <mat-error
+                            *ngIf="formCreationAgence.controls.adresse.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formCreationAgence.controls.adresse.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- code postal-->
+                    <mat-form-field class="col-md-5" appearance="outline">
+                        <mat-label>Code postal</mat-label>
+                        <mat-select formControlName="codePostal">
+                            <ng-container *ngFor="let codePostal of
+                                codesPostalByWilaya">
+                                <mat-option
+                                    [value]="codePostal.idCodePostal">
+                                    {{codePostal.codePostal}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formCreationAgence.controls.codePostal.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formCreationAgence.controls.codePostal.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </mat-expansion-panel>
+            <!--Contact -->
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Contact
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row row-fields">
+                    <div formArrayName="contact" class="col-md-9">
+                        <div *ngFor="let co of contact.controls; let i=index">
+                            <div [formGroupName]="i" class="row">
+                                <!-- type contrat -->
+                                <mat-form-field class="col-md-5"
+                                    appearance="outline">
+                                    <mat-label>Type contact</mat-label>
+                                    <mat-select formControlName="typeContact"
+                                        (selectionChange)="changeTypeContact($event.value,i)">
+                                        <ng-container *ngFor="let type of
+                                            typesContact">
+                                            <mat-option
+                                                [value]="type.description">
+                                                {{type.description}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="formCreationAgence.controls.zone.errors"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf="formCreationAgence.controls.zone.errors.required">
+                                            ce champs est obligatoire</div>
+                                    </mat-error>
+                                </mat-form-field>
+                                <!-- contact email -->
+                                <mat-form-field class="col-md-5"
+                                    appearance="outline"
+                                    *ngIf="contactsArray[i].type=='email'">
+                                    <mat-label>{{contactsArray[i].title}}</mat-label>
+                                    <input type="text" matInput placeholder="" [readonly]="true"
+                                        formControlName="contactEmail">
+                                    <mat-icon matSuffix>{{contactsArray[i].icon}}</mat-icon>
+                                    <mat-error
+                                        *ngIf="contact.controls[i].get('contactEmail')?.hasError('required')"
+                                        class="invalid-feedback">ce champs est
+                                        obligatoire
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="contact.controls[i].get('contactEmail')?.hasError('pattern')"
+                                        class="invalid-feedback">cet email est
+                                        invalid
+                                    </mat-error>
+                                </mat-form-field>
+                                <!-- contact mobile -->
+                                <mat-form-field class="col-md-5"
+                                    appearance="outline"
+                                    *ngIf="contactsArray[i].type!='email'">
+                                    <mat-label>{{contactsArray[i].title}}</mat-label>
+                                    <input type="text" matInput placeholder=""
+                                        formControlName="contactMobile">
+                                    <mat-icon matSuffix>{{contactsArray[i].icon}}</mat-icon>
+                                    <mat-error
+                                        *ngIf="contact.controls[i].get('contactMobile')?.hasError('required')"
+                                        class="invalid-feedback">ce champs est
+                                        obligatoire
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="contact.controls[i].get('contactMobile')?.hasError('pattern')"
+                                        class="invalid-feedback">cet numéro est
+                                        invalide
+                                    </mat-error>
+                                </mat-form-field>
+                                <div class="col-md-2 deleteContact"
+                                    *ngIf="i!=0">
+                                    <mat-icon aria-hidden="false"
+                                        aria-label="Dashboard"
+                                        class="material-symbols-outlined"
+                                        matTooltip="supprimer ce contact"
+                                        matTooltipPosition="right"
+                                        (click)="deleteContact(i)">delete</mat-icon>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 add-col">
+                        <button class="btn btn-secondary" type="button"
+                            (click)="addTypeContact()" *ngIf="!formDisabled">
+                            <mat-icon aria-hidden="false" aria-label="ajouter un
+                                type de contact "
+                                style="margin-right: 1rem;"
+                                class="material-symbols-outlined">add_circle</mat-icon>
+                            Ajouter type contact</button>
+                    </div>
+
+
+                </div>
+            </mat-expansion-panel>
+            <!--info supp -->
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Informations supplémentaires
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="row row-fields">
+                    <!-- Agence annexe-->
+
+                    <mat-form-field class="col-md-5 "
+                        appearance="outline">
+                        <mat-label>Agence annexe</mat-label>
+                        <mat-select formControlName="agenceAnnexe">
+                            <mat-option>-- Aucune --</mat-option>
+                            <ng-container *ngFor="let agence of allAgences">
+                                <mat-option
+                                    [value]="agence.idAgence">
+                                    {{agence.nomAgence}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formCreationAgence.controls.agenceAnnexe.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formCreationAgence.controls.agenceAnnexe.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- Code trésorerie-->
+                    <mat-form-field class="col-md-5 "
+                        appearance="outline">
+                        <mat-label>Code trésorerie</mat-label>
+                        <input type="text" matInput
+                            placeholder=""
+                            formControlName="codeTresorerie">
+                        <mat-error
+                            *ngIf="formCreationAgence.controls.codeTresorerie.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formCreationAgence.controls.codeTresorerie.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="col-md-5"
+                        style="padding-right: 1%;"
+                        appearance="outline">
+                        <mat-label>Date d'ouverture</mat-label>
+                        <input matInput [min]="minDay" [min]="maxDay"
+                            [matDatepicker]="pickerDateOuverture"
+                            formControlName="dateOuverture">
+                        <mat-datepicker-toggle matSuffix
+                            [for]="pickerDateOuverture"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerDateOuverture></mat-datepicker>
+                        <mat-error
+                            *ngIf="formCreationAgence.controls.dateOuverture.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formCreationAgence.controls.dateOuverture.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- Code newAgence-->
+                    <mat-form-field class="col-md-5 "
+                        appearance="outline" *ngIf="statutAgence=='désactivé'">
+                        <mat-label>New Agence</mat-label>
+                        <input type="text" matInput
+                            placeholder=""
+                            formControlName="newAgence">
+                        <mat-error
+                            *ngIf="formCreationAgence.controls.newAgence.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formCreationAgence.controls.newAgence.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <div class="col-md-12 row-button">
+            <button class="btn btn-action" *ngIf="!formDisabled">Enregistrer
+            </button>
+            <!-- <mat-spinner *ngIf="editAgenceSpinner" [diameter]="40"></mat-spinner> -->
+        </div>
+
+    </form>
+
+</div>

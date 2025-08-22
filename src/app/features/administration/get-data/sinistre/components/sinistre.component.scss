@@ -1,0 +1,60 @@
+.rapport-container {
+  max-width:1320px;
+  margin: auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+
+  .logo {
+    height: 60px;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    text-align: center;
+    color: #00008F;
+    margin-bottom: 20px;
+  }
+
+  .form-row {
+    display: flex;
+    gap: 15px;
+    // margin-bottom: 20px;
+    width:100%;
+     flex-wrap: wrap;
+
+    &.right {
+      justify-content: flex-end;
+    }
+
+    mat-form-field {
+      flex: 1;
+    }
+  }
+}
+.date-range-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.date-fields {
+  display: flex;
+  margin:auto;
+  gap:15px;
+   flex-wrap: wrap;
+}
+
+.date-field{
+  min-width: 350px;
+  max-width: 450px;
+}
+.btn-rap{
+  background-color: #00008F;
+  color: #fff;
+}
+.one-mat{
+  display:flex;
+  flex: 0.3256;
+
+}

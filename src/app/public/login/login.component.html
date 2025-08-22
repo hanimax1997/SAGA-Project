@@ -1,0 +1,81 @@
+<div class="container-fluid" style="height: 100vh;">
+    <!-- <img class="axa-logo"
+    src="../../../assets/img/logo/logo-side.png" width="50"
+    height="50"> -->
+    <div class="row" style="justify-content: center; align-items: center;
+        align-content: center; height: 100%;">
+        <div class="col-md-10 login">
+            <div class="row">
+               <div class="col-md-5 login-img" >
+                    <!-- <img class="axa-logo"
+                        src="../../../assets/img/logo/logo-white.png" width="50"
+                        height="50"> -->
+                 <img class="axa-img" src="../../../assets/img/login-img(3).png"
+                        width="100%" height="100%">
+                </div> 
+                <div class="col-md-7 login-content">
+                    <div style="display: flex;
+                        align-items:center;flex-direction:column">
+                        <h1 class="login-title">BIENVENUE À SAGA</h1>
+              
+                    </div>
+
+                    <form [formGroup]="formAuthentification"
+                        (ngSubmit)="submitAuth()" class="login-form">
+                        <!-- <mat-error class="login-error" *ngIf="message">
+                            Nom d'utilisateur ou mot de passe incorrect
+                        </mat-error>
+                        <mat-error class="login-error" *ngIf="!message && loginFind">
+                            Bravo                        
+                        </mat-error> -->
+                        <!-- Debut Champ Nom d'utilisateur -->
+                        <div class="alert alert-danger" *ngIf="errorAuth">
+                            email ou mot de passe incorrect.
+                        </div>
+                        <mat-form-field appearance="outline" class="col-md-12 login-field">
+                            <mat-label>Email</mat-label>
+                            <input matInput formControlName="username">
+                            <mat-icon matSuffix>person</mat-icon>
+                            <mat-error
+                                *ngIf="formAuthentification.controls.username.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formAuthentification.controls.username.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- Fin Champ Nom d'utilisateur -->
+                        <!-- Debut Champ Mot de passe -->
+
+                        <mat-form-field appearance="outline" class="col-md-12 login-field">
+                            <mat-label>Mot de passe</mat-label>
+                            <input matInput 
+                                formControlName="password"
+                                [type]="hide ? 'password':'text'">
+                            <mat-icon matSuffix aria-hidden="false"
+                                aria-label="password" (click)="hide= !hide">{{
+                                hide ? 'visibility_off':'visibility' }}</mat-icon>
+                            <mat-error
+                                *ngIf="formAuthentification.controls.password.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formAuthentification.controls.password.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!-- Fin Champ Mot de passe -->
+                        <p class="login-forget-password">En cas de perte de mot
+                            de passe <a  style="text-decoration: auto;
+                                color: #00008F;"  [routerLink]="['forgot-password']">veuillez cliquer ici</a></p>
+                        <p class="login-forget-password">Si vous voulez procéder à un changement de mot de passe 
+                             <a  style="text-decoration: auto;
+                                color: #00008F;"  [routerLink]="['change-password']">veuillez cliquer ici</a></p>
+                        <button   class="btn btn-action"
+                            type="submit" >Se Connecter</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

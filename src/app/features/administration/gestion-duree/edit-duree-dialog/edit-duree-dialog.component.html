@@ -1,0 +1,59 @@
+<h2 class="heading">Modifier une durée</h2>
+<mat-divider></mat-divider>
+<div *ngIf="dureeEditSuccess" class="alert alert-success">La durée N°{{ idDuree }} a été modifier avec succés</div>
+<div *ngIf="dureeEditError" class="alert alert-success">{{ messageError }}</div>
+<mat-dialog-content class="mat-typography">
+    <form #formDirective="ngForm" [formGroup]="formEditDuree"
+        (ngSubmit)="submitEditDuree(formDirective)" class="login-form" *ngIf="formEditDuree">
+
+        <mat-form-field class="col-md-12" appearance="outline">
+            <mat-label>Description</mat-label>
+            <input type="text" matInput placeholder="" formControlName="description">
+            <mat-error
+            *ngIf="formEditDuree.controls.description.errors"
+            class="invalid-feedback">
+                <div
+                    *ngIf="formEditDuree.controls.description.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+    
+        <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label> Type Durée </mat-label>
+            
+            <mat-select formControlName="type_duree">
+                <mat-option value="Jour">Jour</mat-option>
+                <mat-option value="Mois">Mois</mat-option>
+                <mat-option value="Année">Année</mat-option>
+            </mat-select>
+            <mat-error
+            *ngIf="formEditDuree.controls.type_duree.errors"
+            class="invalid-feedback">
+                <div
+                    *ngIf="formEditDuree.controls.type_duree.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Durée</mat-label>
+            <input type="text" matInput placeholder="" formControlName="duree">
+            <mat-error
+            *ngIf="formEditDuree.controls.duree.errors"
+            class="invalid-feedback">
+                <div
+                    *ngIf="formEditDuree.controls.duree.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <button  class="btn btn-action"
+            type="submit" >Envoyer</button>
+        <button  class="btn btn-cancel"
+            mat-dialog-close >Annuler</button>
+    </form>
+</mat-dialog-content>
+<!-- <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions> -->

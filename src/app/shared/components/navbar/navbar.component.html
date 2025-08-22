@@ -1,0 +1,168 @@
+<nav class="navbar">
+    <div class="brand-name-wrapper">
+        <img src="../../../assets/img/logo/logo-side.png" *ngIf="!isExpanded" width="124px" height="39px">
+        <button mat-icon-button (click)="hide()" *ngIf="!isExpanded">
+            <mat-icon class="material-symbols-outlined">menu</mat-icon>
+        </button>
+
+    </div>
+    <ul class="navbar-nav">
+        <!-- Rapport Menu -->
+        <li class="nav-item">
+            <a class="nav-link" [matMenuTriggerFor]="rapport">
+                <mat-icon aria-hidden="false" aria-label="rapport"
+                    class="material-symbols-outlined">insert_chart</mat-icon>
+                Rapport
+            </a>
+            <mat-menu #rapport="matMenu">
+                <a mat-menu-item [routerLink]="['/production']">
+                    <mat-icon aria-hidden="false" aria-label="Production"
+                        class="material-symbols-outlined">bar_chart</mat-icon>
+                    Production
+                </a>
+                <a mat-menu-item [routerLink]="['/sinistre']">
+                    <mat-icon aria-hidden="false" aria-label="Sinistre"
+                        class="material-symbols-outlined">report</mat-icon>
+                    Sinistre
+                </a>
+            </mat-menu>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link" [matMenuTriggerFor]="crm">
+                <mat-icon aria-hidden="false" aria-label="crm" class="material-symbols-outlined">view_comfy</mat-icon>
+                Entités
+            </a>
+            <mat-menu #crm="matMenu">
+                <a mat-menu-item [routerLink]="['gestion-personnes']">
+                    <mat-icon aria-hidden="false" aria-label="Support
+                        applicatif" class="material-symbols-outlined">group</mat-icon>
+                    Clients
+                </a>
+                <a mat-menu-item [routerLink]="['reseau-commercial/gestion-agences']">
+                    <mat-icon aria-hidden="false" aria-label="Poser une
+                        question" class="material-symbols-outlined">store</mat-icon>
+                    Agences
+                </a>
+                <a mat-menu-item [routerLink]="['migration-auto']">
+                    <mat-icon aria-hidden="false" aria-label="" class="material-symbols-outlined">autorenew</mat-icon>
+                    Migration police auto
+                </a>
+            </mat-menu>
+        </li>
+        <li class="nav-item ">
+            <a class="nav-link" [matMenuTriggerFor]="adminMenu">
+                <mat-icon aria-hidden="false" aria-label="Paramétre"
+                    class="material-symbols-outlined">admin_panel_settings</mat-icon>
+                Administration
+            </a>
+            <mat-menu #adminMenu="matMenu">
+
+                <a mat-menu-item [routerLink]="['gestion-user']">
+                    <mat-icon aria-hidden="false" aria-label="Poser une
+                        question" class="material-symbols-outlined">assignment_ind</mat-icon>
+                    Utilisateurs
+                </a>
+                <a mat-menu-item [routerLink]="['gestion-produits']">
+                    <mat-icon aria-hidden="false" aria-label="Poser une
+                        question" class="material-symbols-outlined">shopping_cart</mat-icon>
+                    Produit
+                </a>
+
+                <a mat-menu-item [routerLink]="['gestion-vehicules']">
+                    <mat-icon aria-hidden="false" aria-label="Poser une
+                        question" class="material-symbols-outlined">shopping_cart</mat-icon>
+                    vehicule
+                </a>
+                <!-- <a mat-menu-item>
+                    <mat-icon aria-hidden="false" aria-label="Soumettre un
+                        feedback"
+                        class="material-symbols-outlined">health_and_safety</mat-icon>
+                    Référentiels
+                </a> -->
+                <a mat-menu-item [routerLink]="['gestion-convention']">
+                    <mat-icon aria-hidden="false" aria-label="Soumettre un
+                        feedback" class="material-symbols-outlined">redeem</mat-icon>
+                    Conventions
+                </a>
+                <a mat-menu-item [routerLink]="['gestion-reduction']">
+                    <mat-icon aria-hidden="false" aria-label="Soumettre un
+                        feedback" class="material-symbols-outlined">redeem</mat-icon>
+                    Réduction
+                </a>
+            </mat-menu>
+        </li>
+        <li class="nav-item ">
+
+
+            <a class="nav-link" [matMenuTriggerFor]="supportMenu">
+                <mat-icon aria-hidden="false" aria-label="Support" class="material-symbols-outlined">support</mat-icon>
+                Support
+            </a>
+            <mat-menu #supportMenu="matMenu" class="drop-menu">
+                <a mat-menu-item (click)="goToSesame('http://portail-sesame/IT/')">
+                    <mat-icon aria-hidden="false" aria-label="Support
+                        applicatif" class="material-symbols-outlined">library_books</mat-icon>
+                    Support applicatif
+                </a>
+                <a mat-menu-item>
+                    <mat-icon aria-hidden="false" aria-label="Poser une
+                        question" class="material-symbols-outlined">sms</mat-icon>
+                    Poser une question
+                </a>
+                <a mat-menu-item>
+                    <mat-icon aria-hidden="false" aria-label="Soumettre un
+                        feedback" class="material-symbols-outlined">forum</mat-icon>Soumettre
+                    un feedback
+                </a>
+            </mat-menu>
+
+        </li>
+        <!-- <li class="nav-item ">
+            <a class="nav-link" [matMenuTriggerFor]="settingsMenu">
+                <mat-icon aria-hidden="false" aria-label="Paramétre"
+                    class="material-symbols-outlined">settings</mat-icon>
+                Paramétre
+            </a>
+            <mat-menu #settingsMenu="matMenu">
+                <a mat-menu-item>
+                    <mat-icon aria-hidden="false" aria-label="Support
+                        applicatif"
+                        class="material-symbols-outlined">library_books</mat-icon>
+                    Support applicatif
+                </a>
+                <a mat-menu-item>
+                    <mat-icon aria-hidden="false" aria-label="Poser une
+                        question"
+                        class="material-symbols-outlined">sms</mat-icon>
+                    Poser une question
+                </a>
+                <a mat-menu-item>
+                    <mat-icon aria-hidden="false" aria-label="Soumettre un
+                        feedback"
+                        class="material-symbols-outlined">forum</mat-icon>Soumettre
+                    un feedback
+                </a>
+            </mat-menu>
+        </li> -->
+        <li class="nav-item dropdown">
+            <a class="nav-link person-info " [matMenuTriggerFor]="userMenu">
+                <div>
+                    <!-- <span class="person-name">Ahmed</span> -->
+                    <span>{{userEmail}}</span>
+                </div>
+                <mat-icon aria-hidden="false" aria-label="utilisateur"
+                    class="material-symbols-outlined">account_box</mat-icon>
+            </a>
+            <mat-menu #userMenu="matMenu">
+                <a mat-menu-item (click)="logOut()">
+                    <mat-icon aria-hidden="false" aria-label="Déconnexion"
+                        class="material-symbols-outlined">logout</mat-icon>
+                    Déconnexion
+                </a>
+
+            </mat-menu>
+
+        </li>
+    </ul>
+</nav>

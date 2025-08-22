@@ -1,0 +1,40 @@
+.container {
+    background-color: #ffff;
+    padding: 40px 0px;
+    height: 100%;
+    // overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)
+}
+
+.row.infos{
+    font-size: 16px;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+.value{
+    color: #00008F;
+    font-weight: 600;
+}
+.container-rows{
+    padding: 2rem;
+    margin-top: 4rem;
+}
+h2.header-title{
+    padding: 0 24px;
+    font-size: 21px!important;
+    color: #00008f;
+    font-weight: 600!important;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.row-buttons{
+    float: right;
+    margin-top: 2rem;
+}
+.row-buttons button:first-child{
+    margin-right: 1rem;
+}

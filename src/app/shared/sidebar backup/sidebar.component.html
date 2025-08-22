@@ -1,0 +1,139 @@
+
+<!--begin::Page-->
+<div class="aside-container">
+  <div class="flex-column-fluid" id="aside_menu">
+    <!-- brand sidebar -->
+    <div class="navbar-header">
+      <div class="brand-wrapper">
+        <!-- Brand -->
+        <div class="brand-name-wrapper">
+          <a class="navbar-brand" href="#">
+            <img src="../../../assets/img/logo/logo-side.png">
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!--begin::Aside Menu-->
+
+    <!--begin::Menu-->
+    <div class="menu menu-column "
+      id="mainAccordion" data-kt-menu="true">
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let menuItem of menuItems" hideToggle [disabled]="menuItem.children.length==0">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <!--no submenu-->
+              <a *ngIf="menuItem.children.length==0" routerLinkActive="active"
+                class="nav-link lvl1" href="">
+                <div class="nav-link-content">
+                  <mat-icon aria-hidden="false" aria-label="Dashboard"
+                    class="material-symbols-outlined">{{menuItem.icon}}</mat-icon>
+                  <span> {{menuItem.title}}</span>
+                </div>
+              </a>
+              <!--with submenu-->
+
+              <a *ngIf="menuItem.children.length!=0" class="nav-link lvl1 "
+                data-toggle="collapse" routerlinkactive="active"
+                [attr.data-target]="'#' + menuItem.name"
+                href="#{{menuItem.name}}">
+                <div class="nav-link-content">
+                  <mat-icon aria-hidden="false" aria-label="Dashboard"
+                    class="material-symbols-outlined">{{menuItem.icon}}</mat-icon>
+                  <span> {{menuItem.title}}</span>
+                </div>
+              </a>
+            </mat-panel-title>
+
+          </mat-expansion-panel-header>
+
+          <div *ngFor="let children of menuItem.children"
+            data-kt-menu-trigger="click"
+            data-kt-menu-placement="right-start" class="{{children.class}}
+            menu-item lvl2">
+
+            <a *ngIf="menuItem.children.length!=0" class="nav-link menu-link "
+              data-bs-toggle="tooltip"
+              data-bs-trigger="hover" data-bs-dismiss="click"
+              [href]="children.path"
+              data-bs-placement="right">
+              <div class="nav-link-content">
+                <mat-icon aria-hidden="false" aria-label="Dashboard"
+                  class="material-symbols-outlined">{{children.icon}}</mat-icon>
+                <span> {{children.title}}</span>
+              </div>
+            </a>
+            <!-- Dropdown level 2 -->
+            <div class="menu-sub menu-sub-dropdown w-225px w-lg-275px ">
+              <div data-kt-menu-trigger="click" class="menu-item
+                menu-accordion" *ngFor="let subChildren of children.children"
+                class="{{subChildren.class}} ">
+
+                <div class="lvl4-list ">
+                  <div class="lvl4-header">
+                    <a class="nav-link">
+                      <div class="nav-link-content">
+                        <mat-icon aria-hidden="false"
+                          aria-label="Dashboard"
+                          class="material-symbols-outlined">{{subChildren.icon}}</mat-icon>
+                        <span> {{subChildren.title}}</span>
+                      </div>
+                    </a>
+                  </div>
+
+                  <ul>
+                    <li>
+                      <a class="nav-link" href="">
+                        <div class="nav-link-content">
+                          <mat-icon aria-hidden="false" aria-label="Dashboard"
+                            class="material-symbols-outlined">manage_search</mat-icon>
+                          <span> Consultation des polices</span>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="nav-link" href="">
+                        <div class="nav-link-content">
+                          <mat-icon aria-hidden="false" aria-label="Dashboard"
+                            class="material-symbols-outlined">add_circle</mat-icon>
+                          <span> Souscription</span>
+                        </div>
+                      </a>
+                    </li>
+                    <li>
+                      <a class="nav-link" href="">
+                        <div class="nav-link-content">
+                          <mat-icon aria-hidden="false" aria-label="Dashboard"
+                            class="material-symbols-outlined">car_crash</mat-icon>
+                          <span> Sinistres</span>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+ 
+        </mat-expansion-panel>
+
+      </mat-accordion>
+
+
+
+      <!--end::Aside Menu-->
+    </div>
+    <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+      <div class="content d-flex flex-column flex-column-fluid"
+        id="kt_content">
+      </div>
+    </div>
+
+  </div>
+</div>

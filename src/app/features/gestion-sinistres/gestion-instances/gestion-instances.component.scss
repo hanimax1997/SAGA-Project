@@ -1,0 +1,58 @@
+@import "../../../shared/styles/tables-gestions.scss";
+.header{
+    float: right;
+}
+
+tr.example-detail-row {
+    height: 0;
+}
+
+tr.example-element-row:not(.example-expanded-row):hover {
+    //  background: rgba(244,64,54,0.08)
+    background: rgba(0, 0, 143, 0.04)
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+}
+
+.example-element-row td {
+    border-bottom-width: 0;
+}
+
+.example-element-detail {
+    overflow: hidden;
+    display: flex;
+}
+
+.mat-column-expandedDetail{
+    padding:0px!important
+}
+.inner-table {
+    width: 100%;
+ 
+    table {
+        width: 100%;
+        background-color: transparent;
+  
+        .mat-row:last-child .mat-cell{
+            border-bottom:none ;
+        }
+    }
+
+    .mat-header-row,
+    .mat-row:nth-child(even) {
+        background-color: transparent
+    }
+}
+
+
+th.mat-header-cell:not(.mat-column-more),
+td.mat-cell:not(.mat-column-more),
+td.mat-footer-cell:not(.mat-column-more) {
+
+    width: 20%;
+}
+// .mat-column-more{
+//     width: 5%;
+// }

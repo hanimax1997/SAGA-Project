@@ -1,0 +1,255 @@
+<div class="container">
+    <!-- Header Section -->
+    <h2 class="header-title">
+        <mat-icon aria-hidden="false"
+            aria-label="Retour"
+            class="material-symbols-outlined"
+            matTooltip="Retour"
+            matTooltipPosition="left"
+            [routerLink]="['/gestion-convention']">arrow_circle_left</mat-icon>
+        Consultation de la convention N°{{idConvention}}
+    </h2>
+
+    <!-- Convention Information -->
+    <div class="infos" *ngIf="conventionReady">
+        <div class="row mini-info">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6 key">Code convention:</div>
+                    <div class="col-md-6 value">{{convention.codeConvention}}</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6 key">Nom convention:</div>
+                    <div class="col-md-6 value">{{convention.nomConvention}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mini-info">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6 key">Date début:</div>
+                    <div class="col-md-6 value">{{convention.dateDebut | dateFormatPipe}}</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6 key">Date fin:</div>
+                    <div class="col-md-6 value">{{convention.dateFin | dateFormatPipe}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mini-info">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6 key">Client:</div>
+                    <div class="col-md-6 value">{{convention.client.raisonSocial}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reductions Table -->
+        <table mat-table [dataSource]="dataSourceReduction" class="gestion-table mat-elevation-z8" matSort>
+
+            <!-- Code Reduction Column -->
+            <ng-container matColumnDef="codeReduction">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Code réduction</th>
+                <td mat-cell *matCellDef="let element">{{element.codeReduction}}</td>
+            </ng-container>
+
+            <!-- Nom Reduction Column -->
+            <ng-container matColumnDef="nomReduction">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Nom réduction</th>
+                <td mat-cell *matCellDef="let element">{{element.nomReduction}}</td>
+            </ng-container>
+
+            <!-- Produit Reduction Column -->
+            <ng-container matColumnDef="produitReduction">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Produit</th>
+                <td mat-cell *matCellDef="let element">{{element.produit.description}}</td>
+            </ng-container>
+
+            <!-- Action Column -->
+            <!-- <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Action000</th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button
+                        (click)="selectedReductionId = element.idReduction"
+                        [matMenuTriggerFor]="menu"
+                        aria-label="Menu réduction">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                </td>
+            </ng-container> -->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let element">
+    
+                    <button mat-icon-button
+                        type="button"
+                        [matMenuTriggerFor]="menu"
+                        aria-label="menu reduction list">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu"
+                        xPosition="after">
+                        <button mat-menu-item
+                            (click)="consultReduction(element.idReduction)"
+                            type="button">
+                            <mat-icon>zoom_in</mat-icon>
+                            <span>Consulter reduction</span>
+                        </button>
+                      
+                    
+                    </mat-menu>
+                </td>
+            </ng-container>
+
+
+
+
+
+
+
+
+
+
+            <!-- Header and Row Definitions -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsReduc"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsReduc;"></tr>
+        </table>
+        <!-- No Data Message -->
+        <div *ngIf="dataSourceReduction.data.length === 0" class="no-data">
+            Aucune réduction disponible.
+        </div>
+
+        <!-- Paginator -->
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+
+    <!-- Add Reduction Section -->
+    <h2 class="header-title">
+        Ajout de réduction à la convention N°{{idConvention}}
+    </h2>
+    <div class="row">
+        <!-- Bouton gauche -->
+        <div class="col-md-2">
+            <button class="btn btn-secondary add-reduction-button"
+                (click)="showFormReductionMethod()" type="button" aria-label="Ajouter une réduction">
+                <mat-icon class="material-symbols-outlined">add</mat-icon>
+                Ajouter une réduction existante
+            </button>
+        </div>
+    
+        <!-- Bouton droit -->
+        <div class="col-md-2 ms-auto">
+            <button class="btn btn-secondary"
+            (click)="navigateToReduction()" type="button">
+            <mat-icon
+                class="material-symbols-outlined">add</mat-icon>
+            Ajouter une réduction</button>
+
+            <!-- <button class="btn btn-secondary" style="display: flex;
+            align-items: center;" (click)="navigateToCreation()">
+
+            <mat-icon aria-hidden="false" aria-label="ajouter une reduction "
+                class="material-symbols-outlined">add_circle</mat-icon>
+
+            Ajouter une nouvelle réduction
+        </button> -->
+        </div>
+    </div>
+   
+
+    <!-- Add Reduction Form -->
+    <form [formGroup]="formReduction" (ngSubmit)="submitReduction()" class="form-container">
+        <div class="form-ajout-red" *ngIf="showFormReduction">
+            <!-- Réduction Select Field -->
+            <mat-form-field appearance="outline" class="col-md-4">
+                <mat-label>Réduction</mat-label>
+                <mat-select  formControlName="reduction" multiple (selectionChange)="onSelectionChange($event)  ">
+                    <mat-option *ngFor="let reduc of reductions" [value]="reduc.idReduction"  aria-checked="reduc.idReduction== temp? true : false">
+                        {{ reduc.nomReduction }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formReduction.get('reduction')?.hasError('required')" class="invalid-feedback"> 
+                    Ce champ est obligatoire
+                </mat-error>
+            </mat-form-field>
+
+            <!-- Type Produit Select Field -->
+            <mat-form-field appearance="outline" class="col-md-5">
+                <mat-label>Type produit</mat-label>
+                <mat-select formControlName="idProduit" (selectionChange)="changeTypeProduit($event.value)">
+                    <mat-option *ngFor="let type of typeProduits" [value]="type.idCodeProduit">
+                        {{ type.description }}
+                    </mat-option>
+                </mat-select>
+                <mat-error *ngIf="formReduction.get('idProduit')?.hasError('required')" class="invalid-feedback">
+                    Ce champ est obligatoire
+                </mat-error>
+            </mat-form-field>
+
+            <!-- Buttons -->
+            <div class="button-reduction">
+                <button class="btn btn-secondary" [disabled]="!produitReady" (click)="refreshListReduction()" type="button" aria-label="Rafraîchir la liste">
+                    <mat-icon class="material-symbols-outlined">restart_alt</mat-icon>
+                    Rafraîchir la liste
+                </button>
+                <button class="btn btn-cancel" type="button" (click)="hideFormReduction()" aria-label="Annuler">
+                    <mat-icon class="material-symbols-outlined">close</mat-icon>
+                    Annuler
+                </button>
+            </div>
+
+            <!-- Selected Reductions Table -->
+            <table mat-table [dataSource]="dataSourcesReductions" class="gestion-table mat-elevation-z8" matSort>
+                <!-- ID Reduction Column -->
+                <ng-container matColumnDef="idReduction">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>N°</th>
+                    <td mat-cell *matCellDef="let element">{{element.codeReduction}}</td>
+                </ng-container>
+
+                <!-- Nom Reduction Column -->
+                <ng-container matColumnDef="nomReduction">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Nom réduction</th>
+                    <td mat-cell *matCellDef="let element">{{element.nomReduction}}</td>
+                </ng-container>
+
+                <!-- Produit Column -->
+                <ng-container matColumnDef="produit">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>Produit</th>
+                    <td mat-cell *matCellDef="let element">{{element.produit.description}}</td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button color="warn" (click)="deleteReduction(element.idReduction)" aria-label="Supprimer réduction">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <!-- Header and Row Definitions -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <!-- No Data Message -->
+            <div *ngIf="dataSourcesReductions.data.length === 0" class="no-data">
+                Aucune réduction sélectionnée.
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="row-button">
+                <button class="btn btn-cancel" type="button" (click)="hideFormReduction()" aria-label="Retour">Retour</button>
+                <button class="btn btn-action" type="submit" [disabled]="formReduction.invalid">Enregistrer</button>
+            </div>
+        </div>
+    </form>
+
+    
+</div>

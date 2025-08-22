@@ -1,0 +1,84 @@
+@import "../../../shared/styles/tables-gestions.scss";
+.container {
+    background-color: #ffff;
+    padding: 40px 0px;
+    height: 100%;
+    // overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)
+}
+.value{
+    color: #00008F;
+    font-weight: 600;
+}
+.key::first-letter {text-transform: uppercase}
+.mat-expansion-panel{
+    margin-bottom: 1rem;
+}
+.mat-expansion-panel-header {
+    background: #c7c7c733 !important;
+    font-weight: 600;
+    font-size: 16px;
+}
+.mat-expansion-panel-header.mat-expanded{
+    height: 48px;
+}
+.mat-expansion-panel-header-title {
+    color: #00008F;
+}
+.mat-expansion-panel:not([class*=mat-elevation-z]){
+    box-shadow: none;
+}
+h2.header-title{
+    padding: 0 24px;
+    font-size: 21px!important;
+    color: #00008f;
+    font-weight: 600!important;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+}
+
+table th,
+table td {
+    font-size: 16px;
+    font-weight: 600;
+   // border-right: 1px solid #e7e7e7;
+    padding-left: 1rem;
+}
+
+.mat-header-cell {
+    color: #333333;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 15px;
+    // width: 165px;
+
+}
+.tables-panel{
+    width: 80%;
+}
+table{
+    width: 100%;
+    margin:2rem;
+}
+
+table.tab td{ 
+font-size: 17px;
+padding: 10px 13px;
+border: 1px solid rgba(0,0,0,.12);
+}
+table.tab tr:nth-child(odd){
+    // background: rgb(247, 247, 249);
+}
+.tab-buttons{
+    margin-top: 4rem;
+    width: 50%;
+    /* margin: 4rem auto; */
+    display: flex;
+    justify-content: space-between;
+}
+.tab-buttons .mat-icon{
+    margin-right: 9px;
+    font-size: 24px;
+}

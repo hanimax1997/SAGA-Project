@@ -1,0 +1,353 @@
+
+    <div *ngIf="formConsulationProduit" style="padding-left: 3%; padding: 3%;" class="container" >
+        <h2 class="heading" style="padding-left: 3%;">Consultation du produit</h2>
+        
+        <mat-divider></mat-divider>
+
+        <mat-dialog-content class="mat-typography">
+            <mat-stepper #stepper>
+                <mat-step >
+                <form #formDirective="ngForm" [formGroup]="formConsulationProduit" class="login-form">
+                    <ng-template matStepLabel>Produit</ng-template>
+                    
+                    <!-- INFORMATION GENERALE -->
+                    <div style="border: 1px solid #E0E0E0; margin-bottom: 3%;" >
+                        <div style="padding: 8px 24px; background: #E0E0E0; font-weight: 700; font-size: 14px;">
+                            Informations génerales du produit
+                        </div>
+                        <div style="padding: 8px 24px;">
+                            <mat-form-field class="col-md-3" style="padding-right: 1%;" appearance="outline">
+                                <mat-label>Code du produit</mat-label>
+                                <input type="text" matInput placeholder="" formControlName="codeProduit">
+                            </mat-form-field>
+                            
+                            
+                            <mat-form-field class="col-md-3" style="padding-right: 1%;" appearance="outline">
+                                <mat-label>Nom du produit</mat-label>
+                                <input type="text" matInput placeholder="" formControlName="description">
+                            </mat-form-field>
+                            <mat-form-field class="col-md-3" style="padding-right: 1%;" appearance="outline">
+                                <mat-label>Codification nationale</mat-label>
+                                <input type="text" matInput placeholder="" formControlName="codificationNationale">
+                            </mat-form-field>
+                            <mat-form-field class="col-md-3" style="padding-left: 1%; padding-right: 1%;" appearance="outline">
+                                <mat-label> Famille produit </mat-label>
+                                <mat-select formControlName="idFamilleProduit">
+                                    <ng-container *ngFor="let famille of dataSourceFamilleProduit?.data">
+                                        <mat-option [value]="famille.id_famille">{{famille.description}}</mat-option>
+                                      </ng-container>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <!-- Specificité du produit-->
+                    <div style="border: 1px solid #E0E0E0; margin-bottom: 3%;" *ngIf="consultations">
+                    
+                        <div style="padding: 8px 24px; background: #E0E0E0; font-weight: 700; font-size: 14px;">
+
+                            Detail du produit
+
+                        </div>
+
+                        <div style="padding: 4px 18px;">
+                            
+                                <table class="table table-sm table-bordered m-t-4 " style="border-collapse: collapse; width: 50%; height: 18px; border:0">
+                                <tr *ngFor="let param of consultations;index as i"  [style]="param.idParamProduit != 11 && param.idParamProduit != 12 ? 'height: 40px;':'display: none; height: 40px;'" >
+                                    <td>{{param.description}}</td>
+                                    <td>
+                                        <!--mat-select *ngIf="param.type == 'checkbox'">
+                                            <mat-option value="option1">Option 1</mat-option>
+                                            <mat-option value="option2">Option 3</mat-option>
+                                        </mat-select-->
+            
+                                        <mat-radio-group [formControlName]="param.libelle" [attr.aria-label]= "param.libelle"  *ngIf="param.type == 'checkbox' " >
+                                            <mat-radio-button [value]="50">Oui</mat-radio-button>
+                                            <mat-radio-button [value]="51" style="padding-left: 20%;">Non</mat-radio-button>
+                                        </mat-radio-group>
+                                    
+            
+                                        <input type="text"  matInput placeholder="" *ngIf="param.type == 'string'">
+            
+                                        <input type="number"  matInput placeholder="" *ngIf="param.type == 'number'">
+            
+                                        <input matInput [matDatepicker]="picker" *ngIf="param.type == 'date'">
+                                        <mat-datepicker-toggle matSuffix [for]="picker" *ngIf="param.type == 'date'"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+            
+            
+                                    </td>
+                                </tr>
+                                </table>
+                            </div>
+                
+                        
+
+                    </div>
+            
+                    <div class="row-button">
+                        <button class="btn btn-cancel" (mouseup)="back()">Retour</button>
+                        <!-- <button *ngIf="!formDirective.valid" class="btn btn-action">Suivant</button> -->
+                        <button matStepperNext class="btn btn-action">Suivant</button>
+                    </div>
+                </form>
+                </mat-step>
+
+                <!-- Suite des parametres par rapport au type Risque -->
+                <mat-step >
+                    <form #formDirective="ngForm" [formGroup]="formConsulationProduit" class="login-form">
+                        <ng-template matStepLabel>Parametres du produit</ng-template>
+                        <!-- INFORMATION GENERALE -->
+                        <div style="border: 1px solid #E0E0E0; margin-bottom: 3%;" >
+                            <div style="padding: 8px 24px; background: #E0E0E0; font-weight: 700; font-size: 14px;">
+                                Paramétres du risque
+                            </div>
+                            <div style="padding: 8px 24px;">
+                                <mat-form-field class="col-md-4" style="padding-left: 1%; padding-right: 1%;" appearance="outline">
+                                    <mat-label> Risque assuré </mat-label>
+                                    <mat-select formControlName="idTypeRisqueProduit" (selectionChange)="onChangeEventTypeRisque($event)">
+                                        <ng-container *ngFor="let typeRisque of dataSourceTypeRisque?.data" >
+                                            <mat-option [value]="typeRisque.idTypeRisque" >{{typeRisque.description}}</mat-option>
+                                          </ng-container>
+                                    </mat-select>
+                                </mat-form-field>
+                                
+                                <mat-radio-group class="col-md-6" style="margin-bottom: 2%; padding-left: 20%;" aria-label="Select an option" formControlName="multirisque"> 
+                                    <mat-radio-button [value]="51" style="padding-right: 8%;">Mono risque</mat-radio-button>
+                                    <mat-radio-button [value]="50">Multirisque</mat-radio-button>
+                                </mat-radio-group>
+          
+                          <!-- Mon tableau dynamique : -->
+        
+                                  <ng-template matStepLabel>Parametre tableau</ng-template>
+                                  <div class="">
+                                      <table mat-table [dataSource]="dataSourceParamRisque" class="mat-elevation-z8 question-table">
+                                          <ng-container matColumnDef="header-question">
+                                              <th mat-header-cell *matHeaderCellDef attr.colspan={{lengthColumns}}>
+                                                <div class="header-tab">
+                                                    <span>Liste des parametres </span>
+                                                </div>
+                                              </th>
+                                          </ng-container>
+
+                                          <!-- Description Column -->
+                                          <ng-container matColumnDef="actif">
+                                              <th mat-header-cell *matHeaderCellDef> Actif </th>
+                                              <td mat-cell *matCellDef="let element" style="padding-top: 24px; padding-bottom: 24px;"> 
+                                              <mat-icon aria-hidden="false" aria-label="" class="material-symbols-outlined"
+                                                  matTooltip="" matTooltipPosition="right" *ngIf="condition(element)" style="color: green;">check_circle
+                                              </mat-icon>
+                                              <mat-icon aria-hidden="false" aria-label="" class="material-symbols-outlined"
+                                                  matTooltip="" matTooltipPosition="right" *ngIf="!condition(element)" style="color: red;">cancel
+                                              </mat-icon>
+                                              </td>
+                                          </ng-container>
+                          
+                                          <!-- Description Column -->
+                                          <ng-container matColumnDef="libelle">
+                                              <th mat-header-cell *matHeaderCellDef> Libellé </th>
+                                              <td mat-cell *matCellDef="let element" style="padding-top: 24px; padding-bottom: 24px;"> {{element.libelle}} </td>
+                                          </ng-container>
+                          
+                                          <!-- Description Column -->
+                                          <ng-container matColumnDef="description">
+                                              <th mat-header-cell *matHeaderCellDef style="padding-right: 60px;"> Description </th>
+                                              <td mat-cell *matCellDef="let element" style="padding-top: 24px; padding-bottom: 24px; padding-right: 60px;"> {{element.descriptionChamp}} </td>
+                                          </ng-container>
+                          
+                                          <!-- Date debut Column -->
+                                          <ng-container matColumnDef="dateDebut">
+                                              <th mat-header-cell *matHeaderCellDef> Date debut </th>
+                                              <td mat-cell *matCellDef="let element" style="padding-top: 24px; padding-bottom: 24px;"> {{element.dateDebut | date:"dd/MM/yyyy"}} </td>
+                                          </ng-container>
+                                      
+                      
+                                          <!-- Action Column -->
+                                          <ng-container matColumnDef="action">
+                                              <th mat-header-cell *matHeaderCellDef> Action </th>
+                                              <td mat-cell *matCellDef="let element">
+                                                <mat-icon aria-hidden="false" aria-label="edit reseau de distribution" class="material-symbols-outlined"
+                                                matTooltip="Voir les valeur du param" matTooltipPosition="right" (mouseup)="openDialogViewParam(element)" >visibility
+                                                </mat-icon>
+                                              </td>
+                                          </ng-container>
+                            
+                                          <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+                                          <tr mat-header-row *matHeaderRowDef="['header-question']" class="example-first-header-row">
+                                          </tr>
+                                          <tr mat-header-row *matHeaderRowDef="displayedColumnsParam" class="example-second-header-row">
+                                          </tr>
+                                          <tr mat-row *matRowDef="let row; columns: displayedColumnsParam;"></tr>
+                                      </table>
+                                      <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10]" aria-label="Select page  of users"></mat-paginator>
+                                  </div>
+                                
+                            </div>
+                        </div>
+
+
+                        <div class="row-button">
+                            <button mat-button matStepperPrevious class="btn btn-cancel">Retour</button>
+                        <!-- <button *ngIf="!formDirective.valid" class="btn btn-action">Suivant</button> -->
+                        <button matStepperNext class="btn btn-action">Suivant</button>
+                        </div>
+                    </form>
+                    </mat-step>
+
+
+                <!-- param avenant-->
+                <mat-step >
+                    <form #formDirective="ngForm" [formGroup]="formConsulationProduit" class="login-form">
+                        <ng-template matStepLabel>Detail Produit</ng-template>
+                        <!-- INFORMATION GENERALE -->
+                        <div style="border: 1px solid #E0E0E0; margin-bottom: 3%;" >
+                            <div style="padding: 8px 24px; background: #E0E0E0; font-weight: 700; font-size: 14px;">
+                                Taxes
+                            </div>
+                            <div style="padding: 8px 24px;">
+                                <mat-form-field class="col-md-12" style="padding-left: 1%; padding-right: 1%;" appearance="outline">
+                                    <mat-label> Taxes</mat-label>
+                                    <mat-select formControlName="produitTaxes" multiple multiple  (selectionChange)="onChangeEventTaxes($event)">
+                                        <ng-container *ngFor="let taxe of dataSourceTaxes?.data" >
+                                            <mat-option [value]="taxe.idTaxe" >{{taxe.description}}</mat-option>
+                                          </ng-container>
+                                    </mat-select>
+                                </mat-form-field>
+                                
+                            <!-- Mon tableau dynamique : -->
+                            <div class="" *ngIf="tableAremplirTaxe">
+                                <table mat-table [dataSource]="tableAremplirTaxe" class="mat-elevation-z8 question-table">
+                                    <ng-container matColumnDef="header-question">
+                                        <th mat-header-cell *matHeaderCellDef attr.colspan={{lengthColumnsTaxe}}>
+                                        <div class="header-tab">
+                                            <span>Liste des taxes selectionnées</span>
+                                        </div>
+                                        </th>
+                                    </ng-container>
+                    
+                                    <!-- Description Column -->
+                                    <ng-container matColumnDef="id">
+                                        <th mat-header-cell *matHeaderCellDef> Id taxe </th>
+                                        <td mat-cell *matCellDef="let element" style="padding-top: 24px; padding-bottom: 24px;"> {{element.idTaxe}}
+                                        </td>
+                                    </ng-container>
+                    
+                                    <!-- Description Column -->
+                                    <ng-container matColumnDef="description">
+                                        <th mat-header-cell *matHeaderCellDef style="padding-right: 60px;"> Description </th>
+                                        <td mat-cell *matCellDef="let element" style="padding-top: 24px; padding-bottom: 24px; padding-right: 60px;">
+                                        {{element.description}} </td>
+                                    </ng-container>
+                    
+                                    <!-- Date debut Column -->
+                                    <ng-container matColumnDef="Valeur">
+                                        <th mat-header-cell *matHeaderCellDef> Valeur de la taxe </th>
+                                        <td mat-cell *matCellDef="let element" style="padding-top: 24px; padding-bottom: 24px;"> {{element.valeur}} </td>
+                                    </ng-container>
+
+                            
+                                
+                
+                                    <!-- Action Column -->
+                                    
+                    
+                                    <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+                                    <tr mat-header-row *matHeaderRowDef="['header-question']" class="example-first-header-row">
+                                    </tr>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumnsTaxes" class="example-second-header-row">
+                                    </tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumnsTaxes;"></tr>
+                                </table>
+                                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10]" aria-label="Select page  of users"></mat-paginator>
+                            </div>
+          
+                                
+                            </div>
+                        </div>
+
+                        <div style="border: 1px solid #E0E0E0; margin-bottom: 3%;" >
+                            <div style="padding: 8px 24px; background: #E0E0E0; font-weight: 700; font-size: 14px;">
+                                Detail du Produit
+                            </div>
+                            <div style="padding: 8px 24px;">
+                                <mat-form-field class="col-md-12" style="padding-left: 1%; padding-right: 1%;" appearance="outline">
+                                    <mat-label> Réseau</mat-label>
+                                    <mat-select formControlName="produitReseaux" multiple >
+                                        <ng-container *ngFor="let reseauDistribution of dataSourceReseauDistribution?.data" >
+                                            <mat-option [value]="reseauDistribution.idReseau" >{{reseauDistribution.description}}</mat-option>
+                                          </ng-container>
+                                    </mat-select>
+                                </mat-form-field>    
+                                
+                                <mat-form-field class="col-md-12" style="padding-left: 1%; padding-right: 1%;" appearance="outline">
+                                    <mat-label> Questionnaire</mat-label>
+                                    <mat-select formControlName="questionnaires" multiple >
+                                        <ng-container *ngFor="let questionnaire of dataSourceDureeQuestionnaire?.data" >
+                                            <mat-option [value]="questionnaire.idQuestionnaire" >{{questionnaire.description}}</mat-option>
+                                          </ng-container>
+                                    </mat-select>
+                                </mat-form-field> 
+
+                                <mat-form-field class="col-md-12" style="padding-left: 1%; padding-right: 1%;" appearance="outline">
+                                    <mat-label> Durée</mat-label>
+                                    <mat-select formControlName="produitDurees" multiple >
+                                        <ng-container *ngFor="let duree of dataSourceDuree?.data" >
+                                            <mat-option [value]="duree.id_duree" >{{duree.type_duree}}</mat-option>
+                                          </ng-container>
+                                    </mat-select>
+                                </mat-form-field> 
+
+                                <mat-form-field class="col-md-12" style="padding-left: 1%; padding-right: 1%;" appearance="outline">
+                                    <mat-label> Type d'avenant</mat-label>
+                                    <mat-select formControlName="produitTypeAvenants" multiple >
+                                        <ng-container *ngFor="let avenant of dataSourceAvenant?.data" >
+                                            <mat-option [value]="avenant.idCodeTypeAvenant" >{{avenant.description}}</mat-option>
+                                          </ng-container>
+                                    </mat-select>
+                                </mat-form-field>  
+
+                                <mat-form-field class="col-md-12" style="padding-left: 1%; padding-right: 1%;"appearance="outline">
+                                    <mat-label> Type de fractionnement</mat-label>
+                                    <mat-select formControlName="produitTypeFractionnements" multiple >
+                                        <ng-container *ngFor="let fractionnement of dataSourceFractionnement?.data" >
+                                            <mat-option [value]="fractionnement.idCodeTypeFractionnement" >{{fractionnement.description}}</mat-option>
+                                          </ng-container>
+                                    </mat-select>
+                                </mat-form-field>  
+
+                                <mat-form-field class="col-md-12" style="padding-left: 1%; padding-right: 1%;" appearance="outline">
+                                    <mat-label> Pack</mat-label>
+                                    <mat-select formControlName="produitPacks" multiple >
+                                        <ng-container *ngFor="let pack of dataSourcePack?.data" >
+                                            <mat-option [value]="pack.idPack0" >{{pack.description}}</mat-option>
+                                          </ng-container>
+                                    </mat-select>
+                                </mat-form-field>   
+
+                            </div>
+                        </div>
+                        <div class="row-button">
+                            <button mat-button class="btn btn-cancel">Retour</button>
+                        <!-- <button *ngIf="!formDirective.valid" class="btn btn-action">Suivant</button> -->
+                        <button matStepperNext class="btn btn-action">Suivant</button>
+                        </div>
+                    </form>
+                    </mat-step>
+            </mat-stepper>
+
+            
+        </mat-dialog-content>
+
+      
+    
+    </div>
+
+    <div *ngIf='!formConsulationProduit' style="padding-left: 36%;" class="center">
+        <div class='center'>
+            <!-- <img src="http://assets.pokemon.com/assets/cms2/img/pokedex/full/143.png"/> -->
+            <h1>Hey, cette page n'existe pas !</h1>
+            <a routerLink="/gestion-produits/gestion-produit-risque" class="waves-effect waves-teal btn-flat">
+              Retourner à l' accueil
+            </a>
+          </div>
+        </div>

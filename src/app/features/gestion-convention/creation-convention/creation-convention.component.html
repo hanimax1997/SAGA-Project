@@ -1,0 +1,313 @@
+
+<div class="container ">
+    <h2 class="header-title"><mat-icon class="mat-icon notranslate
+            material-symbols-outlined material-icons mat-icon-no-color"
+            aria-label="directions_car">redeem</mat-icon>
+        Convention</h2>
+    <div class="alert alert-success" *ngIf="conventionSuccess">Convention
+        {{codeConvention}} a été créer avec succés </div>
+    <div class="alert alert-danger"
+        *ngIf="errorHandler.error">{{errorHandler.msg}}</div>
+    <mat-stepper #stepper>
+        <!--infoGenerale-->
+        <mat-step [stepControl]="formInfoGenarale" [editable]="true">
+            <ng-template matStepLabel>Informations générales
+            </ng-template>
+            <form #formDirective="ngForm" [formGroup]="formInfoGenarale"
+                (ngSubmit)="submitInfoGenerale(formDirective)">
+                <div class="form row">
+                    <!--nom Convention -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Nom Convention</mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="nomConvention">
+                        <mat-error
+                            *ngIf="formInfoGenarale.controls.nomConvention.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formInfoGenarale.controls.nomConvention.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!--date debut -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Date Début</mat-label>
+                        <input matInput
+                            [matDatepicker]="pickerDateDebut"
+                            formControlName="dateDebut"
+                            [min]=minDate
+                            (dateChange)="setDateDebut($event.value)">
+                        <mat-datepicker-toggle matSuffix
+                            [for]="pickerDateDebut"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerDateDebut></mat-datepicker>
+                        <mat-error
+                            *ngIf="formInfoGenarale.controls.dateDebut.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formInfoGenarale.controls.dateDebut.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!--date fin -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Date fin</mat-label>
+                        <input matInput
+                            [matDatepicker]="pickerDateFin"
+                            formControlName="dateFin" [min]="dateDebut"
+                            (dateChange)="changeDateFin($event.value)">
+                        <mat-datepicker-toggle matSuffix
+                            [for]="pickerDateFin"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerDateFin></mat-datepicker>
+                        <mat-error
+                            *ngIf="formInfoGenarale.controls.dateFin.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formInfoGenarale.controls.dateFin.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+
+                </div>
+                <div class="row-button">
+                    <button class="btn btn-action"
+                        type="submit">Suivant</button>
+                </div>
+            </form>
+        </mat-step>
+        <mat-step [stepControl]="formInfoClient" [editable]="true">
+            <form [formGroup]="formFiltre" class="filter"
+                (ngSubmit)="submitFilter()">
+                <mat-form-field class="col-md-5"
+                    appearance="fill">
+                    <mat-label>Raison Sociale</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="raisonSociale">
+                    <mat-error
+                        *ngIf="formFiltre.controls.raisonSociale.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formFiltre.controls.raisonSociale.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+                <div class="filter-button">
+
+                    <button class="btn btn-action"
+                        type="submit">Filtrer</button>
+                        <button class="btn btn-cancel"
+                        (click)="resetSearch()">Rafraichir</button>
+                        <button class="btn btn-secondary"
+                        (click)="addNewClient()">Ajouter client</button>
+                </div>
+            </form>
+            <ng-template matStepLabel> Informations Client
+            </ng-template>
+            <table mat-table [dataSource]="dataSourceClients"
+                class="gestion-table" *ngIf="dataSourceClients">
+                <!-- check Column -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef> </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-radio-button
+                            (change)="$event ? addClient(element, $event): null ">
+                        </mat-radio-button>
+
+                    </td>
+                </ng-container>
+                <!-- numClient Column -->
+                <ng-container matColumnDef="numClient">
+                    <th mat-header-cell *matHeaderCellDef> N° </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.idClient}}</td>
+                </ng-container>
+
+                <!-- RaisonSociale Column -->
+                <ng-container matColumnDef="RaisonSociale">
+                    <th mat-header-cell *matHeaderCellDef> Raison sociale</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.raisonSocial}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsClient"
+                    class="example-second-header-row">
+                </tr>
+
+                <tr mat-row
+                    *matRowDef="let row; columns: displayedColumnsClient;"></tr>
+                <!-- dateOuverture Column
+                <ng-container matColumnDef="dateOuverture">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Date ouverture</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.produit}}</td>
+                </ng-container>
+                 nif Column 
+                <ng-container matColumnDef="nif">
+                    <th mat-header-cell *matHeaderCellDef>
+                        NIF</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.produit}}</td>
+                </ng-container> -->
+            </table>
+            <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10]"
+                aria-label="Select page"></mat-paginator>
+            <div class="row-button">
+                <button matStepperPrevious class="btn btn-cancel"
+                    type="button">Retour</button>
+                <button class="btn btn-action"
+                    matStepperNext>Suivant</button>
+            </div>
+        </mat-step>
+        <!--produit/ reduction -->
+        <mat-step [stepControl]="formInfoGenarale" [editable]="true">
+
+            <ng-template matStepLabel> Informations réduction
+            </ng-template>
+
+            <form #formDirective="ngForm" [formGroup]="formReduction"
+                (ngSubmit)="submitConvention(formDirective)">
+                <div class="row form">
+
+                    <!--type produit -->
+                    <mat-form-field appearance="outline"
+                        class="col-md-5 ">
+                        <mat-label>Type produit</mat-label>
+                        <mat-select formControlName="idProduit"
+                            (selectionChange)="changeTypeProduit($event.value)">
+                            <ng-container *ngFor="let type of
+                    typeProduits">
+                                <mat-option
+                                    [value]="type.idCodeProduit">
+                                    {{type.description}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formReduction.controls.idProduit.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formReduction.controls.idProduit.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!-- *ngIf="reductionReady"  -->
+                    <div class="row reduction">
+                        <div class="alert alert-danger"
+                            *ngIf="erreurDateDebut">Veuillez saisir la date
+                            début de la convention.</div>
+                        <!--type produit -->
+                        <mat-form-field appearance="outline"
+                            class="col-md-4">
+                            <mat-label>Réduction</mat-label>
+                            <!-- <mat-select formControlName="reduction">
+                    <mat-option *ngFor="let reduc of reductions; let i=index"
+                        [value]="reduc.idReduction">
+                        <mat-checkbox
+                            (change)="onChangeReduc(reduc,$event.checked)">
+                            {{reduc.nomReduction}}</mat-checkbox>
+                    </mat-option>
+                </mat-select> -->
+                            <mat-select formControlName="reduction" multiple>
+                                <ng-container *ngFor="let reduc of reductions">
+                                    <mat-option [value]="reduc.idReduction"
+                                        (click)="onChangeReduc(reduc)">
+                                        {{reduc.nomReduction}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formReduction.controls.reduction.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formReduction.controls.reduction.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <div class=" col-md-5 button-reduction">
+
+                            <button class="btn btn-secondary"
+                                [disabled]="!produitReady"
+                                (click)="refreshListReduction()" type="button">
+                                <mat-icon
+                                    class="material-symbols-outlined">restart_alt</mat-icon>
+                                Rafraichir la liste </button>
+                            <button class="btn btn-secondary"
+                                (click)="navigateToReduction()" type="button">
+                                <mat-icon
+                                    class="material-symbols-outlined">add</mat-icon>
+                                Ajouter une réduction</button>
+                        </div>
+                        <table mat-table
+                            [dataSource]="dataSourcesReductions"
+                            class="gestion-table" *ngIf="!reducEmpty">
+
+                            <!-- idReduction Column -->
+                            <ng-container matColumnDef="idReduction">
+                                <th mat-header-cell *matHeaderCellDef> N° </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.codeReduction}}</td>
+                            </ng-container>
+
+                            <!-- nomRedcution Column -->
+                            <ng-container matColumnDef="nomReduction">
+                                <th mat-header-cell *matHeaderCellDef> Nom
+                                    rédcution </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.nomReduction}}</td>
+                            </ng-container>
+                            <!-- typeProduit Column -->
+                            <ng-container matColumnDef="produit">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Produit</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.produit}}</td>
+                            </ng-container>
+                            <!-- Action Column 
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell
+                        *matHeaderCellDef>
+                        Action
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+
+                        <button mat-icon-button
+                            type="button"
+                            [matMenuTriggerFor]="menu"
+                            aria-label="menu reduction list">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu"
+                            xPosition="after">
+                            <button mat-menu-item (click)="deleteReduction(element.id)"
+                                type="button">
+                                <mat-icon>delete</mat-icon>
+                                <span>Supprimer réduction</span>
+                            </button>
+                        </mat-menu>
+                    </td>
+                </ng-container>-->
+                            <tr mat-header-row
+                                *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row;
+                    columns:
+                    displayedColumns;">
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row-button">
+                    <button matStepperPrevious class="btn btn-cancel"
+                        type="button">Retour</button>
+                    <button class="btn btn-action"
+                        type="submit">Enregistrer</button>
+                </div>
+            </form>
+        </mat-step>
+    </mat-stepper>
+
+</div>

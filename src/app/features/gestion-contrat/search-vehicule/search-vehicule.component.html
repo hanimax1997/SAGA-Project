@@ -1,0 +1,47 @@
+<h2 class="heading">
+    Veuillez choisir un véhicule du tableau
+</h2>
+<mat-divider></mat-divider>
+<div class="row" style="margin-bottom: 3%; display: flex; justify-content: center;">
+    <mat-dialog-content class="mat-typography"></mat-dialog-content>
+    <div class="col-md-12" style="padding-left: 2%;padding-right: 2%;">
+        <div class="mat-elevation-z8 p-0">
+            <table mat-table [dataSource]="dataSource" matSort style="width: 100%;">
+                <!-- idVehicule Column -->
+                <ng-container matColumnDef="idVehicule">
+                    <th mat-header-cell *matHeaderCellDef style="background: #00008F; color: white; font-size: large;"> N° Véhicule </th>
+                    <td mat-cell *matCellDef="let element" (click)="selectVehicule(element)" appBorderRow> {{element.idVehicule}} </td>
+                </ng-container>
+
+                <!-- marque Column -->
+                <ng-container matColumnDef="marque">
+                    <th mat-header-cell *matHeaderCellDef style="background: #00008F; color: white; font-size: large;"> Marque </th>
+                    <td mat-cell *matCellDef="let element" (click)="selectVehicule(element)" appBorderRow> {{element.marque?.description}} </td>
+                </ng-container>
+
+                <!-- modele Column -->
+                <ng-container matColumnDef="modele">
+                    <th mat-header-cell *matHeaderCellDef style="background: #00008F; color: white; font-size: large;"> Modèle </th>
+                    <td mat-cell *matCellDef="let element" (click)="selectVehicule(element)" appBorderRow> {{element.modele?.description}} </td>
+                </ng-container>
+
+                <!-- puissance Column -->
+                <ng-container matColumnDef="puissance">
+                    <th mat-header-cell *matHeaderCellDef style="background: #00008F; color: white; font-size: large;"> Puissance </th>
+                    <td mat-cell *matCellDef="let element" (click)="selectVehicule(element)" appBorderRow> {{element.puissanceFiscale?.description}} </td>
+                </ng-container>
+
+                <!-- energie Column -->
+                <ng-container matColumnDef="energie">
+                    <th mat-header-cell *matHeaderCellDef style="background: #00008F; color: white; font-size: large;"> Energie </th>
+                    <td mat-cell *matCellDef="let element" (click)="selectVehicule(element)" appBorderRow> {{element.energie?.description}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label=""></mat-paginator>
+        </div>  
+    </div>
+</div>

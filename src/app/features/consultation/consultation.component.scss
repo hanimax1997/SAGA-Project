@@ -1,0 +1,22 @@
+h2.heading{
+  color: #00008f;
+  font-weight: 700 !important;
+  letter-spacing: 0.5px;
+}
+
+.mat-icon{
+  height: 100%;
+  font-size: 36px;
+  width: fit-content;
+}
+
+.mat-icon:hover,
+.mat-icon:hover{
+  color: #d14723;
+  cursor: pointer;
+}
+
+.container-fluid{
+  height: 100%;
+  overflow-y: auto;
+}

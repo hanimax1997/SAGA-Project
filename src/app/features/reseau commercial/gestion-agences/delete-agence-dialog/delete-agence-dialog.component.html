@@ -1,0 +1,49 @@
+<h2 class="heading">Désactivation agence</h2>
+<mat-divider></mat-divider>
+
+
+<mat-dialog-content class="mat-typography">
+    <!-- <p>Etes-vous sur de vouloir désactiver l'agence  </p> -->
+   
+    <form #formDirective="ngForm" [formGroup]="formDesactivateAgence"
+        class="row"
+        style="display: flex;flex-direction: column;" (submit)="submitDesactAgence()">
+        <!-- newAgences-->
+        <mat-form-field class="col-md-12" appearance="outline">
+            <mat-label>new Agence</mat-label>
+            <mat-select formControlName="newAgence">
+                <mat-option>-- Aucune --</mat-option>
+                <ng-container *ngFor="let agence of newAgences">
+                    <mat-option
+                        [value]="agence.idAgence">
+                        {{agence.nomAgence}}
+                    </mat-option>
+                </ng-container>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-12"
+            appearance="outline">
+            <mat-label>Date Fin</mat-label>
+            <input matInput [matDatepicker]="pickerDateDebut"
+                formControlName="dateFin" [min]="minDate">
+            <mat-datepicker-toggle matSuffix [for]="pickerDateDebut"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDateDebut></mat-datepicker>
+            <mat-error
+                *ngIf="formDesactivateAgence.controls.dateFin.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formDesactivateAgence.controls.dateFin.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+
+        <div class="btn-row">
+            <button class="btn btn-cancel" mat-dialog-close
+                type="button">Retour</button>
+            <button class="btn btn-delete" 
+                type="submit">Désactiver</button>
+        </div>
+    </form>
+
+</mat-dialog-content>

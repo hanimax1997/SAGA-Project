@@ -1,0 +1,62 @@
+<h2 class="heading">
+    Modifier un reseau Distribution
+    <span style="float: right; font-size: 24px;" >
+        <mat-icon aria-hidden="false" aria-label="" class="material-symbols-outlined"
+                matTooltip="" matTooltipPosition="right" mat-dialog-close> close
+              </mat-icon>
+    </span>
+</h2>
+<mat-divider></mat-divider>
+<!-- <div *ngIf="reseauDistributionEditSuccess" class="alert alert-success">Le reseau de distribution N°{{idReseau}} a été modifier avec succés</div> -->
+<div *ngIf="reseauDistributionEditError" class="alert alert-danger"> {{messageError}} </div>
+<mat-dialog-content class="mat-typography">
+    <form #formDirective="ngForm" [formGroup]="formEditReseauDistribution"
+        (ngSubmit)="submitEditReseauDistribution(formDirective)" class="login-form" *ngIf="formEditReseauDistribution">
+
+        <mat-form-field class="col-md-12" appearance="outline">
+            <mat-label>Description</mat-label>
+            <input type="text" matInput placeholder="" formControlName="description">
+            <mat-error
+            *ngIf="formEditReseauDistribution.controls.description.errors"
+            class="invalid-feedback">
+                <div
+                    *ngIf="formEditReseauDistribution.controls.description.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+    
+        <mat-form-field class="col-md-6" style="padding-right: 3%;" appearance="outline">
+            <mat-label>Date debut</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dateDebut" >
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error
+            *ngIf="formEditReseauDistribution.controls.dateDebut.errors"
+            class="invalid-feedback">
+                <div
+                    *ngIf="formEditReseauDistribution.controls.dateDebut.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+    
+        <mat-form-field class="col-md-6" style="padding-left: 3%;" appearance="outline">
+            <mat-label>Date fin</mat-label>
+            <input matInput [min]="minDate" [matDatepicker]="picker2" formControlName="dateFin">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+            <mat-error *ngIf="formEditReseauDistribution.controls.dateFin.hasError('matDatepickerMin')"
+            class="invalid-feedback">
+                <div>  Date fin est inférieur à la date début</div>
+            </mat-error>
+        </mat-form-field>
+
+        <button class="btn btn-action"
+            type="submit" >Envoyer</button>
+        <button mat-raised-button class="btn btn-cancel"
+            mat-dialog-close >Annuler</button>
+    </form>
+</mat-dialog-content>
+<!-- <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions> -->

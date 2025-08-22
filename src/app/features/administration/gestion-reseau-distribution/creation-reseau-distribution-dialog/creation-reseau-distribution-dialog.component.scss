@@ -1,0 +1,30 @@
+//button action 
+.buttons.row{
+    justify-content: space-between;
+    padding: 0px 21px;
+    text-align: left;
+  }
+  //heading 
+  h2.heading{
+    color: #00008f;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+  }
+  .mat-dialog-content{
+    padding-top: 15px;
+  }
+  .mat-radio-button {
+    margin: 0 12px;
+  }
+  .mat-form-field{
+    padding-top: 15px;
+  }
+  .mat-error{
+    font-size: 11px;
+  }
+  .row-button {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 3rem;
+    margin-top: 2rem;
+  }

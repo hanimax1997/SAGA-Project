@@ -1,0 +1,625 @@
+
+<div class="container ">
+    <mat-stepper #stepper>
+        <mat-step [editable]="true" *ngIf="typeDecompte == 'PV'">
+            <ng-template matStepLabel>Calculateur </ng-template>
+            <div class="header-container">
+                <h2 class="header-title">
+                    <mat-icon aria-hidden="false"
+                        class="material-symbols-outlined"
+                        matTooltip="Retour"
+                        matTooltipPosition="left"
+                        [routerLink]="['../../..']" *ngIf="!missionSelected">arrow_circle_left</mat-icon>
+                    <mat-icon aria-hidden="false"
+                        class="material-symbols-outlined"
+                        matTooltip="Retour"
+                        matTooltipPosition="left"
+                        (click)="missionSelected=false" *ngIf="missionSelected">arrow_circle_left</mat-icon>
+                    <div *ngIf="missionSelected">
+                        <!-- <mat-icon class="mat-icon notranslate
+                        material-symbols-outlined material-icons mat-icon-no-color"
+                            aria-label="directions_car">calculate</mat-icon> -->
+                        Calculateur
+        
+                    </div>
+                </h2>
+        
+            </div>
+            <app-entete-gestion></app-entete-gestion>
+            <div class="alert alert-danger" *ngIf="dataSourceMission.data.length==0">Ce
+                sinistre ne contient aucune mission d'expertise</div>
+            <button class="btn btn-secondary"
+                style="display: flex;align-items: center;margin-bottom: 1rem;"
+                (click)="goTo('expertise')" *ngIf="!missionSelected">
+        
+                <mat-icon aria-hidden="false"
+                    class="material-symbols-outlined">add_circle</mat-icon>
+        
+                Ajouter une mission d'expertise
+        
+            </button>
+            <section *ngIf="!missionSelected && dataSourceMission.data.length!=0">
+        
+                <table mat-table [dataSource]="dataSourceMission" class="gestion-table">
+        
+                    <!--  numMission -->
+                    <ng-container matColumnDef="numMission">
+                        <th mat-header-cell *matHeaderCellDef> N° Mission d'expertise
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.numMission}}
+                        </td>
+                    </ng-container>
+        
+                    <!-- typeExpertise Column -->
+                    <ng-container matColumnDef="typeExpertise">
+                        <th mat-header-cell *matHeaderCellDef> Type Expertise </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.typeExpertise.description}}
+                        </td>
+                    </ng-container>
+                    <!-- modeExpertise Column -->
+                    <ng-container matColumnDef="modeExpertise">
+                        <th mat-header-cell *matHeaderCellDef> Mode Expertise </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.modeExpertise.description}}
+                        </td>
+                    </ng-container>
+                    <!-- Expert Column -->
+                    <ng-container matColumnDef="expert">
+                        <th mat-header-cell *matHeaderCellDef> Expert </th>
+                        <td mat-cell *matCellDef="let element"> {{element.idexpert }}</td>
+                    </ng-container>
+                    <!--  dateMission Column -->
+                    <ng-container matColumnDef="dateMission">
+                        <th mat-header-cell *matHeaderCellDef> Date mission d'expertise
+                        </th>
+                        <td mat-cell *matCellDef="let element"> {{element.dateMission |
+                            dateFormatPipe }} </td>
+                    </ng-container>
+                    <!-- statut Column -->
+                    <ng-container matColumnDef="statut">
+                        <th mat-header-cell *matHeaderCellDef> Statut </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.statutMission.description}}
+                        </td>
+                    </ng-container>
+        
+                    <!-- Action Column -->
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef> Action </th>
+                        <td mat-cell *matCellDef="let element">
+        
+                            <button mat-icon-button
+                                type="button"
+                                [matMenuTriggerFor]="menu"
+                                aria-label="menu">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                            <mat-menu #menu="matMenu"
+                                xPosition="after"
+                                class="menu-formule">
+                                <button mat-menu-item
+                                    (click)="selectMission(element.idMissionExpertise,element.dateMission)"
+                                    [disabled]="element.statutMission.code!='S10'"
+                                    type="button">
+                                    <mat-icon>zoom_in</mat-icon>
+                                    <span>Selectionner mission</span>
+                                </button>
+                            </mat-menu>
+        
+                        </td>
+                    </ng-container>
+        
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"
+                        class="example-second-header-row">
+                    </tr>
+        
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+            </section>
+            <section *ngIf="missionSelected">
+        
+                <table class="garanties">
+                    <thead>
+                        <tr>
+                            <th>Garantie</th>
+                            <th>Reserve</th>
+                            <th>Usage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="disabled-td">{{nomGarantie}}</td>
+                            <td class="disabled-td">{{nomReserve}}</td>
+                            <td class="disabled-td">{{usage}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+        
+                <form [formGroup]="formInfoGenerale" class="form-calculator">
+                    <table class="generale">
+                        <tbody>
+                            <tr>
+                                <td>Type Perte</td>
+                                <td><mat-form-field>
+                                        <mat-select formControlName="typePerte" (selectionChange)="selectTypePerte($event.value)"
+                                            placeholder="valeur">
+                                            <ng-container
+                                                *ngFor="let param of typePerteArray">
+                                                <mat-option [value]="param">{{param.description}}</mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Visite du risque</td>
+                                <td><mat-form-field>
+                                        <mat-select formControlName="visiteRisque"
+                                            placeholder="valeur">
+                                            <ng-container
+                                                *ngFor="let param of visiteRisqueArray">
+                                                <mat-option [value]="param.idParam">{{param.description}}</mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field></td>
+                            </tr>
+                            <tr>
+                                <td>Calcul en HT / TTC</td>
+                                <td><mat-form-field>
+                                        <mat-select formControlName="calculHTTTC"
+                                            placeholder="valeur">
+                                            <ng-container
+                                                *ngFor="let param of calculHTTTCArray">
+                                                <mat-option [value]="param.idParam">{{param.description}}</mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field></td>
+                            </tr>
+                            <tr>
+                                <td>Reference PV</td>
+                                <td><mat-form-field>
+                                        <input type="text" matInput
+                                            placeholder="valeur"
+                                            formControlName="referencePV">
+                                    </mat-form-field></td>
+                            </tr>
+                            <tr>
+                                <td>Avis sur le PV</td>
+                                <td><mat-form-field>
+                                        <mat-select formControlName="avisPV"
+                                            placeholder="valeur">
+                                            <ng-container
+                                                *ngFor="let param of avisPVCArray">
+                                                <mat-option [value]="param.idParam">{{param.description}}</mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field></td>
+                            </tr>
+                            <tr>
+                                <td>Controle usage</td>
+                                <td><mat-form-field>
+                                        <mat-select formControlName="controleUsage"
+                                            placeholder="valeur">
+                                            <ng-container
+                                                *ngFor="let param of controleUsageArray">
+                                                <mat-option [value]="param">{{param.description}}</mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field></td>
+                            </tr>
+                            <tr>
+                                <td>Date PV</td>
+                                <td>
+                                    <mat-form-field>
+        
+                                        <input matInput [matDatepicker]="datePV"
+                                            formControlName="datePV" placeholder="date"
+                                            [max]="today" [min]="dateExpertise">
+                                        <mat-datepicker-toggle matSuffix
+                                            [for]="datePV"></mat-datepicker-toggle>
+                                        <mat-datepicker #datePV></mat-datepicker>
+                                    </mat-form-field>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                    <form [formGroup]="formCalculator" class="form-calculator">
+                        <table class="typeInfoDecompte">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Brut</th>
+                                    <th>% Vetusté</th>
+                                    <th>Vetusté</th>
+                                    <th>Retenue</th>
+                                    <th>Motif</th>
+                                    <th>Net</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Main d'œuvre</td>
+                                    <td> <mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="montant"
+                                                formControlName="brut_CP460"
+                                                (ngModelChange)="onBrutInput($event,'CP460')">
+                                        </mat-form-field></td>
+                                    <td class="disabled-td"></td>
+                                    <td class="disabled-td">
+                                        <div
+                                            *ngFor="let decompte of calcultateur.sinistreDecompteInfos">
+                                            <span
+                                                *ngIf="decompte.typeInfoDecompte.code === 'CP460'">{{decompte.vetuste}}
+                                            </span>
+                                        </div>
+        
+                                    </td>
+                                    <td><mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="montant"
+                                                formControlName="retenue_CP460"
+                                                (ngModelChange)="onRetenueInput($event,'CP460')">
+                                            <mat-error
+                                                *ngIf="formCalculator.controls.retenue_CP460.errors"
+                                                class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCalculator.controls.retenue_CP460.retenueValid">
+                                                    le brut doit etre supérieur à la
+                                                    retenue</div>
+                                            </mat-error>
+                                        </mat-form-field></td>
+                                    <td><mat-form-field>
+                                            <mat-select formControlName="motif_CP460"
+                                                placeholder="motif">
+                                                <ng-container
+                                                    *ngFor="let param of motifArray">
+                                                    <mat-option [value]="param.idParam">{{param.description}}</mat-option>
+                                                </ng-container>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </td>
+                                    <td class="result-td">{{ netObj.CP460 | twoDegit}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Peinture</td>
+                                    <td><mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="montant"
+                                                formControlName="brut_CP461"
+                                                (ngModelChange)="onBrutInput($event,'CP461')">
+                                        </mat-form-field></td>
+                                    <td class="disabled-td"></td>
+                                    <td class="disabled-td">
+                                        <div
+                                            *ngFor="let decompte of calcultateur.sinistreDecompteInfos">
+                                            <span
+                                                *ngIf="decompte.typeInfoDecompte.code === 'CP461'">{{decompte.vetuste}}
+                                            </span>
+                                        </div>
+        
+                                    </td>
+                                    <td><mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="montant"
+                                                formControlName="retenue_CP461"
+                                                (ngModelChange)="onRetenueInput($event,'CP461')">
+                                            <mat-error
+                                                *ngIf="formCalculator.controls.retenue_CP461.errors"
+                                                class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCalculator.controls.retenue_CP461.hasError('max')">
+                                                    le brut doit etre supérieur à la
+                                                    retenue</div>
+                                            </mat-error>
+                                        </mat-form-field></td>
+                                    <td><mat-form-field>
+                                            <mat-select placeholder="motif"
+                                                formControlName="motif_CP461">
+                                                <ng-container
+                                                    *ngFor="let param of motifArray">
+                                                    <mat-option [value]="param.idParam">{{param.description}}</mat-option>
+                                                </ng-container>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </td>
+                                    <td class="result-td">{{netObj.CP461 | twoDegit}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Fourniture</td>
+                                    <td><mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="montant"
+                                                formControlName="brut_CP462"
+                                                (ngModelChange)="onBrutInput($event,'CP462')">
+                                        </mat-form-field></td>
+                                    <td><mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="pourcentage" max="100"
+                                                formControlName="vetuste_CP462">
+                                            <mat-error
+                                                *ngIf="formCalculator.controls.vetuste_CP462.errors"
+                                                class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCalculator.controls.vetuste_CP462.hasError('max')">
+                                                    Max 100</div>
+                                            </mat-error>
+                                        </mat-form-field></td>
+                                    <td class="result-td">
+                                        <div
+                                            *ngFor="let decompte of calcultateur.sinistreDecompteInfos">
+                                            <span
+                                                *ngIf="decompte.typeInfoDecompte.code === 'CP462'">{{decompte.vetuste
+                                                | twoDegit}}
+                                            </span>
+                                        </div>
+        
+                                    </td>
+                                    <td><mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="montant"
+                                                formControlName="retenue_CP462"
+                                                (ngModelChange)="onRetenueInput($event,'CP462')">
+                                            <mat-error
+                                                *ngIf="formCalculator.controls.retenue_CP462.errors"
+                                                class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCalculator.controls.retenue_CP462.retenueValid">
+                                                    le brut doit etre supérieur à la
+                                                    retenue</div>
+                                            </mat-error>
+                                        </mat-form-field></td>
+                                    <td>
+                                        <mat-form-field>
+                                            <mat-select placeholder="motif"
+                                                formControlName="motif_CP462">
+                                                <ng-container
+                                                    *ngFor="let param of motifArray">
+                                                    <mat-option [value]="param.idParam">{{param.description}}</mat-option>
+                                                </ng-container>
+                                            </mat-select>
+                                        </mat-form-field></td>
+                                    <td class="result-td">{{netObj.CP462 | twoDegit}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Don glaces</td>
+                                    <td><mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="montant"
+                                                formControlName="brut_CP463"
+                                                (ngModelChange)="onBrutInput($event,'CP463')">
+                                        </mat-form-field></td>
+                                    <td class="disabled-td"></td>
+                                    <td class="disabled-td">
+                                        <div
+                                            *ngFor="let decompte of calcultateur.sinistreDecompteInfos">
+                                            <span
+                                                *ngIf="decompte.typeInfoDecompte.code === 'CP463'">{{decompte.vetuste}}
+                                            </span>
+                                        </div>
+        
+                                    </td>
+                                    <td><mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="montant"
+                                                formControlName="retenue_CP463"
+                                                (ngModelChange)="onRetenueInput($event,'CP463')">
+                                            <mat-error
+                                                *ngIf="formCalculator.controls.retenue_CP463.errors"
+                                                class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCalculator.controls.retenue_CP463.retenueValid">
+                                                    le brut doit etre supérieur à la
+                                                    retenue</div>
+                                            </mat-error>
+                                        </mat-form-field></td>
+                                    <td>
+                                        <mat-form-field>
+                                            <mat-select placeholder="motif"
+                                                formControlName="motif_CP463">
+                                                <ng-container
+                                                    *ngFor="let param of motifArray">
+                                                    <mat-option [value]="param.idParam">{{param.description}}</mat-option>
+                                                </ng-container>
+                                            </mat-select>
+                                        </mat-form-field></td>
+                                </tr>
+                                <tr>
+                                    <td>Don pneux</td>
+                                    <td><mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="montant"
+                                                formControlName="brut_CP464"
+                                                (ngModelChange)="onBrutInput($event,'CP464')">
+                                        </mat-form-field></td>
+                                    <td><mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="pourcentage" max="100"
+                                                formControlName="vetuste_CP464">
+                                            <mat-error
+                                                *ngIf="formCalculator.controls.vetuste_CP464.errors"
+                                                class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCalculator.controls.vetuste_CP464.hasError('max')">
+                                                    Max 100</div>
+                                            </mat-error>
+                                        </mat-form-field></td>
+                                    <td class="result-td">
+                                        <div
+                                            *ngFor="let decompte of calcultateur.sinistreDecompteInfos">
+                                            <span
+                                                *ngIf="decompte.typeInfoDecompte.code === 'CP464'">{{decompte.vetuste
+                                                | twoDegit}}
+                                            </span>
+                                        </div>
+        
+                                    </td>
+                                    <td><mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="montant"
+                                                formControlName="retenue_CP464"
+                                                (ngModelChange)="onRetenueInput($event,'CP464')">
+                                            <mat-error
+                                                *ngIf="formCalculator.controls.retenue_CP464.errors"
+                                                class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCalculator.controls.retenue_CP464.retenueValid">
+                                                    le brut doit etre supérieur à la
+                                                    retenue</div>
+                                            </mat-error>
+                                        </mat-form-field></td>
+                                    <td>
+                                        <mat-form-field>
+                                            <mat-select placeholder="motif"
+                                                formControlName="motif_CP464">
+                                                <ng-container
+                                                    *ngFor="let param of motifArray">
+                                                    <mat-option [value]="param.idParam">{{param.description}}</mat-option>
+                                                </ng-container>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Dommage brut</td>
+                                    <td class="result-td">{{calcultateur.dommageBrut |
+                                        twoDegit}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Vétusté</td>
+                                    <td class="result-td">{{calcultateur.vetuste |
+                                        twoDegit}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Dommage net vetusté</td>
+                                    <td class="result-td"> <mat-form-field>
+                                        <input type="number" matInput
+                                            placeholder="Dommage net vetusté"
+                                            formControlName="dommageNetVetuste"
+                                            (ngModelChange)="calcultateur.dommageNetVetuste = $event">
+                                    </mat-form-field>
+                                        {{calcultateur.dommageNetVetuste
+                                        | twoDegit}}</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="4">RP</td>
+                                    <td rowspan="2" class="header-tr">Capitale</td>
+                                    <td class="header-tr">Capital assuré</td>
+                                    <td class="header-tr">Valeur Expert</td>
+                                    <td class="header-tr">RP Capitaux</td>
+        
+                                </tr>
+                                <tr>
+                                    <td class="result-td">{{calcultateur.capitalAssure |
+                                        twoDegit}}</td>
+                                    <td><mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="montant"
+                                                formControlName="capitalValeurExpert">
+                                        </mat-form-field></td>
+                                    <td class="result-td">{{calcultateur.rpcapitaux |
+                                        twoDegit}}</td>
+        
+                                </tr>
+                                <tr>
+                                    <td rowspan="2">Usage</td>
+                                    <td class="header-tr">RC Payée</td>
+                                    <td class="header-tr">RC Due</td>
+                                    <td class="header-tr">RP RC</td>
+        
+                                </tr>
+                                <tr>
+                                    <td class="result-td">{{calcultateur.rcpayee |
+                                        twoDegit}}</td>
+                                    <td class="result-td">{{calcultateur.rcdue |
+                                        twoDegit}}</td>
+                                    <td class="result-td">{{calcultateur.rcrp | twoDegit
+                                        }}</td>
+        
+                                </tr>
+                                <tr>
+                                    <td>Régle propotionnel</td>
+                                    <td colspan="2" class="result-td">{{calcultateur.reglePropotionnel
+                                        | twoDegit}}</td>
+        
+                                </tr>
+                                <tr>
+                                    <td>Dommage net RP</td>
+                                    <td colspan="2" class="result-td">{{calcultateur.dommageNetRp
+                                        | twoDegit}}</td>
+        
+                                </tr>
+                                <tr>
+                                    <td>Immobilisation</td>
+                                    <td><mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="jours"
+                                                formControlName="nbImmobilisation">
+                                        </mat-form-field></td>
+                                    <td class="result-td">{{calcultateur.immobilisation
+                                        | twoDegit}}</td>
+        
+                                </tr>
+                                <tr>
+                                    <td>Franchise</td>
+                                    <td colspan="2" class="result-td">
+                                        <mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="Franchise"
+                                                formControlName="franchise"
+                                                (ngModelChange)="calcultateur.franchise = $event">
+                                        </mat-form-field>
+                                        {{calcultateur.franchise | twoDegit}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Part technique</td>
+                                    <td colspan="2" class="result-td">{{calcultateur.partTechnique
+                                        | twoDegit}}</td>
+        
+                                </tr>
+                                <tr>
+                                    <td>Part commerciale</td>
+                                    <td colspan="2"><mat-form-field>
+                                            <input type="number" matInput
+                                                placeholder="montant"
+                                                formControlName="partCommerciale">
+                                        </mat-form-field></td>
+        
+                                </tr>
+                                <tr>
+                                    <td>Total à regler</td>
+                                    <td colspan="2" class="result-td">{{calcultateur.totalRegle
+                                        | twoDegit}}</td>
+        
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="button-row">
+                            <button class="btn btn-action" type="submit"
+                                *ngIf="calculatorReady"
+                                (click)="saveCalculateur()">Suivant
+                            </button>
+                            <button class="btn btn-secondary" type="submit"
+                                (click)="submitCalculateur()">Calculer
+                            </button>
+                        </div>
+        
+                    </form>
+                </section>
+        </mat-step>
+        <mat-step [editable]="true">
+            <ng-template matStepLabel>Creation OP </ng-template>
+            <app-create-op-assure [calculateur]="calcultateur" (newItemEvent)="emitOp($event)" *ngIf="calculatorReady || typeDecompte == 'OP'"></app-create-op-assure>
+        </mat-step>
+        <mat-step [editable]="true" >
+            <ng-template matStepLabel *ngIf="step3">Paiement </ng-template>
+            <ng-template matStepLabel *ngIf="step4">Instance </ng-template>
+            <app-paiement-sinistre [jsonOp]="jsonOp" *ngIf="step3"></app-paiement-sinistre>
+            <app-creation-instance [jsonOp]="jsonOp" *ngIf="step4"></app-creation-instance>
+        </mat-step>
+    </mat-stepper>
+</div>

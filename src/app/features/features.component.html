@@ -1,0 +1,25 @@
+
+
+<mat-drawer-container class="example-container" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side" disableClose="true"
+        opened="true">
+        <!-- <p style="width:400px">Auto-resizing sidenav</p>
+        <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
+        <button (click)="showFiller= !showFiller" mat-raised-button>
+            Toggle extra text
+        </button> -->
+        <app-sidebar [isExpanded]="isExpanded" (newItemEvent)="hide($event)" class="sidebar"></app-sidebar>
+    </mat-drawer>
+
+    <div class="wrapper d-flex flex-column" [ngClass]="{'open':isExpanded}">
+        <app-navbar [isExpanded]="isExpanded" (newItemEvent)="hide($event)"></app-navbar>
+        <div class="body-outlet">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+
+</mat-drawer-container>
+
+
+<!-- <app-sidebar></app-sidebar>
+<app-navbar></app-navbar> -->

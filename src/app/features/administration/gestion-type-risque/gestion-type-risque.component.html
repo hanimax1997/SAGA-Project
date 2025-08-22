@@ -1,0 +1,93 @@
+<div class="container ">
+    <div class="" *ngIf="step">
+        <div class="header">
+
+            <h2 class="title-table">Listes des types risque</h2>
+    
+            <button class="btn btn-secondary" style="display: flex;
+                align-items: center;" (click)="openCreateDialog()">
+    
+                <mat-icon aria-hidden="false" aria-label="ajouter type risque "
+                    class="material-symbols-outlined">add_circle</mat-icon>
+    
+                    Ajouter un nouveau type risque
+            </button>
+        </div>
+        <mat-divider></mat-divider>
+        <table mat-table [dataSource]="dataSource" class="gestion-table">
+    
+    
+            <!-- idTypeRisque Column -->
+            <ng-container matColumnDef="idTypeRisque">
+                <th mat-header-cell *matHeaderCellDef> id </th>
+                <td mat-cell *matCellDef="let element" >
+                    {{element.idTypeRisque}} </td>
+            </ng-container>
+    
+            <!-- description Column -->
+            <ng-container matColumnDef="description" >
+                <th mat-header-cell *matHeaderCellDef > Description </th>
+                <td mat-cell *matCellDef="let element" > {{element.description}}
+                </td>
+            </ng-container>
+    
+            <!-- Codification nationale Column -->
+            <ng-container matColumnDef="Codification_nationale">
+                <th mat-header-cell *matHeaderCellDef > Codification nationale </th>
+                <td mat-cell *matCellDef="let element" >
+                    {{element.codificationNationale}} </td>
+            </ng-container>
+    
+            <!-- Codification_metier Column -->
+            <ng-container matColumnDef="Codification_metier">
+                <th mat-header-cell *matHeaderCellDef > Codification Métiers </th>
+                <td mat-cell *matCellDef="let element" >
+                    {{element.codificationMetier}} </td>
+            </ng-container>
+    
+            <!-- date_Debut Column -->
+            <ng-container matColumnDef="date_Debut">
+                <th mat-header-cell *matHeaderCellDef > Date début </th>
+                <td mat-cell *matCellDef="let element" > {{element.dateDebut |
+                    dateFormatPipe }} </td>
+            </ng-container>
+            <!-- date_Fin Column -->
+            <ng-container matColumnDef="date_Fin">
+                <th mat-header-cell *matHeaderCellDef > Date fin </th>
+                <td mat-cell *matCellDef="let element" >{{element.DateFin |
+                    dateFormatPipe }} </td>
+            </ng-container>
+            <!-- Action Column -->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="menu duree list">
+                        <mat-icon >more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="openEditDialog(element.idTypeRisque)">
+                        <mat-icon >edit</mat-icon>
+                        <span>Modifier un type risque</span>
+                      </button>
+                      <button mat-menu-item (click)="viewParamRisque(element)">
+                        <mat-icon>visibility</mat-icon>
+                        <span>Détails type risque</span>
+                      </button>
+                    </mat-menu>
+                </td>
+            </ng-container>
+    
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"
+                class="example-second-header-row">
+            </tr>
+    
+    
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10]"
+            aria-label="Select page of users"></mat-paginator>
+    </div>
+
+    <app-gestion-param-risque [typeRisque]="typeRisque" (newItemEvent)="stepChange()" *ngIf="!step"></app-gestion-param-risque>
+
+</div>

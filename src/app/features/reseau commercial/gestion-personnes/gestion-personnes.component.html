@@ -1,0 +1,180 @@
+<div class="container-fluid" style="height: 100%;">
+  <div class="row" style="justify-content: center; align-items: center; align-content: center;">
+      <div class="card col-md-10" style="align-items: center; align-content: center; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15); padding-top: 2%; background: #FFFFFF;">
+          <div class="row">
+            <div class="card-body">
+                  <!-- Debut Statistiques personne -->
+                  <h2 class="heading" style="padding-left: 6%;">Application Statistics</h2>
+                  <div class="row" style="margin-bottom: 5%; display:flex; justify-content: space-evenly;">
+                      <div class="card col-md-3" style="background: white; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);">
+                          <div class="card-body" style="padding: 5%;">
+                              <h1 style="color: #2F76E5; font-size: 32px;">6</h1>
+                              <p style="font-size: 13px;">Personnes physique</p>
+                          </div>
+                      </div>
+                      <div class="card col-md-3" style="background: white; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);">
+                          <div class="card-body" style="padding: 5%;">
+                              <h1 style="color: #2F76E5; font-size: 32px;">12</h1>
+                              <p style="font-size: 13px;">Personnes morale</p>
+                          </div>
+                      </div>
+                      <div class="card col-md-3" style="background: white; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);">
+                          <div class="card-body" style="padding: 5%;">
+                              <h1 style="color: #2F76E5; font-size: 32px;">18</h1>
+                              <p style="font-size: 13px;">Personnes totale</p>
+                          </div>
+                      </div>
+                  </div>
+                  <!-- Debut Statistiques personne -->
+
+                  <div class="row" style="display:flex; justify-content: center;">
+                      <h2 class="heading" style="padding-left: 6%; padding-right: 6%;"> {{ title }} 
+                            <mat-icon style="float: right;" [matMenuTriggerFor]="menu_creation">more_vert</mat-icon>
+                            
+                            <mat-menu #menu_creation="matMenu">
+                                <button mat-menu-item (click)="openDialogAddPersonne()">
+                                  <!-- <mat-icon>dialpad</mat-icon> -->
+                                  <span>Ajouter une personne</span>
+                                </button>
+                                <button mat-menu-item>
+                                  <!-- <mat-icon>voicemail</mat-icon> -->
+                                  <span>Ajouter une relation</span>
+                                </button>
+                                <button mat-menu-item>
+                                  <!-- <mat-icon>notifications_off</mat-icon> -->
+                                  <span>Ajouter un type document</span>
+                                </button>
+                                <button mat-menu-item>
+                                  <!-- <mat-icon>notifications_off</mat-icon> -->
+                                  <span>Ajouter une profession</span>
+                                </button>
+                                <button mat-menu-item>
+                                  <!-- <mat-icon>notifications_off</mat-icon> -->
+                                  <span>Ajouter une adresse</span>
+                                </button>
+                                <!-- <button mat-menu-item (click)="telecharger(devis)">
+                                  <span>Télécharger</span>
+                                </button> -->
+                            </mat-menu>
+                      </h2>
+                  </div>
+                   
+                  <!-- Debut Champs filtre -->
+                  <div class="row" style="margin-bottom: 3%; display: flex; justify-content: center;">
+                      <div class="col-md-11" style="padding-left: 2%;padding-right: 2%;">
+                                  <div class="row" style="display: flex;">
+                                    <form #formDirective="ngForm" [formGroup]="formFilter" class="login-form" *ngIf="formFilter" (ngSubmit)="filterPersonne()">
+                                      <mat-form-field style="padding-right: 15px; width: 20%;" appearance="outline">
+                                        <mat-label>Type personne</mat-label>
+                                        <mat-select [value]="typePersonne" (selectionChange)="changeClient($event)">
+                                            <mat-option value="moral">Moral</mat-option>
+                                            <mat-option value="physique">Physique</mat-option>
+                                        </mat-select>
+                                      </mat-form-field>
+                                      <mat-form-field style="padding-left: 15px;padding-right: 15px; width: 20%;" *ngFor="let consultation of consultations" [class]="consultation.position" appearance="outline">
+                                          <mat-label>{{ consultation.libelle }}</mat-label>
+                                          
+                                          <mat-select *ngIf="consultation.type == 'select'" [formControlName]="consultation.formName">
+                                              <ng-container *ngFor="let option of consultation.ifselect">
+                                                <mat-option [value]="option">{{option}}</mat-option>
+                                              </ng-container>
+                                          </mat-select>
+
+                                          <input type="text" matInput placeholder="" *ngIf="consultation.type == 'string'" [formControlName]="consultation.formName">
+
+                                          <input type="number" matInput placeholder="" *ngIf="consultation.type == 'number'" [formControlName]="consultation.formName">
+
+                                          <input matInput [matDatepicker]="picker" *ngIf="consultation.type == 'date'" [formControlName]="consultation.formName">
+                                          <mat-datepicker-toggle matSuffix [for]="picker" *ngIf="consultation.type == 'date'"></mat-datepicker-toggle>
+                                          <mat-datepicker #picker></mat-datepicker>
+                                      </mat-form-field>
+                                      
+                                      <div class="col-md-12">
+                                          <button mat-raised-button type="submit" style="height: 100%; float: right; background: #00008F; color: white;">Rechercher</button>
+                                      </div>
+                                    </form>
+                                  </div>
+                      </div>
+                  </div>
+                  <!-- Fin Champs filtre -->
+
+                  <!-- Debut Table personne -->
+                  <div class="row">
+                      <mat-form-field appearance="outline">
+                          <mat-label>Recherche rapide</mat-label>
+                          <mat-icon matSuffix> search</mat-icon>
+                          <input matInput (keyup)="applyFilter($event)" placeholder="" #input>
+                      </mat-form-field>
+                      <div class="mat-elevation-z8 p-0">
+                          <table mat-table [dataSource]="dataSource" matSort class="gestion-table" >
+
+                              <!-- idClient Column -->
+                              <ng-container matColumnDef="idClient">
+                                <th mat-header-cell *matHeaderCellDef > N° Client </th>
+                                <td mat-cell *matCellDef="let element" (click)="openDialogEdit(element.idClient)" appBorderRow> {{element.idClient}} </td>
+                              </ng-container>
+                            
+                              <!-- Assuré Column -->
+                              <ng-container matColumnDef="assure">
+                                <th mat-header-cell *matHeaderCellDef > Assuré </th>
+                                <td mat-cell *matCellDef="let element" (click)="openDialogEdit(element.idClient)" appBorderRow> {{element.nom != null ? element.nom+" "+element.prenom1:element.raisonSocial}} </td>
+                              </ng-container>
+                            
+                              <!-- typePersonne Column -->
+                              <ng-container matColumnDef="typePersonne">
+                                <th mat-header-cell *matHeaderCellDef > Type personne </th>
+                                <td mat-cell *matCellDef="let element" (click)="openDialogEdit(element.idClient)" appBorderRow> {{element.nom != null ? 'Physique':'Morale'}} </td>
+                              </ng-container>
+                            
+                              <!-- date  Column -->
+                              <ng-container matColumnDef="date">
+                                <th mat-header-cell *matHeaderCellDef > Date naissance/ouverture </th>
+                                <td mat-cell *matCellDef="let element" (click)="openDialogEdit(element.idClient)" appBorderRow> 
+                                  <ng-container *ngIf="element.dateNaissance != null">
+                                    {{ element.dateNaissance | date:"dd/MM/yyyy" }}
+                                  </ng-container>
+                                  <ng-container *ngIf="element.dateOuverture != null">
+                                    {{ element.dateOuverture | date:"dd/MM/yyyy" }}
+                                  </ng-container>
+                                </td>
+                              </ng-container>
+                            
+                              <!-- numero Column -->
+                              <ng-container matColumnDef="numero">
+                                <th mat-header-cell *matHeaderCellDef> NIN/NIF </th>
+                                <td mat-cell *matCellDef="let element" (click)="openDialogEdit(element.idClient)" appBorderRow> {{element.nin != null ? element.nin:element.nif}} </td>
+                              </ng-container>
+                            
+                              <!-- Action Column -->
+                              <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef > Action </th>
+                                <td mat-cell *matCellDef="let element"> 
+                                      <mat-icon [matMenuTriggerFor]="menu_update" style="padding-top: 10%;">more_vert</mat-icon>
+                                      <mat-menu #menu_update="matMenu">
+                                          <button mat-menu-item (click)="openDialogEdit(element.idClient)">
+                                            <span>
+                                            <mat-icon aria-hidden="false" aria-label="Modifier personne"
+                                            class="material-symbols-outlined" matTooltip="Modifier personne"
+                                            matTooltipPosition="right">visibility</mat-icon> Consulter</span>
+                                          </button>
+                                          <button mat-menu-item>
+                                            <span>Archiver</span>
+                                          </button>
+                                      </mat-menu>
+                                </td>
+                              </ng-container>
+                            
+                              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                          </table>
+                        
+                          <mat-paginator [length]="personneTable.totalElements" *ngIf="dataSource.data.length!=0" [pageSize]="10"  (page)="onPageChange($event)">
+                          </mat-paginator>
+                      </div>                         
+                  </div>
+                  <!-- Fin Table personne -->
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

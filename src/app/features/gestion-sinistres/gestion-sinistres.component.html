@@ -1,0 +1,348 @@
+<div class="container ">
+    <div class="header">
+
+        <h2 class="title-table">
+            <!-- <mat-icon aria-hidden="false"
+                aria-label="ajouter pack "
+                class="material-symbols-outlined">car_crash</mat-icon> -->
+            Listes des sinistres {{ produit }}</h2>
+
+        <button class="btn btn-secondary" style="display: flex;
+            
+            align-items: center;" 
+            [disabled]="isCourtier || !roleExist"
+            (click)="addSinistre()">
+
+            <mat-icon aria-hidden="false" aria-label="ajouter pack "
+                class="material-symbols-outlined">add_circle</mat-icon>
+
+            Déclarer un sinistre {{ produit }}
+        </button>
+    </div>
+    <mat-divider></mat-divider>
+
+    <mat-accordion class="example-headers-align" multi>
+        <!--Contrat-->
+        <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Recherches sinistre
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <form #formDirective="ngForm" [formGroup]="formFilterSinistre"
+                (ngSubmit)="submitFilter(0,10)"
+                class="row
+                formFiltre">
+                <div class="row">
+                    <!--numPolice-->
+                    <mat-form-field class="col-md-4"
+                        appearance="outline">
+                        <mat-label>N°police</mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="numPolice">
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <!--dateSurvenance -->
+
+                    <mat-form-field class="col-md-4"
+                        appearance="outline">
+                        <mat-label>Date Survenance</mat-label>
+                        <input matInput [matDatepicker]="pickerdateSurvenance"
+                            formControlName="dateSurvenance">
+                        <mat-datepicker-toggle matSuffix
+                            [for]="pickerdateSurvenance"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerdateSurvenance></mat-datepicker>
+                    </mat-form-field>
+                    <!--N°Sinistre-->
+                    <mat-form-field class="col-md-4"
+                        appearance="outline">
+                        <mat-label>N°Sinistre</mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="numSinistre">
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <!--codeRisque -->
+                    <mat-form-field class="col-md-4"
+                        appearance="outline">
+                        <mat-label>Code risque </mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="codeRisque">
+                    </mat-form-field>
+                    <!--numChassis-->
+                    <mat-form-field class="col-md-4"
+                        *ngIf="codeProduit == '45A' || codeProduit == '45F' || codeProduit == '45L';else mrh"
+                        appearance="outline">
+                        <mat-label>N°Chassis</mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="numChassis">
+                    </mat-form-field>
+                    <ng-template #mrh>
+                        <!--Adresse-->
+                        <mat-form-field class="col-md-4"
+                            appearance="outline">
+                            <mat-label>Adresse</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="adresse">
+                        </mat-form-field>
+                    </ng-template>
+                </div>
+                <div class="row">
+                    <!--nomAssure-->
+                    <mat-form-field class="col-md-4"
+                        appearance="outline" *ngIf="codeProduit == '45A'">
+                        <mat-label>Nom assure</mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="nomAssure">
+                    </mat-form-field>
+                    <!--prenomAssure-->
+                    <mat-form-field class="col-md-4"
+                        appearance="outline" *ngIf="codeProduit == '45A'">
+                        <mat-label>Prénom assure</mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="prenomAssure">
+                    </mat-form-field>
+                    <!--raisonSociale-->
+                    <mat-form-field class="col-md-4"
+                        appearance="outline">
+                        <mat-label>Raison Sociale</mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="raisonSociale">
+                    </mat-form-field>
+                </div>
+                <ng-container>
+                    <div class="row"
+                        *ngIf="codeProduit == '45A' || codeProduit == '45F' || codeProduit == '45L'">
+                        <!--num assuré -->
+                        <mat-form-field class="col-md-4"
+                            appearance="outline">
+                            <mat-label>Nom conducteur du véhicule
+                                assuré</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="nomConducteurAssure">
+                        </mat-form-field>
+                        <!--num assuré -->
+                        <mat-form-field class="col-md-4"
+                            appearance="outline">
+                            <mat-label>Prénom conducteur du véhicule
+                                assuré</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="prenomConducteurAssure">
+                        </mat-form-field>
+                        <!--immatriculationAssure-->
+                        <mat-form-field class="col-md-4"
+                            appearance="outline">
+                            <mat-label>Immatriculation assuré</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="immatriculationAssure">
+                        </mat-form-field>
+                    </div>
+                    <div class="row"
+                        *ngIf="codeProduit == '45A' || codeProduit == '45F' || codeProduit == '45L'">
+                        <!--nomAdversaire -->
+                        <mat-form-field class="col-md-4"
+                            appearance="outline">
+                            <mat-label>Nom adversaire</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="nomAdversaire">
+                        </mat-form-field>
+                        <!--prenomAdversaire-->
+                        <mat-form-field class="col-md-4"
+                            appearance="outline">
+                            <mat-label>Prénom adversaire</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="prenomAdversaire">
+                        </mat-form-field>
+                        <!--immatriculationAdversaire-->
+                        <mat-form-field class="col-md-4"
+                            appearance="outline">
+                            <mat-label>Immatriculation Adversaire</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="immatriculationAdversaire">
+                        </mat-form-field>
+                    </div>
+                    <div class="row" *ngIf="codeProduit == '45L'">
+                        <!--idClient -->
+                        <mat-form-field class="col-md-4"
+                            appearance="outline">
+                            <mat-label>ID Client</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="idClient">
+                        </mat-form-field>
+                        <!--numContrat-->
+                        <mat-form-field class="col-md-4"
+                            appearance="outline">
+                            <mat-label>Numero Contrat</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="numContrat">
+                        </mat-form-field>
+                    </div>
+                </ng-container>
+
+                <div class="row-buttons">
+                    <button class="btn btn-action"
+                        type="submit">Recherche</button>
+                    <mat-icon class="material-symbols-outlined"
+                        (click)="resetTable(formDirective)"
+                        matTooltip="Rénitialisation"
+                        matTooltipPosition="right">restart_alt</mat-icon>
+                </div>
+            </form>
+
+        </mat-expansion-panel>
+    </mat-accordion>
+
+    <table mat-table [dataSource]="dataSource" class="gestion-table"
+        *ngIf="dataSource.data.length!=0">
+
+        <!--  numSinistre -->
+        <ng-container matColumnDef="numSinistre">
+            <th mat-header-cell *matHeaderCellDef> N°Sinistre </th>
+            <td mat-cell *matCellDef="let element"> {{element.codeSinistre}}
+            </td>
+        </ng-container>
+
+        <!-- numPolice Column -->
+        <ng-container matColumnDef="numPolice">
+            <th mat-header-cell *matHeaderCellDef> N°Police </th>
+            <td mat-cell *matCellDef="let element"> {{element.codePolice}}
+            </td>
+        </ng-container>
+
+        <!-- assure Column -->
+        <ng-container matColumnDef="assure">
+            <th mat-header-cell *matHeaderCellDef> Assure </th>
+            <td mat-cell *matCellDef="let element"><span
+                    *ngIf="element.nom!=null;else personneMorale">{{element.nom
+                    }}
+                    {{element.prenom }}</span>
+                <ng-template #personneMorale>{{element.raisonSocial
+                    }}</ng-template>
+            </td>
+        </ng-container>
+        <!-- date survenance Column -->
+        <ng-container matColumnDef="dateSurvenance">
+            <th mat-header-cell *matHeaderCellDef> Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.dateSurvenance |date:'dd-MM-yyyy' : 'utc'}} </td>
+        </ng-container>
+        <!-- Immatriculation Column -->
+        <ng-container matColumnDef="immatriculation"
+            *ngIf="codeProduit == '45A' || codeProduit == '45F' || codeProduit == '45L'">
+            <th mat-header-cell *matHeaderCellDef> Immatriculation </th>
+            <td mat-cell *matCellDef="let element"> {{element.immatriculation}}
+            </td>
+        </ng-container>
+        <!-- causeSinistre Column -->
+        <ng-container matColumnDef="causeSinistre"
+            *ngIf="codeProduit == '45A' || codeProduit == '45F' || codeProduit == '45L'">
+            <th mat-header-cell *matHeaderCellDef> Cause </th>
+            <td mat-cell *matCellDef="let element"> {{element.cause_sinistre}}
+            </td>
+        </ng-container>
+        <!-- typeSinistre Column -->
+        <ng-container matColumnDef="typeSinistre"
+            *ngIf="codeProduit == '45A' || codeProduit == '45F' || codeProduit == '45L'||   codeProduit == '95' || codeProduit == '96'">
+            <th mat-header-cell *matHeaderCellDef> Nature</th>
+            <td mat-cell *matCellDef="let element"> {{element.typeSinistre}}
+            </td>
+        </ng-container>
+        <!-- garantie Column -->
+        <ng-container matColumnDef="garantie"
+            *ngIf="codeProduit == '95' || codeProduit == '96'">
+            <th mat-header-cell *matHeaderCellDef> Garantie </th>
+            <td mat-cell *matCellDef="let element"> {{element.cause_sinistre}}
+            </td>
+        </ng-container>
+        <!-- Wilaya Column -->
+        <ng-container matColumnDef="wilaya"
+            *ngIf="codeProduit == '95' || codeProduit == '96'">
+            <th mat-header-cell *matHeaderCellDef> Wilaya </th>
+            <td mat-cell *matCellDef="let element"> {{element.wilaya}}
+            </td>
+        </ng-container>
+        <!-- commune Column -->
+        <ng-container matColumnDef="commune"
+            *ngIf="codeProduit == '95' || codeProduit == '96'">
+            <th mat-header-cell *matHeaderCellDef> Commune</th>
+            <td mat-cell *matCellDef="let element"> {{element.commune}}
+            </td>
+        </ng-container>
+        <!-- situationSinistre Column -->
+        <ng-container matColumnDef="situationSinistre">
+            <th mat-header-cell *matHeaderCellDef> Situation</th>
+            <td mat-cell *matCellDef="let element">
+                {{element.situationSinistre}}
+            </td>
+        </ng-container>
+
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let element">
+
+                <button mat-icon-button
+                    type="button"
+                    [matMenuTriggerFor]="menu"
+                    aria-label="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu"
+                    xPosition="after"
+                    class="menu-formule">
+                    <button mat-menu-item
+                        (click)="goTo('police',element.codePolice)"
+                        type="button">
+                        <mat-icon>zoom_in</mat-icon>
+                        <span>Consulter police</span>
+                    </button>
+                    <button mat-menu-item
+                        type="button"
+                        (click)="goTo('sinistre',element.codeSinistre)">
+                        <mat-icon>zoom_in</mat-icon>
+                        <span>Consulter sinistre</span>
+                    </button>
+                    <!-- <button mat-menu-item
+                        type="button"
+                        (click)="goTo('edit',element.codeSinistre)"
+                        [disabled]="element.situationSinistre=='Annulé'">
+                        <mat-icon>edit</mat-icon>
+                        <span>Modifier sinistre</span>
+                    </button> -->
+                    <button mat-menu-item
+                  
+                        type="button"  
+                        (click)="goTo('gestion',element.codeSinistre)">
+                        <mat-icon>settings</mat-icon>
+                        <span>Gestion sinistre</span>
+                    </button>
+                    <button mat-menu-item
+                    [disabled]="element.situationSinistre=='Annulée' || !roleExist"
+                        type="button"
+                        (click)="goTo('expertise',element.idSinistre)"
+                     >
+                        <mat-icon>demography</mat-icon>
+                        <span>Expertise</span>
+                    </button>
+                </mat-menu>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"
+            class="example-second-header-row">
+        </tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [length]="lengthElement"
+        *ngIf="dataSource.data.length!=0" [pageSize]="10"
+        (page)="onPageChange($event)">
+
+
+    </mat-paginator>
+            <!-- <mat-paginator  [length]="lengthElement"
+        [pageSize]="10"
+       (page)="onPageChange($event)"> -->
+</div>

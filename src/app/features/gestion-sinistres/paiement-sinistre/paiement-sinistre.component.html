@@ -1,0 +1,64 @@
+<div class="container ">
+    <h2 class="header-title">
+        Paiement</h2>
+    <app-entete-gestion></app-entete-gestion>
+
+    <form #formDirective="ngForm" [formGroup]="formPayment"
+        (ngSubmit)="submitPayement(formDirective)"
+        class="row ">
+
+        <!--modePayement -->
+        <mat-form-field class="col-md-5"
+            appearance="outline">
+            <mat-label>Mode de paiement</mat-label>
+            <mat-select formControlName="modePayement"
+                (selectionChange)="getSelectedMode($event.value)">
+                <ng-container *ngFor="let mode of modePayement">
+                    <mat-option [value]="mode">{{mode.description}}</mat-option>
+                </ng-container>
+            </mat-select>
+            <mat-error
+                *ngIf="formPayment.controls.modePayement.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formPayment.controls.modePayement.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <!--rib -->
+        <mat-form-field class="col-md-5"
+            appearance="outline" *ngIf="modeSelected=='04'">
+            <mat-label>RIB</mat-label>
+            <input type="text"
+                matInput
+                formControlName=rib>
+            <mat-error
+                *ngIf="formPayment.controls.rib.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formPayment.controls.rib.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <!--agence -->
+        <mat-form-field class="col-md-5"
+            appearance="outline">
+            <mat-label>Agence</mat-label>
+            <mat-select formControlName="agence">
+                <ng-container *ngFor="let agence of agencesArray">
+                    <mat-option [value]="agence.idAgence">{{agence.nomAgence}}</mat-option>
+                </ng-container>
+            </mat-select>
+            <mat-error
+                *ngIf="formPayment.controls.agence.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formPayment.controls.agence.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <div class="row-button" *ngIf="!errorCheck">
+            <button class="btn btn-action" type="submit">Enregistrer</button>
+        </div>
+    </form>
+</div>

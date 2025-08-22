@@ -1,0 +1,243 @@
+<h2 class="heading">Créer parametre risque
+    <span style="float: right; font-size: 24px;">
+        <mat-icon aria-hidden="false" aria-label
+            class="material-symbols-outlined"
+            matTooltip matTooltipPosition="right" mat-dialog-close> close
+        </mat-icon>
+    </span>
+</h2>
+<mat-divider></mat-divider>
+<div *ngIf="detailRisqueCreationSuccess" class="alert alert-success">Le
+    paramètre risque N°{{idDetailRisque}} a été ajouter avec succés</div>
+<div *ngIf="detailRisqueCreationError" class="alert alert-danger">{{messageError}}</div>
+<mat-dialog-content class="mat-typography">
+    <form #formDirective="ngForm" [formGroup]="formCreationDetailRisque"
+        (ngSubmit)="submitCreationDetailRisque(formDirective)"
+        class="login-form">
+        <div class="row">
+            <!-- <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+            <mat-label> Type Risque </mat-label>
+            
+            <mat-select formControlName="idTypeRisque">
+                <ng-container *ngFor="let type of types_risque">
+                    <mat-option
+                            [value]="type.idTypeRisque">
+                            {{type.description}}
+                        </mat-option>
+                </ng-container>
+            </mat-select>
+            <mat-error
+            *ngIf="formCreationDetailRisque.controls.idTypeRisque.errors"
+            class="invalid-feedback">
+                <div
+                    *ngIf="formCreationDetailRisque.controls.idTypeRisque.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field> -->
+            <mat-form-field class="col-md-6"
+                appearance="outline">
+                <mat-label>Libelle</mat-label>
+                <input type="text" matInput placeholder
+                    formControlName="libelle">
+                <mat-error
+                    *ngIf="formCreationDetailRisque.controls.libelle.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreationDetailRisque.controls.libelle.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6"
+                appearance="outline">
+                <mat-label>Description</mat-label>
+                <input type="text" matInput placeholder
+                    formControlName="descriptionChamp">
+                <mat-error
+                    *ngIf="formCreationDetailRisque.controls.descriptionChamp.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreationDetailRisque.controls.descriptionChamp.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6"
+                appearance="outline">
+                <mat-label>Numéro d'ordre</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="orderChamp">
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6" appearance="outline">
+                <mat-label>Taille</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="sizeChamp">
+            </mat-form-field>
+            <div class="row">
+                <mat-form-field class="col-md-6"
+                    appearance="outline">
+                    <mat-label> Type Champ </mat-label>
+
+                    <mat-select formControlName="typeChamp"
+                        (selectionChange)="getTypeChamp($event.value)">
+                        <ng-container *ngFor="let type of types_champs">
+                            <mat-option
+                                [value]="type">
+                                {{type.description}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col-md-6"
+                    appearance="outline" *ngIf="fromTableExist">
+                    <mat-label>Table</mat-label>
+
+                    <mat-select formControlName="tableGeneric">
+                        <ng-container *ngFor="let table of genericTables">
+                            <mat-option
+                                [value]="table">
+                                {{table.description}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <mat-checkbox class="col-md-3" formControlName="isParent"
+                    style="padding-left: 2%; padding-top: 1.5%;">Ce param risque
+                    est il père ?</mat-checkbox>
+                <mat-checkbox class="col-md-3" formControlName="isFils"
+                    style="padding-left: 2%; padding-top: 1.5%;">Ce param risque
+                    est il fils ?</mat-checkbox>
+
+                <mat-form-field class="col-md-12" appearance="outline"
+                    *ngIf="formCreationDetailRisque.value.typeChamp?.code == 'L01'">
+                    <mat-label>Options du select</mat-label>
+                    <mat-chip-list #chipList aria-label="option selection">
+                        <mat-chip *ngFor="let option of options"
+                            [selectable]="selectable"
+                            [removable]="removable" (removed)="remove(option)">
+                            {{option.reponse}}
+                            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                        </mat-chip>
+                        <input placeholder="New option..."
+                            [matChipInputFor]="chipList"
+                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                            [matChipInputAddOnBlur]="addOnBlur"
+                            (matChipInputTokenEnd)="add($event)">
+                    </mat-chip-list>
+
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <mat-form-field class="col-md-6" appearance="outline">
+                    <mat-label> Catégorie Risque </mat-label>
+
+                    <mat-select (selectionChange)="getCategorie($event)"
+                        formControlName="categorieRisquelist"
+                        [(ngModel)]="categorieRisque">
+                        <ng-container *ngFor="let categorie of categories">
+                            <mat-option
+                                [value]="categorie.idParam">
+                                {{categorie.description}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="formCreationDetailRisque.controls.categorieRisquelist.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formCreationDetailRisque.controls.categorieRisquelist.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="col-md-6"
+                    appearance="outline"
+                    *ngIf="categorieRisque== 192">
+                    <mat-label>Nouvelle Catégorie</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="categorieRisque">
+                    <mat-error
+                        *ngIf="formCreationDetailRisque.controls.categorieRisque.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formCreationDetailRisque.controls.categorieRisque.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="col-md-6" appearance="outline"
+                    *ngIf="formCreationDetailRisque.value.isFils">
+                    <mat-label> Param risque père </mat-label>
+
+                    <mat-select formControlName="idParamParent">
+                        <ng-container *ngFor="let type of paramRisqueByType">
+                            <mat-option
+                                [value]="type.idParamRisque">
+                                {{type.libelle}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-checkbox class="col-md-6" formControlName="isList"
+                    style="padding-left: 2%; padding-top: 1.5%;">Ce paramRisque contient une liste ?</mat-checkbox>
+
+                <mat-form-field class="col-md-6" appearance="outline"
+                    *ngIf="formCreationDetailRisque.value.isList">
+                    <mat-label> Liste Param risque </mat-label>
+
+                    <mat-select formControlName="listparam" multiple>
+                        <ng-container *ngFor="let type of paramRisqueByType">
+                            <mat-option
+                                [value]="type.idParamRisque">
+                                {{type.libelle}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <mat-form-field class="col-md-6"
+                appearance="outline">
+                <mat-label>Date debut</mat-label>
+                <input matInput [matDatepicker]="pickerDateDebut"
+                    formControlName="dateDebut"
+                    (dateChange)="debutDateChange($event.value)">
+                <mat-datepicker-toggle matSuffix [for]="pickerDateDebut"></mat-datepicker-toggle>
+                <mat-datepicker #pickerDateDebut></mat-datepicker>
+                <mat-error
+                    *ngIf="formCreationDetailRisque.controls.dateDebut.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreationDetailRisque.controls.dateDebut.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6"
+                appearance="outline">
+                <mat-label>Date fin</mat-label>
+                <input matInput [min]="minDate" [matDatepicker]="pickerDateFin"
+                    formControlName="dateFin">
+                <mat-datepicker-toggle matSuffix [for]="pickerDateFin"></mat-datepicker-toggle>
+                <mat-datepicker #pickerDateFin></mat-datepicker>
+                <mat-error
+                    *ngIf="formCreationDetailRisque.controls.dateFin.hasError('matDatepickerMin')"
+                    class="invalid-feedback">
+                    <div> Date fin est inférieur à la date début</div>
+                </mat-error>
+            </mat-form-field>
+            <div>
+                <button class="btn btn-action"
+                    type="submit">Envoyer</button>
+                <button class="btn btn-cancel"
+                    mat-dialog-close>Annuler</button>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+<!-- <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions> -->

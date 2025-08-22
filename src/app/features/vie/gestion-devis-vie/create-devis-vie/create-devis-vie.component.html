@@ -1,0 +1,1800 @@
+<div class="container">
+    <h2 class="header-title"><mat-icon class="mat-icon notranslate
+            material-symbols-outlined material-icons mat-icon-no-color"
+            aria-label="directions_car">{{produitInfo.icon}}</mat-icon>
+        {{produitInfo.description}} </h2>
+    <mat-stepper #stepper>
+
+        <mat-step [stepControl]="formInfoSouscripteur" [editable]="true">
+      
+            <ng-template matStepLabel>Information du souscripteur  </ng-template>
+            <!--Assuré / Conducteur -->
+            <form [formGroup]="formInfoSouscripteur"
+                (ngSubmit)="submitInfosSouscripteur()">
+                <mat-accordion class="example-headers-align" multi>
+                    <!--INFORMATION Souscripteur -->
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Information du souscripteur
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <!-- body bloc -->
+                        
+
+                        <div class="row " style="flex-direction:
+                            column;flex-direction: column;padding: 1rem 2rem;">
+                            <mat-form-field appearance="outline"
+                                class="col-md-5 ">
+                                <mat-label>Type client</mat-label>
+                                <mat-select formControlName="typeClient"
+                                    (selectionChange)="changeTypeClient($event.value)">
+                                    <ng-container *ngFor="let type of
+                                        typeClients">
+                                        <mat-option                                           
+                                            [value]="type">
+                                            {{type.description}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                                <mat-error
+                                    *ngIf="formInfoSouscripteur.controls.typeClient.errors"
+                                    class="invalid-feedback">
+                                    <div
+                                        *ngIf="formInfoSouscripteur.controls.typeClient.errors.required">
+                                        ce champs est obligatoire</div>
+                                </mat-error>
+                            </mat-form-field>
+                            <div class="row">
+                                <mat-form-field appearance="outline"
+                                    class="col-md-5">
+                                    <mat-label>{{labelNom}}</mat-label>
+                                    <input type="text" matInput placeholder
+                                        formControlName="nom">
+                                    <mat-error
+                                        *ngIf="formInfoSouscripteur.controls.nom.errors"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf="formInfoSouscripteur.controls.nom.errors.required">
+                                            ce champs est obligatoire</div>
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline"
+                                    class="col-md-5"
+                                    *ngIf="typeClient!='personne morale'">
+                                    <mat-label>Prénom</mat-label>
+                                    <input type="text" matInput placeholder
+                                        formControlName="prenom">
+                                    <mat-error
+                                        *ngIf="formInfoSouscripteur.controls.prenom.errors"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf="formInfoSouscripteur.controls.prenom.errors.required">
+                                            ce champs est obligatoire</div>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="row">
+                                <!--Date-->
+
+                                <mat-form-field class="col-md-5"
+                                    appearance="outline"
+                                    *ngIf="typeClient!='personne morale'">
+                                    <mat-label>Date Naissance</mat-label>
+                                    <input matInput
+                                        [matDatepicker]="pickerDateNaissance"
+                                        formControlName="dateNaissance">
+                                    <mat-datepicker-toggle matSuffix
+                                        [for]="pickerDateNaissance"></mat-datepicker-toggle>
+                                    <mat-datepicker
+                                        #pickerDateNaissance></mat-datepicker>
+                                    <mat-error
+                                        *ngIf="formInfoSouscripteur.controls.dateNaissance.errors"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf="formInfoSouscripteur.controls.dateNaissance.errors.required">
+                                            ce champs est obligatoire</div>
+                                        <div
+                                            *ngIf="formInfoSouscripteur.controls.dateNaissance.errors.ageInf18">
+                                            L'age de l'assuré doit etre
+                                            supérieur à 18 ans</div>
+                                            <div
+                                            *ngIf="formInfoSouscripteur.controls.dateNaissance.errors.ageSup107">
+                                            L'age de l'assuré doit etre
+                                            inférieur à 107 ans</div>
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline"
+                                    class="col-md-5">
+                                    <mat-label>Email</mat-label>
+                                    <input type="text" matInput placeholder
+                                        formControlName="email">
+                                    <mat-error
+                                        *ngIf="formInfoSouscripteur.controls.email.errors"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf="formInfoSouscripteur.controls.email.errors.required">
+                                            ce champs est obligatoire</div>
+                                        <div
+                                            *ngIf="formInfoSouscripteur.controls.email.errors.pattern"
+                                            class="invalid-feedback">adresse
+                                            email
+                                            non conforme.
+                                        </div>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <div class="row">
+                                <!-- type contrat -->
+                                <mat-form-field class="col-md-5"
+                                    appearance="outline">
+                                    <mat-label>Type contact</mat-label>
+                                    <mat-select formControlName="typeContact"
+                                        (selectionChange)="changeTypeContact($event.value)">
+                                        <ng-container *ngFor="let type of
+                                            typesContact">
+                                            <mat-option [value]="type">
+                                                {{type}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="formInfoSouscripteur.controls.typeContact.errors"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf="formInfoSouscripteur.controls.typeContact.errors.required">
+                                            ce champs est obligatoire</div>
+                                    </mat-error>
+                                </mat-form-field>
+                                <mat-form-field appearance="outline"
+                                    class="col-md-5">
+                                    <mat-label>Téléphone</mat-label>
+                                    <span matPrefix>+213 &nbsp;</span>
+                                    <input type="text" matInput placeholder
+                                        formControlName="tel">
+                                    <mat-error
+                                        *ngIf="formInfoSouscripteur.controls.tel.errors"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf="formInfoSouscripteur.controls.tel.errors.required">
+                                            ce champs est obligatoire</div>
+                                        <div
+                                            *ngIf="formInfoSouscripteur.controls.tel.errors.pattern"
+                                            class="invalid-feedback">ce numéro est invalide 
+                                        </div>
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+                    </mat-expansion-panel>
+                    <!--contrat-->
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Contrat
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>                
+                        <div class="row" style="padding: 20px;">  
+                            <mat-form-field appearance="outline"
+                                class="col-md-5 ">
+                                <mat-label>Agence</mat-label>
+                                <mat-select formControlName="agence">
+                                    <ng-container *ngFor="let agence of
+                                        agences">
+                                        <mat-option
+                                            [value]="agence.idAgence">
+                                            {{agence.nomAgence}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                                <mat-error
+                                    *ngIf="formInfoSouscripteur.controls.agence.errors"
+                                    class="invalid-feedback">
+                                    <div
+                                        *ngIf="formInfoSouscripteur.controls.agence.errors.required">
+                                        ce champs est obligatoire</div>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </mat-expansion-panel>               
+                </mat-accordion>
+                
+                <div>
+                    <button class="btn btn-action"
+                        type="submit">Suivant</button>
+                </div>
+            </form>
+        </mat-step>
+        <!-- ********** risque ********** -->
+        <mat-step [stepControl]="formParamRisque" [editable]="true">
+      
+            <ng-template matStepLabel>Information du risque</ng-template>          
+            <form [formGroup]="formParamRisque"
+                *ngIf="risqueArrayReady && multiRisque">
+<!-- 
+                <form [formGroup]="formParamRisque" #formDirective="ngForm"
+                (ngSubmit)="submitParamRisque(formDirective)"
+                *ngIf="risqueArrayReady && multiRisque"> -->
+
+                <mat-accordion class="example-headers-align" multi>
+                    <!--INFORMATION RISQUE -->
+                    <mat-expansion-panel [expanded]="true" class="risque-panel"
+                        hideToggle>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Information du risque
+                                <!-- Informations conducteur -->
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <!-- body bloc -->
+                        <mat-expansion-panel hideToggle 
+                        [expanded]="true"
+                        class="panel-risque" *ngIf="multiRisque">
+                    
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="categoryTitle">
+                                {{produitInfo.description}}1
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="row" style="padding: 1rem 2rem;">
+                        <ng-container *ngFor="let rs of tableauxParCategorie">
+                            <!--select not child-->
+                            <mat-form-field appearance="outline"
+                                class="col-md-5"
+                                *ngIf="rs.typeChamp?.code=='L01'">
+                                <mat-label>{{rs.libelle}}00
+                                </mat-label>
+                                <mat-select
+                                    formControlName="{{rs.formName}}"                                  
+                                 
+                                    (selectionChange)="getRelation(rs.typeChamp?.code,rs.isParent,rs.idParamRisque,$event.value.idParam,rs.formName)">
+                                    <ng-container *ngFor="let
+                                        response of
+                                        rs.reponses">
+                                        <mat-option 
+                                            [value]="response">
+                                            {{response.description}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['required']">
+                                    ce champs est obligatoire
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.bloquant
+                                    " class="invalid-feedback">
+                                    {{formParamRisque.get(rs.formName).errors?.msg}}
+                                </mat-error>
+                            </mat-form-field>
+
+                          
+                            <!--from table -->
+                            <mat-form-field appearance="outline"
+                                class="col-md-5"
+                                *ngIf=" rs.typeChamp?.code=='L08'">
+                                <mat-label>{{rs.libelle}}33
+                                </mat-label>
+                                <mat-select
+                                    formControlName="{{rs.formName}}"
+                                    (selectionChange)="getRelation(rs.typeChamp?.code,rs.isParent,rs.idParamRisque,$event.value.id,rs.formName,rs.reponses,rs.codeParam)">
+                                    <ng-container *ngFor="let response of rs.reponses">
+                                        <mat-option   *ngIf="response.code !== '12' && rs.codeParam==='P182' "
+                                            [value]="response">
+                                            {{rs.codeParam != "P215" ? response.description : response.nationalite}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['required']">
+                                    ce champs est obligatoire
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.bloquant
+                                " class="invalid-feedback">
+                                    {{formParamRisque.get(rs.formName).errors?.msg}}
+                                </mat-error>
+                            </mat-form-field>                          
+                            <mat-form-field appearance="outline"
+                                class="col-md-5"
+                                *ngIf="rs.typeChamp?.code=='L02' || rs.typeChamp?.code=='L07'">
+                                <mat-label>{{rs.libelle}}</mat-label>
+                                <input matInput
+                                    type="text"
+                                    formControlName={{rs.formName}}>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['required']">
+                                    ce champs est obligatoire
+                                </mat-error>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['max']">
+                                    ce champs est non conforme
+                                </mat-error>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['min']">
+                                    ce champs est non conforme
+                                </mat-error>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['pattern']
+                                    ||
+                                    formParamRisque.get(rs.formName).errors?.['maxlength'] || formParamRisque.get(rs.formName).errors?.['minlength'] 
+                                    ">
+                                    ce champs n'est pas conforme
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.bloquant
+                                    " class="invalid-feedback">
+                                    {{formParamRisque.get(rs.formName).errors?.msg}}
+                                </mat-error>
+                                <!-- <mat-error *ngIf="!formParamRisque.get(rs.formName).errors?.bloquant && formParamRisque.get(rs.formName).errors?.msg!='' " class="invalid-feedback warning-field">
+                                    {{formParamRisque.get(rs.formName).errors?.msg}}
+                                </mat-error> -->
+                            </mat-form-field>
+
+                            <!--input Number-->
+                            <mat-form-field appearance="outline"
+                                class="col-md-5"
+                                *ngIf="rs.typeChamp?.code=='L03'">
+                                <mat-label>{{rs.libelle}}</mat-label>
+                                <input matInput
+                                    type="number"
+                                    formControlName={{rs.formName}}>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['required']">
+                                    ce champs est obligatoire
+                                </mat-error>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['max']">
+                                    ce champs est non conforme
+                                </mat-error>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['min']">
+                                    ce champs est non conforme
+                                </mat-error>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['pattern']
+                                    ||
+                                    formParamRisque.get(rs.formName).errors?.['maxlength'] || formParamRisque.get(rs.formName).errors?.['minlength'] 
+                                    ">
+                                    ce champs n'est pas conforme
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.bloquant
+                                    " class="invalid-feedback">
+                                    {{formParamRisque.get(rs.formName).errors?.msg}}
+                                </mat-error>
+                                <!-- <mat-error *ngIf="!formParamRisque.get(rs.formName).errors?.bloquant && formParamRisque.get(rs.formName).errors?.msg!='' " class="invalid-feedback warning-field">
+                                    {{formParamRisque.get(rs.formName).errors?.msg}}
+                                </mat-error> -->
+                            </mat-form-field>
+
+                            <!--Date-->
+                            <mat-form-field class="col-md-5"
+                                appearance="outline"
+                                *ngIf="rs.typeChamp?.description=='date'">
+                                <mat-label>{{rs.libelle}}</mat-label>
+                                <input matInput
+                                    [min]="rs.codeParam==='P212'||rs.codeParam==='P259'?formParamRisque.get(codeProduit=='20G'?'DateDébut':'DateDépart')?.value:minDate"
+                                    [max]="rs.codeParam==='P211'||rs.codeParam==='P258'?maxDate:rs.codeParam==='P212'||rs.codeParam==='P259'?maxDateRetour:''"
+                                    [matDatepicker]="picker"
+                                    formControlName="{{rs.formName}}"
+                                    (dateChange)="onDateChange($event,rs.idParamRisque)">
+                                <mat-datepicker-toggle matSuffix
+                                    [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker
+                                    #picker></mat-datepicker>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['required']">
+                                    ce champs est obligatoire
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.bloquant
+                                    " class="invalid-feedback">
+                                    {{formParamRisque.get(rs.formName).errors?.msg}}
+                                </mat-error>  
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['matDatepickerMin'] && rs.codeParam==='P212'">
+                                    la date de retour ne peut pas être inférieure à la date depart
+                                </mat-error>
+                                <mat-error
+                                class="invalid-feedback"
+                                *ngIf="formParamRisque.get(rs.formName).errors?.['matDatepickerMax'] && rs.codeParam==='P212'">
+                                la date de retour ne doit pas dépassée 365 jour apartir de la date depart
+                            </mat-error>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['matDatepickerMax'] && rs.codeParam==='P211'">
+                                    la date d'effet ne doit pas dépassée 6 mois
+                                </mat-error>
+                                                               
+                            </mat-form-field>
+                            <!--Boolean-->
+                            <mat-form-field appearance="outline"
+                                class="col-md-5"
+                                *ngIf="rs.typeChamp?.code=='L04'">
+                                <mat-label>{{rs.libelle}}
+                                </mat-label>
+                                <mat-select
+                                    formControlName="{{rs.formName}}">
+                                    <mat-option
+                                        [value]="true">Oui
+                                    </mat-option>
+                                    <mat-option
+                                        [value]="false">Non
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['required']">
+                                    ce champs est obligatoire
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.bloquant
+                                    " class="invalid-feedback">
+                                    {{formParamRisque.get(rs.formName).errors?.msg}}
+                                </mat-error>
+                            </mat-form-field>
+
+                         
+                        </ng-container>
+
+                        <mat-form-field class="col-md-5" appearance="outline" *ngIf="produitInfo.codeProduit === '20A'">
+                            <mat-label>Durée du Voyage (en jours)</mat-label>
+                            <input matInput [value]="duration" readonly>
+                        </mat-form-field>
+                      </div>    
+                        <!-- Methode risque -->    
+                        </mat-expansion-panel>
+                        <mat-expansion-panel hideToggle
+                        *ngIf="multiRisque && (selectedValue.code=='F02'||selectedValue.code=='F03')"
+                        [expanded]="true"
+                        class="panel-risque"
+                        style="margin-top: 20px;" >
+                        <mat-expansion-panel-header >
+                            <mat-panel-title class="categoryTitle" >
+                               Informations nombre  assurés
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                       
+                            <ng-container class="multiRisque-nombre" >
+                                <p>Veuillez choisir le nombre d'assurés </p>
+                                <mat-form-field appearance="outline" class="col-md-5">
+                                    <mat-label>Nombre d'assuré</mat-label>
+                                    <input matInput
+                                        type="number" [formControl]="nbrAssure">
+                                        <mat-error *ngIf="nbrAssure.hasError('min')">
+                                            Le nombre d'assuré ne correspond pas au min de la formule
+                                        </mat-error>
+                                        <mat-error *ngIf="nbrAssure.hasError('max')">
+                                            Le nombre d'assuré ne correspond pas au max de la formule
+                                        </mat-error>
+                                </mat-form-field>  
+                               
+                                    <div class="row download">
+                                        <div class="row">
+                                            <p>Veuillez choisir entre remplir un formulaire ou
+                                                importer un fichier.</p>
+                                        </div>
+                
+                                        <div class="row">                
+                                            <div id="wrap"
+                                                style="justify-content: space-around;display:flex">
+                                                <button class="btn btn-file"
+                                                    (click)="formWay('form')">Formulaire</button>
+                                                <button class="btn btn-file"
+                                                    (click)="formWay('file')">Fichier
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>                                                            
+                            </ng-container>                           
+                       
+                        </mat-expansion-panel>
+                       
+                        <!-- info risque-->
+                        <mat-expansion-panel hideToggle
+                        *ngIf="risqueStep == 1"
+                        [expanded]="true"
+                        class="panel-risque"
+                        style="margin-top: 20px;">
+                        <mat-expansion-panel-header *ngIf="displayFormRisque" >
+                            <mat-panel-title class="categoryTitle" >
+                               Assuré
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>                                        
+                        
+                        <div class="row">
+                            <mat-checkbox
+                            class="col-md-12 ConducteurAssure"    
+                            [disabled]="isCheckboxDisabled"                      
+                            [checked]="isAssure"                           
+                            *ngIf="typeClient=='personne physique'"
+                            (change)="changeRoleClient($event.checked, 'Assure')"
+                            style="padding: 1rem 2rem;">Le souscripteur est l'assuré  
+                            </mat-checkbox>
+                        </div>
+                        <ng-container *ngFor="let rs of tableauxParCategorieAssure">       
+                            <mat-form-field appearance="outline"
+                                class="col-md-5"
+                                *ngIf="rs.typeChamp?.code=='L01'">
+                                <mat-label>{{rs.libelle}}
+                                </mat-label>
+                                <mat-select
+                                    formControlName="{{rs.formName}}"
+                                    (selectionChange)="getRelation(rs.typeChamp?.code,rs.isParent,rs.idParamRisque,$event.value.idParam,rs.formName)">
+                                    <ng-container *ngFor="let response of rs.reponses">
+                                        <mat-option
+                                            [value]="response">
+                                            {{response.description}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                                
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['required']  ">
+                                    ce champs est obligatoire
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.bloquant  
+                                    " class="invalid-feedback">
+                                    {{formParamRisque.get(rs.formName).errors?.msg}}
+                                </mat-error>
+                            </mat-form-field>
+                            <!--from table -->
+                            <mat-form-field appearance="outline"
+                                class="col-md-5"
+                                *ngIf=" rs.typeChamp?.code=='L08'">
+                                <mat-label>{{rs.libelle}}
+                                </mat-label>
+                                <mat-select
+                                    formControlName="{{rs.formName}}"
+                                    (selectionChange)="getRelation(rs.typeChamp?.code,rs.isParent,rs.idParamRisque,$event.value.id,rs.formName)">
+                                    <ng-container *ngFor="let response of rs.reponses">
+                                        <mat-option 
+                                            [value]="response">
+                                            {{rs.codeParam==='P215'?response.nationalite:response.description}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['required'] ">
+                                    ce champs est obligatoire
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.bloquant 
+                                " class="invalid-feedback">
+                                    {{formParamRisque.get(rs.formName).errors?.msg}}
+                                </mat-error>
+                            </mat-form-field>                                       
+                            <!--input Text-->
+                            <mat-form-field appearance="outline"
+                                class="col-md-5"
+                                *ngIf="(rs.typeChamp?.code=='L02' || rs.typeChamp?.code=='L07')&&
+                                rs.codeParam!='P25'
+                                &&
+                                rs.codeParam!='P26'">
+                                <mat-label>{{rs.libelle}}</mat-label>
+                                <input matInput
+                                    type="text"
+                                    formControlName={{rs.formName}}>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['required']">
+                                    ce champs est obligatoire
+                                </mat-error>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['max'] ">
+                                    ce champs est non conforme
+                                </mat-error>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['min'] ">
+                                    ce champs est non conforme
+                                </mat-error>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['pattern']
+                                    ||
+                                    formParamRisque.get(rs.formName).errors?.['maxlength'] || formParamRisque.get(rs.formName).errors?.['minlength'] 
+                                    ">
+                                    ce champs n'est pas conforme
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.bloquant
+                                    " class="invalid-feedback">
+                                    {{formParamRisque.get(rs.formName).errors?.msg}}
+                                </mat-error>
+                               
+                            </mat-form-field>
+
+                            <!--input Number-->
+                            <mat-form-field appearance="outline"
+                                class="col-md-5"
+                                *ngIf="rs.typeChamp?.code=='L03'">
+                                <mat-label>{{rs.libelle}}</mat-label>
+                                <input matInput
+                                    type="number"
+                                    formControlName={{rs.formName}}>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['required']">
+                                    ce champs est obligatoire
+                                </mat-error>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['max']">
+                                    ce champs est non conforme
+                                </mat-error>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['min']">
+                                    ce champs est non conforme
+                                </mat-error>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['pattern']
+                                    ||
+                                    formParamRisque.get(rs.formName).errors?.['maxlength'] || formParamRisque.get(rs.formName).errors?.['minlength'] 
+                                    ">
+                                    ce champs n'est pas conforme
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.bloquant
+                                    " class="invalid-feedback">
+                                    {{formParamRisque.get(rs.formName).errors?.msg}}
+                                </mat-error>                                            
+                            </mat-form-field>
+
+                            <!--Date-->
+                            <mat-form-field class="col-md-5"
+                                appearance="outline"
+                                *ngIf="rs.typeChamp?.description=='date' && rs.codeParam=='P166'">
+                                <mat-label>{{rs.libelle}}</mat-label>
+                                <input matInput
+                                    [max]="today"
+                                    [matDatepicker]="picker"
+                                    formControlName="{{rs.formName}}">
+                                <mat-datepicker-toggle matSuffix
+                                    [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker
+                                    #picker></mat-datepicker>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['required']">
+                                    ce champs est obligatoire
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.bloquant
+                                    " class="invalid-feedback">
+                                    {{formParamRisque.get(rs.formName).errors?.msg}}
+                                </mat-error>
+                            </mat-form-field>
+                              <!--Date-->
+                              <mat-form-field class="col-md-5"
+                              appearance="outline"
+                              *ngIf="rs.typeChamp?.description=='date' && rs.codeParam=='P214'">
+                              <mat-label>{{rs.libelle}}</mat-label>
+                              <input matInput
+                                  [min]="minDate"
+                                  [matDatepicker]="picker"
+                                  formControlName="{{rs.formName}}">
+                              <mat-datepicker-toggle matSuffix
+                                  [for]="picker"></mat-datepicker-toggle>
+                              <mat-datepicker
+                                  #picker></mat-datepicker>
+                              <mat-error
+                                  class="invalid-feedback"
+                                  *ngIf="formParamRisque.get(rs.formName).errors?.['required']">
+                                  ce champs est obligatoire
+                              </mat-error>
+                              <mat-error
+                                  *ngIf="formParamRisque.get(rs.formName).errors?.bloquant
+                                  " class="invalid-feedback">
+                                  {{formParamRisque.get(rs.formName).errors?.msg}}
+                              </mat-error>
+                          </mat-form-field>
+                            <!--Boolean-->
+                            <mat-form-field appearance="outline"
+                                class="col-md-5"
+                                *ngIf="rs.typeChamp?.code=='L04'">
+                                <mat-label>{{rs.libelle}}
+                                </mat-label>
+                                <mat-select
+                                    formControlName="{{rs.formName}}">
+                                    <mat-option
+                                        [value]="true">Oui
+                                    </mat-option>
+                                    <mat-option
+                                        [value]="false">Non
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error
+                                    class="invalid-feedback"
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.['required']">
+                                    ce champs est obligatoire
+                                </mat-error>
+                                <mat-error
+                                    *ngIf="formParamRisque.get(rs.formName).errors?.bloquant
+                                    " class="invalid-feedback">
+                                    {{formParamRisque.get(rs.formName).errors?.msg}}
+                                </mat-error>
+                            </mat-form-field>
+                      
+                           
+                        </ng-container>
+                       
+                        </mat-expansion-panel>  
+                         <!-- <mat-expansion-panel [expanded]="true"
+
+                        class="risque-panel"
+
+                        hideToggle *ngIf='multiRisque'>
+
+                        <mat-expansion-panel-header>
+
+                            <mat-panel-title>
+
+                                Groupe
+
+
+
+                            </mat-panel-title>
+
+
+
+                        </mat-expansion-panel-header>
+
+                        <div class="row">
+
+                            <mat-form-field appearance="outline"
+
+                            class="col-md-5"                           >
+
+                            <mat-label>groupe</mat-label>
+
+                            <input matInput
+
+                                [disabled]="true"
+
+                                value="voyage"
+
+                                type="hidden"
+
+                                formControlName='groupe'>
+
+                        </mat-form-field>
+
+
+
+                        </div>
+Change
+55
+of 80
+
+Previous change
+
+Next change
+
+Explain
+
+                    </mat-expansion-panel>-->
+
+
+
+                    <mat-expansion-panel [expanded]="true"
+
+                    class="risque-panel"
+
+                    hideToggle *ngIf='multiRisque'>
+
+                    <mat-expansion-panel-header>
+
+                        <mat-panel-title>
+
+                            Groupe
+
+                            <!-- Informations conducteur -->
+
+                        </mat-panel-title>
+
+
+
+                    </mat-expansion-panel-header>
+
+                    <div *ngIf="codeProduit!='20A'; else groupeVoyage" class="row">
+
+                        <mat-form-field appearance="outline"
+
+                            class="col-md-3">
+
+                            <mat-label>Groupes</mat-label>
+
+                            <mat-select
+
+                                formControlName="groupe">
+
+                                <mat-option value="new">Nouveau
+
+                                    groupe</mat-option>
+
+                                <mat-option *ngFor="let
+
+                            groupe of groupArray"
+
+                                    [value]="groupe">
+
+                                    {{groupe}}</mat-option>
+
+                            </mat-select>
+
+                            <mat-error
+
+                                class="invalid-feedback"
+
+                                *ngIf="formParamRisque.get('groupe')?.errors?.['required']">
+
+                                ce champs est obligatoire
+
+                            </mat-error>
+
+                        </mat-form-field>
+
+                        <!--new groupe -->
+
+                        <mat-form-field appearance="outline"
+
+                            class="col-md-5"
+
+                            *ngIf="formParamRisque.get('groupe')?.value=='new'">
+
+                            <mat-label>Nouveau
+
+                                groupe</mat-label>
+
+                            <input matInput
+
+                                type="text"
+
+                                formControlName='newGroupe'>
+
+                            <mat-error
+
+                                class="invalid-feedback"
+
+                                *ngIf="formParamRisque.get('newGroupe')?.errors?.['required']">
+
+                                ce champs est obligatoire
+
+                            </mat-error>
+
+                        </mat-form-field>
+
+                    </div>
+
+                    <ng-template #groupeVoyage>
+
+                        <div class="row">
+
+                            <mat-form-field appearance="outline"
+
+                            class="col-md-5"                           >
+
+                            <mat-label>groupe</mat-label>
+
+                            <input matInput
+
+
+
+                                value="voyage"
+
+
+
+                                formControlName='groupe'>
+
+                        </mat-form-field>
+
+                        </div>
+
+                    </ng-template>
+
+                </mat-expansion-panel>
+                        <div class style="margin-bottom: 20px;">                             
+                            <!-- <button class="btn btn-action"
+                                *ngIf="!multiRisque && risqueStep !=2"
+                                type="submit">Suivant</button> -->
+                            <button class="btn btn-secondary"
+                                *ngIf="multiRisque && risqueStep !=2"
+                                (click)="submitParamRisque()">Ajouter</button>
+                            <button class="btn btn-cancel"
+                                *ngIf="risqueStep !=2"
+                                (click)="goBack()"
+                                type="button">Retour</button>
+                        </div>    
+                        
+
+                <table mat-table [dataSource]="dataSourceRisque"
+                class="gestion-table risque"               
+                *ngIf="multiRisque && dataSourceRisque.data.length!=0 ">
+
+                <ng-container matColumnDef="risqueNum">
+                    <th mat-header-cell *matHeaderCellDef> Risque N° </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.risqueNum}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="nom">
+                    <th mat-header-cell *matHeaderCellDef> Nom </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.Nom}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="prenom">
+                    <th mat-header-cell *matHeaderCellDef> Prénom </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.Prenom}}
+                    </td>
+                </ng-container>
+             
+                <ng-container matColumnDef="groupe">
+                    <th mat-header-cell *matHeaderCellDef> Groupe </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.groupe}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef> Action</th>
+                    <td mat-cell *matCellDef="let element">
+
+                        <button mat-icon-button
+                            type="button"
+                            [matMenuTriggerFor]="menu"
+                            aria-label="menu risque list">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu"
+                            xPosition="after">
+                            <button mat-menu-item type="button"
+                                (click)="openDialog(element.risqueNum)">
+                                <mat-icon>zoom_in</mat-icon>
+                                <span>Consulter risque</span>
+                            </button>
+                            <!-- <button mat-menu-item type="button"
+                                (click)="deleteRisque(element.risqueNum)">
+                                <mat-icon>delete</mat-icon>
+                                <span>Supprimer risque</span>
+                            </button> -->
+
+                        </mat-menu>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsRisque"
+                    class="example-second-header-row">
+                </tr>
+
+                <tr mat-row
+                    *matRowDef="let row; columns: displayedColumnsRisque;"></tr>
+
+                        </table> 
+
+            <!-- Avec fichier -->             
+            <mat-expansion-panel hideToggle
+            *ngIf="risqueStep==2"
+            [expanded]="true"
+            class="panel-risque"
+            style="margin-top: 20px;" >
+            <mat-expansion-panel-header >
+                <mat-panel-title class="categoryTitle" >
+                   impoter fichier
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+          
+                <div class="row">
+                    <p>Veuillez importer le  modèle.</p>
+                </div>
+                <div class="row">
+                    <div id="wrap">
+                        <!-- <a href="#" class="btn-slide">
+                            <span class="circle"><mat-icon>download</mat-icon></span>
+                            <span class="title">Télécharger modéle</span>
+                            <span class="title-hover">Télécharger modéle</span>
+                        </a> -->
+                        <!-- <a href="#" class="btn-slide" (change)="onFileSelected($event)" multiple="false" >
+                            <span class="circle"><mat-icon>download</mat-icon></span>
+                            <span class="title">Exporter modéle</span>
+                            <span class="title-hover">Exporter modéle</span>
+                        </a> -->
+
+                        <input type="file" name="fileInput"
+                            (change)="onFileSelected($event)" #fileInput />
+                        <div *ngFor="let lines of fileControle">
+                            <ng-container *ngIf="lines.description.length!=0">
+                                <div class="alert alert-danger">
+                                    <ul class="error-lines">
+                                        <span>ligne {{lines.ligne}} </span>
+                                        <li
+                                            *ngFor="let description of lines.description">
+                                            {{description}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+                     
+                    </mat-expansion-panel>                  
+                </mat-accordion>
+
+            </form>
+            
+
+            <button class="btn btn-action" *ngIf="risqueStep==2" type="button"
+                (click)="checkAssureNumber()">Suivant</button>
+            <button class="btn btn-cancel" *ngIf="risqueStep==2" type="button"
+                (click)="risqueStep=0">Retour</button>
+            <!-- Valider & Next Step-->
+            <div class
+                *ngIf="multiRisque  && (dataSourceRisque.data.length!=0 || fileSuccess)  && risqueStep !=2">
+                <button class="btn btn-action" type="button"
+                    (click)="checkAssureNumber()">Suivant</button>
+            </div>
+        </mat-step>
+        <!-- ********** pack  **********-->
+        <mat-step>
+            <ng-template matStepLabel>Pack et garanties</ng-template>
+            <div *ngIf="!multiRisque" class="row" style="display: flex;align-items:
+                center;justify-content: space-between;margin:2rem 1rem">
+                <p>Veuillez choisir un pack </p>
+                <mat-form-field appearance="outline" class="col-md-5">
+                    <mat-label>Pack</mat-label>
+                    <mat-select (selectionChange)="getPack($event.value,0)">
+                    <!-- <mat-select (selectionChange)="getPackMulti($event.value,0)"> -->
+                        <ng-container *ngFor="let pack of packs">
+                            <mat-option
+                                [value]="pack.idPack0">
+                                {{pack.description}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+
+                <button class="btn btn-secondary " *ngIf="loadTable"
+                    (click)="generateCalcul()" style="display: flex; width:
+                    133px;">
+                    <mat-icon class="material-symbols-outlined" style="
+                        margin-right: 9px; font-size: 24px;">
+                        autorenew
+                    </mat-icon>Calculer</button>
+            </div>
+            <div class="alert alert-danger"
+                *ngIf="errorTarif.error">{{errorTarif.msg}}</div>
+            <div class="alert alert-danger"
+                *ngIf="errorHandler.error">{{errorHandler.msg}}</div>
+            <div class="alert alert-danger" *ngIf="errorPackForm">Veuillez
+                remplir tous les champs des garanties obligatoires/cochées</div>
+
+            <table mat-table [dataSource]="dataSource" multiTemplateDataRows
+                class="mat-elevation-z8 pack-table"
+                *ngIf="loadTable ">
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <!-- <mat-checkbox (change)="$event ?
+                            masterToggle() :
+                            null"
+                            [checked]="selection.hasValue() &&
+                            isAllSelected() "
+                            [indeterminate]="selection.hasValue() &&
+                            !isAllSelected()">
+                        </mat-checkbox> -->
+                    </th>
+                    <td mat-cell *matCellDef="let row ;let j=dataIndex">
+                        <mat-checkbox
+                            (click)="$event.stopPropagation();
+                            garantieSelectedIds.push(row.idGarantie)"                          
+                            [checked]="row.checked"
+                            [formControl]="getControl(j,'checked')">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <!-- Garantie Column -->
+                <ng-container matColumnDef="garantie">
+                    <th mat-header-cell *matHeaderCellDef>Garantie
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.description}}
+                    </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="plafond">
+                    <th mat-header-cell *matHeaderCellDef> Plafond</th>
+                    <td mat-cell *matCellDef="let element; let i= dataIndex">
+                        <span *ngIf="element.plafond.length==0; else
+                            plafondNotEmpty">-</span>
+                        <ng-template #plafondNotEmpty>
+                            <mat-form-field
+                                *ngIf="element.plafond.length>1; else
+                                plafondInput">
+                                <mat-label>Plafond</mat-label>
+                                <mat-select
+                                    [formControl]="getControl(i,'plafond')">
+                                    <ng-container *ngFor="let
+                                        plafond of
+                                        element.plafond">
+                                        <mat-option
+                                            [value]="plafond">
+                                            {{plafond.valeur | number :
+                                            '1.0-0'|
+                                            money}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                            </mat-form-field>
+                            <ng-template #plafondInput>
+                                <mat-form-field
+                                    *ngIf="element.plafond[0].descriptionvVal=='input';
+                                    else plafondValue">
+                                    <mat-label>Plafond</mat-label>
+                                    <input
+                                        type="text"
+                                        matInput
+                                        [formControl]="getControl(i,'plafond')"
+                                        >
+                                </mat-form-field>
+                                <ng-template #plafondValue>
+                                    <span
+                                        *ngIf="element.plafond[0].valeur != '0';else plafondNull">{{element.plafond[0].valeur|
+                                        number :
+                                        '1.0-0' | money}}</span>
+                                    <ng-template #plafondNull> -
+                                    </ng-template>
+                                </ng-template>
+                            </ng-template>
+
+                        </ng-template>
+                    </td>
+                </ng-container>
+
+                <!-- Franchise Column -->
+                <ng-container matColumnDef="franchise">
+                    <th mat-header-cell *matHeaderCellDef> Franchise
+                    </th>
+                    <td mat-cell *matCellDef="let element; let i= dataIndex">
+                        <span *ngIf="element.franchise.length==0; else
+                            franchiseNotEmpty">-</span>
+                        <ng-template #franchiseNotEmpty>
+                            <mat-form-field
+                                *ngIf="element.franchise.length>1; else
+                                franchiseInput">
+                                <mat-label>Franchise</mat-label>
+                                <mat-select
+                                    [formControl]="getControl(i,'franchise')">
+                                    <ng-container *ngFor="let
+                                        franchise of
+                                        element.franchise">
+                                        <mat-option
+                                            [value]="franchise">
+                                            {{franchise.valeur| number :
+                                            '1.0-0'
+                                            | money}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                            </mat-form-field>
+                            <ng-template #franchiseInput>
+                                <mat-form-field
+                                    *ngIf="element.franchise[0].descriptionvVal=='input';
+                                    else franchiseValue">
+                                    <mat-label>Franchise</mat-label>
+                                    <input type="text" matInput
+                                        [formControl]="getControl(i,'franchise')" />
+                                </mat-form-field>
+                                <ng-template #franchiseValue>
+                                    <span>{{element.franchise[0].valeur|
+                                        number
+                                        : '1.0-0' | money}}</span>
+                                </ng-template>
+                            </ng-template>
+                        </ng-template>
+                    </td>
+                </ng-container>
+
+                <!-- Formule Column -->
+                <ng-container matColumnDef="formule">
+                    <th mat-header-cell *matHeaderCellDef> Formule
+                    </th>
+                    <td mat-cell *matCellDef="let element; let i= dataIndex">
+                        <span *ngIf="element.formule.length==0 ;
+                            else
+                            formuleNotEmpty">-</span>
+                        <ng-template #formuleNotEmpty>
+                            <mat-form-field
+                                *ngIf="element.formule.length>1;
+                                else formuleInput">
+                                <mat-label>Formule</mat-label>
+                                <mat-select
+                                    [formControl]="getControl(i,'formule')">
+                                    <ng-container *ngFor="let
+                                        formule of
+                                        element.formule">
+                                        <mat-option
+                                            [value]="formule">
+                                            {{codeProduit != '95' &&
+                                            (formule.valeur | number :'1.0-0' |
+                                            money) == 0 ? (formule.valeur |
+                                            number :
+                                            '1.0-0'
+                                            | money) : (formule.valeur | number
+                                            :'1.0-0' | money)}}
+                                            {{formule?.unite}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+
+                            </mat-form-field>
+                            <ng-template #formuleInput>
+                                <mat-form-field
+                                    *ngIf="element.formule[0].descriptionvVal=='input';
+                                    else formuleValue">
+                                    <mat-label>Formule</mat-label>
+                                    <input type="text" matInput
+                                        [formControl]="getControl(i,'formule')" />
+                                </mat-form-field>
+                                <ng-template #formuleValue>
+                                    <span>{{element.formule[0].valeur |
+                                        number :
+                                        '1.0-0' | money}}</span>
+                                </ng-template>
+                            </ng-template>
+                        </ng-template>
+
+                    </td>
+                </ng-container>
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef> Prime nette
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="tarifReady &&
+                            element.prime!=null; else primeNull">
+                            {{element.prime | number : '1.0-0' | money}}
+                            <sup>DZD</sup>
+                        </ng-container>
+                        <ng-template #primeNull>-</ng-template>
+
+                        <!-- <button mat-icon-button
+                            type="button"
+                            [matMenuTriggerFor]="menu"
+                            aria-label="">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu"
+                            xPosition="after"
+                            class="">
+                            <button mat-menu-item
+                                type="button">
+                                <mat-icon>edit</mat-icon>
+                                <span>Modifier pack</span>
+                            </button>
+                            <button mat-menu-item
+                                type="button">
+                                <mat-icon>format_list_bulleted</mat-icon>
+                                <span>Afficher paramètre(s)</span>
+                            </button>
+                            <button mat-menu-item
+                                type="button">
+                                <mat-icon>format_list_bulleted</mat-icon>
+                                <span>Afficher garantie(s)</span>
+                            </button>
+                        </mat-menu> -->
+                    </td>
+                </ng-container>
+                <!-- Afficher sous garantie  Column -->
+                <ng-container matColumnDef="sousGarantie">
+                    <th mat-header-cell *matHeaderCellDef> </th>
+                    <td mat-cell *matCellDef="let element"
+                        class="example-element-row"
+                        [class.example-expanded-row]="expandedElement === element">
+                        <!-- <span *ngIf="element.sousGarantieList.length==0 ">
+                        </span>
+                        <span *ngIf="element.sousGarantieList.length>0 ">
+                            <mat-icon>{{expandedElement === element ?
+                                'expand_less' :
+                                'expand_more'}}</mat-icon>
+                        </span> -->
+
+                        <button mat-icon-button
+                            *ngIf="element.sousGarantieList.data.length!=0"
+                            type="button" class="expandButton"
+                            aria-label
+                            (click)="expandedElement = expandedElement === element ? null : element">
+                            <mat-icon>{{expandedElement === element ?
+                                'indeterminate_check_box' :
+                                'add_box'}}</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+                <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element"
+                        [attr.colspan]="displayedColumns.length">
+                        <div class="example-element-detail"
+                            [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                            <!-- <table class="example-element-diagram pack-table">
+                                <tr>
+                                    <th></th>
+                                    <th>Sous garantie</th>
+                                    <th>Plafond</th>
+                                    <th>Franchise</th>
+                                    <th>Formule</th>
+                                    <th>Prime</th>
+                                </tr>
+                                <tr
+                                    *ngFor="let sousGarantie of element.sousGarantieList"
+                                    style="text-transform: capitalize;">
+                                    <td></td>
+                                    <td>{{sousGarantie.description}}</td>
+                                </tr>
+
+                            </table> -->
+                            <table mat-table
+                                [dataSource]="element.sousGarantieList"
+                                multiTemplateDataRows
+                                class="mat-elevation-z8 pack-table innertable"
+                                *ngIf="loadTable">
+                                <!-- Checkbox Column -->
+                                <ng-container matColumnDef="select">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        <!-- <mat-checkbox (change)="$event ? masterSousToggle() :null"
+                                            [checked]="selection.hasValue() &&  isAllSousSelected() "
+                                            [indeterminate]="selection.hasValue() && !isAllSousSelected()">
+                                        </mat-checkbox> -->
+                                    </th>
+                                    <td mat-cell
+                                        *matCellDef="let row ;let i=dataIndex">
+                                        <mat-checkbox
+                                            (click)="$event.stopPropagation();sousGarantieSelectedIds.push(row.idSousGarantie)"
+                                            (change)="$event ? selection.toggle(row): null"
+                                            [checked]="false"
+                                            [formControl]="getSousGarantieControl(i,'checked')">
+                                        </mat-checkbox>
+
+                                    </td>
+                                </ng-container>
+                                <!-- SOUS Garantie Column -->
+                                <ng-container matColumnDef="garantie">
+                                    <th mat-header-cell *matHeaderCellDef>Sous
+                                        garantie
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.description}}
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="plafond">
+                                    <th mat-header-cell
+                                        *matHeaderCellDef>plafond
+                                    </th>
+                                    <td mat-cell
+                                        *matCellDef="let element; let i= dataIndex">
+                                        <span
+                                            *ngIf="element.plafond.length==0; else
+                                            plafondNotEmpty">/</span>
+                                        <ng-template #plafondNotEmpty>
+                                            <mat-form-field
+                                                *ngIf="element.plafond.length>1; else
+                                                plafondInput">
+                                                <mat-label>Plafond</mat-label>
+                                                <mat-select
+                                                    [formControl]="getSousGarantieControl(i,'plafond')">
+                                                    <ng-container
+                                                        *ngFor="let
+                                                        plafond of
+                                                        element.plafond">
+                                                        <mat-option
+                                                            [value]="plafond">
+                                                            {{plafond.valeur
+                                                            |
+                                                            number : '1.0-0'|
+                                                            money}}
+                                                        </mat-option>
+                                                    </ng-container>
+                                                </mat-select>
+                                            </mat-form-field>
+                                            <ng-template #plafondInput>
+                                                <mat-form-field
+                                                    *ngIf="element.plafond[0].descriptionvVal=='input';
+                                                    else plafondValue">
+                                                    <mat-label>Plafond</mat-label>
+                                                    <input
+                                                        type="number"
+                                                        [max]="element.valeur"
+                                                        matInput
+                                                        [formControl]="getSousGarantieControl(i,'plafond')" />
+                                                </mat-form-field>
+                                                <ng-template #plafondValue>
+                                                    <span>{{element.plafond[0].valeur|
+                                                        number :
+                                                        '1.0-0' | money}}</span>
+                                                </ng-template>
+                                            </ng-template>
+
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <!-- Franchise Column -->
+                                <ng-container matColumnDef="franchise">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        Franchise
+                                    </th>
+                                    <td mat-cell
+                                        *matCellDef="let element; let i= dataIndex">
+                                        <span
+                                            *ngIf="element.franchise.length==0; else
+                            franchiseNotEmpty">/</span>
+                                        <ng-template #franchiseNotEmpty>
+                                            <mat-form-field
+                                                *ngIf="element.franchise.length>1; else
+                                franchiseInput">
+                                                <mat-label>Franchise</mat-label>
+                                                <mat-select
+                                                    [formControl]="getSousGarantieControl(i,'franchise')">
+                                                    <ng-container
+                                                        *ngFor="let
+                                        franchise of
+                                        element.franchise">
+                                                        <mat-option
+                                                            [value]="franchise">
+                                                            {{franchise.valeur|
+                                                            number : '1.0-0'
+                                                            | money}}
+                                                        </mat-option>
+                                                    </ng-container>
+                                                </mat-select>
+                                            </mat-form-field>
+                                            <ng-template #franchiseInput>
+                                                <mat-form-field
+                                                    *ngIf="element.franchise[0].descriptionvVal=='input';
+                                    else franchiseValue">
+                                                    <mat-label>Franchise</mat-label>
+                                                    <input type="text"
+                                                        matInput
+                                                        [formControl]="getSousGarantieControl(i,'franchise')" />
+                                                </mat-form-field>
+                                                <ng-template #franchiseValue>
+                                                    <span>{{element.franchise[0].valeur|
+                                                        number
+                                                        : '1.0-0' |
+                                                        money}}</span>
+                                                </ng-template>
+                                            </ng-template>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Formule Column -->
+                                <ng-container matColumnDef="formule">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        Formule
+                                    </th>
+                                    <td mat-cell
+                                        *matCellDef="let element; let i= dataIndex">
+                                        <span
+                                            *ngIf="element.formule.length==0 ;
+                            else
+                            formuleNotEmpty">/</span>
+                                        <ng-template #formuleNotEmpty>
+                                            <mat-form-field
+                                                *ngIf="element.formule.length>1;
+                                else formuleInput">
+                                                <mat-label>Formule</mat-label>
+                                                <mat-select
+                                                    [formControl]="getSousGarantieControl(i,'formule')">
+                                                    <ng-container
+                                                        *ngFor="let
+                                        formule of
+                                        element.formule">
+                                                        <mat-option
+                                                            [value]="formule">
+                                                            {{codeProduit !=
+                                                            '95' &&
+                                                            (formule.valeur |
+                                                            number :'1.0-0' |
+                                                            money) == 0 ?
+                                                            (formule.valeur |
+                                                            number :
+                                                            '1.0-0'
+                                                            | money) :
+                                                            (formule.valeur |
+                                                            number :'1.0-0' |
+                                                            money)}}
+                                                            {{formule?.unite}}
+                                                        </mat-option>
+                                                    </ng-container>
+                                                </mat-select>
+
+                                            </mat-form-field>
+                                            <ng-template #formuleInput>
+                                                <mat-form-field
+                                                    *ngIf="element.formule[0].descriptionvVal=='input';
+                                    else formuleValue">
+                                                    <mat-label>Formule</mat-label>
+                                                    <input type="text"
+                                                        matInput
+                                                        [formControl]="getSousGarantieControl(i,'formule')" />
+                                                </mat-form-field>
+                                                <ng-template #formuleValue>
+                                                    <span>{{element.formule[0].valeur
+                                                        | number :
+                                                        '1.0-0' | money}}</span>
+                                                </ng-template>
+                                            </ng-template>
+                                        </ng-template>
+
+                                    </td>
+                                </ng-container>
+                                <!-- Action Column -->
+                                <ng-container matColumnDef="action">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="tarifReady &&
+                                        element.prime!=null; else primeNull">
+                                            {{element.prime | number : '1.0-0' |
+                                            money}}
+                                            <sup>DZD</sup>
+                                        </ng-container>
+                                        <ng-template #primeNull>-</ng-template>
+                                    </td>
+                                </ng-container>
+                                <!-- more Column -->
+                                <ng-container matColumnDef="more">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row
+                                    *matHeaderRowDef="DisplayedColumnsSousGarantie"></tr>
+                                <tr mat-row
+                                    *matRowDef="let row; columns: DisplayedColumnsSousGarantie;"></tr>
+                            </table>
+                        </div>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row
+                    *matRowDef="let element; columns: displayedColumns;">
+                </tr>
+                <tr mat-row
+                    *matRowDef="let row; columns: ['expandedDetail']"
+                    class="example-detail-row">
+                </tr>
+
+                <!-- <tr mat-header-row
+                    *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns:
+                    displayedColumns;">
+                </tr> -->
+
+            </table>
+            
+            <form *ngIf="multiRisque &&codeProduit!='97'">
+                <mat-table [dataSource]="dataSourceGroupePack">
+                    <ng-container matColumnDef="groupe">
+                        <mat-header-cell
+                            *matHeaderCellDef>Groupe</mat-header-cell>
+                        <mat-cell *matCellDef="let element">{{ element.group
+                            }}</mat-cell>
+                    </ng-container>
+
+
+
+                    <ng-container *ngIf="codeProduit!='20G';else packGav" matColumnDef="pack">
+                        <mat-header-cell
+                            *matHeaderCellDef>Pack</mat-header-cell>
+                        <mat-cell *matCellDef="let element">
+                            <mat-select
+                                placeholder='veuillez choisir le pack assigné au groupe: {{ element.group}}'
+                                [(ngModel)]="element.pack"
+                                (selectionChange)="getPackMulti($event.value,element.group)"
+                                name="pack{{ element.group }}">
+
+                                <mat-option *ngFor="let pack of packs"
+                                    [value]="pack.idPack0">{{
+                                    pack.description }}</mat-option>
+                            </mat-select>
+                        </mat-cell>
+                    </ng-container>
+
+                    <ng-template #packGav>
+                        <ng-container  matColumnDef="pack">
+                            <mat-header-cell
+                                *matHeaderCellDef>Pack</mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <mat-select
+                                    placeholder='veuillez choisir le pack assigné au groupe: {{ element.group}}'
+                                    [(ngModel)]="element.pack"
+                                    (selectionChange)="getPackMulti($event.value,element.group)"
+                                    name="pack{{ element.group }}">
+                                    <mat-option *ngFor="let pack of packs[element.group]"
+                                        [value]="pack.idPack0">{{
+                                        pack.description }}</mat-option>
+                                </mat-select>
+                            </mat-cell>
+                        </ng-container>
+                    </ng-template>
+                    <mat-header-row
+                        *matHeaderRowDef="displayedColumnsGroupePack"></mat-header-row>
+                    <mat-row
+                        *matRowDef="let row; columns: displayedColumnsGroupePack;"></mat-row>
+                </mat-table>
+                <!-- <button type="submit">Submit</button> -->
+            </form>
+
+            <!-- <div class="row card" *ngIf="tarifReady && (codeProduit != '20G' ||  codeProduit != '20A')">
+                <div class="prime-card">
+                    <div style="
+                        font-size: 21px;
+                        color: #00008f;
+                        font-weight: 600;">
+                        <span style="font-size: 18px;font-weight:
+                            600;margin-right:12px">Prime nette totale:</span>
+                        <span style="float: right;">{{PrimeTotale | number :
+
+                            '1.0-0' | money}}
+                            <sup>DZD</sup></span>
+                    </div>
+                </div>
+            </div>-->
+        
+            <div>
+         
+                <button class="btn btn-action"  [disabled]="garantieNull" *ngIf="tarifReady || multiRisque" (click)="next()">                  
+                    <span>Suivant</span></button>
+                <button class="btn btn-cancel" (click)="goBack()"
+                    type="button">Retour</button>
+             
+            </div>
+
+        </mat-step>
+        <!-- ********** reduction   **********-->
+        <mat-step [editable]="true">
+            <ng-template matStepLabel>Réduction</ng-template>
+            <p>Veuillez choisir une Convention/Réduction</p>
+            <div class="alert alert-danger"
+                *ngIf="errorHandler.error">{{errorHandler.msg}}</div>
+            <form [formGroup]="formReduction"
+                (ngSubmit)="submitReduction()"
+                class="row">
+                <mat-form-field class="col-md-5" appearance="outline">
+                    <mat-label> Convention</mat-label>
+
+                    <mat-select formControlName="convention"
+                        [(value)]="defaultConvention"
+                        (selectionChange)="getReductionByConvention($event.value)">
+                        <mat-option
+                            [value]="'aucuneConvention'">
+                            Aucune Convention
+                        </mat-option>
+                        <ng-container
+                            *ngFor="let convention of conventions">
+
+                            <mat-option
+                                [value]="convention.idConvention">
+                                {{convention.nomConvention}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="col-md-5" appearance="outline">
+                    <mat-label> Réduction</mat-label>
+
+                    <mat-select formControlName="reduction">
+                        <mat-option [value]="'aucuneReduction'"> Aucune
+                            Reduction </mat-option>
+                        <ng-container
+                            *ngFor="let reduction of reductions">
+                            <mat-option
+                                [value]="reduction.idReduction">
+                                {{reduction.nomReduction}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <div class>
+                    <button class="btn btn-action" type="submit">
+                        <!-- <mat-spinner color="white" diameter=30
+                        *ngIf="loaderControles"></mat-spinner>  -->
+                        <span>Suivant</span></button>
+                    <button class="btn btn-cancel" (click)="goBack()"
+                        type="button">Retour</button>
+                </div>
+            </form>
+        </mat-step>
+
+        <!-- ********** resumé  **********-->
+        <mat-step>
+            <ng-template matStepLabel>Résumé</ng-template>
+
+            <div class="alert alert-danger"
+                *ngIf="errorHandler.error">{{errorHandler.msg}}</div>
+            <div class="alert alert-success" *ngIf="successDevis">Le
+                devis
+                {{idDevis}} a été créé
+                avec succès, pour le consulter veuillez <a
+                    class="consult-devis"
+                    [routerLink]=" ['/', 'consultation/vie/', codeProduit, produit, idDevis]">cliquez
+
+                    ici.</a> </div>
+            <table class="resume">
+
+                <tr *ngFor="let element of returnedTarif.primeList">
+                    <ng-container *ngIf="element.idPrime==101">
+                        <td>{{element.description}}</td>
+                        <td>{{element.prime | number : '1.0-0' | money}}
+                            <sup>DZD</sup></td>
+                    </ng-container>
+                </tr>
+                <tr *ngFor="let element of returnedTarif.taxeList">
+                    <td>{{element.description}}</td>
+                    <td>{{element.prime | number : '1.0-0' | money}}
+                        <sup>DZD</sup></td>
+                </tr>
+                <tr *ngFor="let element of returnedTarif.primeList">
+                    <ng-container *ngIf="element.idPrime==186">
+                        <td class="primeTotale">{{element.description}}</td>
+                        <td class="primeTotale">{{element.prime | number
+                            :
+                            '1.0-0' | money}} <sup>DZD</sup></td>
+                    </ng-container>
+                </tr>
+            </table>
+
+            <div class="resume-buttons"
+                *ngIf="successDevis && !saveDevis">
+                <button class="btn btn-download"
+                    (click)="downloadDevis(returnedDevis)">
+                    <mat-icon class="material-symbols-outlined">
+                        download
+                    </mat-icon>Télécharger devis</button>
+                <button class="btn btn-download"
+                    (click)="convertToContract()">
+                    <mat-icon class="material-symbols-outlined">
+                        source_notes
+                    </mat-icon>Convertir en contrat</button>
+            </div>
+            <div>
+                <button class="btn btn-cancel" (click)="goBackReduc()"
+                    type="button">Retour</button>
+                <button class="btn btn-action"
+                    [ngClass]="{'button--loading':
+                    loaderDevis}" (click)="submitDevis()"
+                    *ngIf="saveDevis" [disabled]="loaderDevis">
+                    <span class="button__text">Enregistrer devis</span>
+                </button>
+            </div>
+            
+        </mat-step>
+    </mat-stepper>
+</div>

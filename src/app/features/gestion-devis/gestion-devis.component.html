@@ -1,0 +1,219 @@
+<div class="container ">
+    <div class="header">
+
+        <h2 class="title-table">Listes des devis {{nomProduit}}</h2>
+
+        <button class="btn btn-secondary" style="display: flex;
+
+            align-items: center;" (click)="redirectToCreation()">
+
+            <mat-icon aria-hidden="false" aria-label="ajouter pack "
+                class="material-symbols-outlined">add_circle</mat-icon>
+
+            Ajouter un devis
+
+        </button>
+
+    </div>
+    <div class="filtre">
+        <form #formDirective="ngForm" [formGroup]="formFilterDevis" class="row
+            formFiltre"
+            (ngSubmit)="submitFilter(0,10)" *ngIf="formFilterDevis">
+
+            <div class="row">
+                <!--num devis-->
+                <mat-form-field appearance="outline"
+                    class="col-md-4">
+                    <mat-label>N°devis</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="idDevis">
+                </mat-form-field>
+                <!--nom client devis-->
+                <mat-form-field appearance="outline"
+                    class="col-md-4">
+                    <mat-label>Nom</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="nom">
+                </mat-form-field>
+                <!--raison devis-->
+                <mat-form-field appearance="outline"
+                    class="col-md-4">
+                    <mat-label>Raison Sociale</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="raisonSocial">
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <!-- agence-->
+                <mat-form-field class="col-md-4"
+                    appearance="outline">
+                    <mat-label>Agence</mat-label>
+                    <mat-select formControlName="agence">
+                        <ng-container *ngFor="let agence of agences">
+                            <mat-option [value]="agence.idAgence">
+                                {{agence.nomAgence}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <!-- statut-->
+                <mat-form-field class="col-md-4"
+                    appearance="outline">
+                    <mat-label>Statut</mat-label>
+                    <mat-select formControlName="statut">
+                        <ng-container *ngFor="let statut of statuts">
+                            <mat-option [value]="statut.idParam">
+                                {{statut.description}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <!-- date du  -->
+                <mat-form-field class="col-md-4"
+                    appearance="outline">
+                    <mat-label>Du </mat-label>
+                    <input matInput
+                        [matDatepicker]="pickerDu"
+                        formControlName="dateDebut">
+                    <mat-datepicker-toggle matSuffix
+                        [for]="pickerDu"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerDu></mat-datepicker>
+                </mat-form-field>
+                <!-- date au  -->
+                <mat-form-field class="col-md-4"
+                    appearance="outline">
+                    <mat-label>Au </mat-label>
+                    <input matInput
+                        [matDatepicker]="pickerAu"
+                        formControlName="dateFin">
+                    <mat-datepicker-toggle matSuffix
+                        [for]="pickerAu"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerAu></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="row buttons">
+                <button class="btn btn-action" type="submit">Filtrer</button>
+                <mat-icon class="material-symbols-outlined"
+                    (click)="resetTable(formDirective)"
+                    matTooltip="Rénitialisation" matTooltipPosition="right">restart_alt</mat-icon>
+            </div>
+
+        </form>
+    </div>
+    <div class="alert alert-danger" *ngIf="errorHandler.error">{{errorHandler.msg}}</div>
+    <table mat-table [dataSource]="dataSource" class="
+        devis-table" *ngIf="dataSource.data.length!=0">
+
+        <!-- idDevis Column -->
+        <ng-container matColumnDef="idDevis">
+            <th mat-header-cell *matHeaderCellDef> N°. </th>
+            <td mat-cell *matCellDef="let element"> {{element.idDevis}} </td>
+        </ng-container>
+        <!-- dateDevis Column -->
+        <ng-container matColumnDef="dateDevis">
+            <th mat-header-cell *matHeaderCellDef> Date d'établissemnt </th>
+            <td mat-cell *matCellDef="let element"> {{element.dateDevis |
+                dateFormatPipe}} </td>
+        </ng-container>
+        <!-- duree Column -->
+        <ng-container matColumnDef="duree">
+            <th mat-header-cell *matHeaderCellDef>Durée</th>
+            <td mat-cell *matCellDef="let element"> {{element.duree}} </td>
+        </ng-container>
+        <!-- agence Column -->
+        <ng-container matColumnDef="agence">
+            <th mat-header-cell *matHeaderCellDef> Agence </th>
+            <td mat-cell *matCellDef="let element"> {{element.agence}} </td>
+        </ng-container>
+        <!-- nom raison social Column -->
+        <ng-container matColumnDef="raisonSocialOuNom">
+
+            <th mat-header-cell *matHeaderCellDef> Nom ou Raison sociale</th>
+            <td mat-cell *matCellDef="let element" >
+                <ng-container *ngIf="element.raisonSocial=='';else
+                    personneMoral">{{element?.nom | slice:0:50 }} {{element?.prenom | slice:0:50}}</ng-container>
+                <ng-template #personneMoral>{{element?.raisonSocial | slice:0:50}}
+                </ng-template>
+            </td>
+        </ng-container>
+        <!-- prenom Column
+        <ng-container matColumnDef="prenom">
+            <th mat-header-cell *matHeaderCellDef> Prénom </th>
+            <td mat-cell *matCellDef="let element">
+                <ng-container *ngIf="element.raisonSocial==' ';else
+                    personneMoral">{{element?.prenom}} </ng-container>
+                <ng-template #personneMoral>/</ng-template>
+            </td>
+
+        </ng-container>
+         -->
+        <!-- status Column -->
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Statut </th>
+            <td mat-cell *matCellDef="let element">
+                <mat-chip-list aria-label="Fish selection">
+                    <mat-chip [style]="(element.statut.idParam | statutColor)"
+                        color="primary">
+                        {{ element.statut.description }}
+                    </mat-chip>
+                </mat-chip-list>
+            </td>
+        </ng-container>
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button
+                    type="button"
+                    [matMenuTriggerFor]="menu"
+                    aria-label="menu devis list">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu"
+                    xPosition="after"
+                    class="menu-devis">
+                    <button mat-menu-item
+                        (click)="navigateToContrat(element.idDevis)"
+                        [disabled]="element.statut.code!='S03' && !(roleApproval && element.statut.code=='S04')"
+                        type="button">
+                        <mat-icon>source_notes</mat-icon>
+                        <span>Convertir en contrat</span>
+                    </button>
+                    <button mat-menu-item
+                        (click)="consultDevis(element.idDevis)"
+                        type="button">
+                        <mat-icon>zoom_in</mat-icon>
+                        <span>Consulter devis</span>
+                    </button>
+                    <button mat-menu-item
+                        (click)="printDevis(element.idDevis)"
+                        type="button">
+                        <mat-icon>print</mat-icon>
+                        <span>Imprimer devis</span>
+                    </button>
+                    <button mat-menu-item
+                        *ngIf="roleApproval && element.statut.code=='S04'"
+                        (click)="ApproveDevisDialog(element.idDevis)"
+                        type="button">
+                        <mat-icon>approval</mat-icon>
+                        <span>Approbation devis</span>
+                    </button>
+                </mat-menu>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"
+            class="example-second-header-row">
+        </tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+<!-- 
+        <mat-paginator [length]="devisTable.totalElements" *ngIf="dataSource.data.length!=0" [pageSize]="10"  (page)="onPageChange($event)">
+        </mat-paginator> -->
+        <mat-paginator [length]="lengthElement" *ngIf="dataSource.data.length!=0" [pageSize]="10"  (page)="onPageChange($event)">
+        </mat-paginator>
+</div>

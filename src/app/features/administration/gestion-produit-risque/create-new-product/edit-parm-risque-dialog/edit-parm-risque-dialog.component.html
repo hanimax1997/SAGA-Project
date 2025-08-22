@@ -1,0 +1,76 @@
+<h2 class="heading">
+    Paramtrer le parametre du produit
+    <span style="float: right; font-size: 24px;" >
+        <mat-icon aria-hidden="false" aria-label="" class="material-symbols-outlined"
+                matTooltip="" matTooltipPosition="right" mat-dialog-close> close
+              </mat-icon>
+    </span>
+</h2>
+<mat-divider></mat-divider>
+<div class="row" style="margin-bottom: 3%; display: flex; justify-content: center;">
+    <mat-dialog-content class="mat-typography"></mat-dialog-content>
+    <div class="col-md-11" style="padding-left: 2%;padding-right: 2%;">
+        <form #formDirective="ngForm" [formGroup]="formCreationDetailParam" (ngSubmit)="submit()">
+                <div class="row" style="display: flex;">
+
+                        <mat-form-field *ngFor="let consultation of consultations" class="col-md-6" appearance="outline">
+                       
+                            <mat-label>{{ consultation.description }}</mat-label>
+    
+                            <mat-select  multiple   *ngIf="consultation.type == 'selectMultiple'">
+                                <mat-label>{{ consultation.description }}</mat-label>
+                                <ng-container *ngFor="let list of consultation.ifselect" >
+                                    <mat-option value={{list}}>{{list}}</mat-option>
+                                </ng-container>
+                            </mat-select>
+    
+                            <mat-radio-group   *ngIf="consultation.type == 'checkbox' " >
+                                    <mat-radio-button *ngFor="let list of consultation.ifselect" value={{list}}> {{list}} </mat-radio-button>
+                            </mat-radio-group>
+    
+
+                            <mat-select *ngIf="consultation.type == 'select'">
+                                <mat-label>{{ consultation.description }}</mat-label>
+                                <ng-container *ngFor="let list of consultation.ifselect">
+                                    <mat-option value={{list}}>{{list}}</mat-option>
+                                </ng-container>
+                            </mat-select>
+
+                            <input type="text"  [formControlName]="consultation.libelle" matInput placeholder="" *ngIf="consultation.type == 'string'">
+    
+                            <input type="number" [formControlName]="consultation.libelle" matInput placeholder="" *ngIf="consultation.type == 'number'">
+    
+                            <input matInput [matDatepicker]="picker" *ngIf="consultation.type == 'date'">
+                            <mat-datepicker-toggle matSuffix [for]="picker" *ngIf="consultation.type == 'date'"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+
+                        <!-- definir le workflow-->
+                        <mat-form-field class="col-md-6" style="padding-left: 1%; padding-right: 1%;" appearance="outline">
+                            <mat-label> Workflow</mat-label>
+                            <mat-select formControlName="workflows" multiple  (selectionChange)="onChangeEventworkflow($event)" >
+                                <ng-container *ngFor="let work of possibilite" >
+                                    <mat-option [value]="work" >{{work.description}}</mat-option>
+                                  </ng-container>
+                            </mat-select>
+                        </mat-form-field> 
+
+                        <mat-form-field class="col-md-6" style="padding-left: 1%; padding-right: 1%;" appearance="outline" *ngIf="champObligatoire">
+                            <mat-label> Obligatoire</mat-label>
+                            <mat-select formControlName="mondatory" multiple>
+                                <ng-container *ngFor="let work of champObligatoire" >
+                                    <mat-option [value]="work.idParam" >{{work.description}}</mat-option>
+                                  </ng-container>
+                            </mat-select>
+                        </mat-form-field> 
+
+
+                        
+                        <div class="row-button">
+                            <button class="btn btn-cancel" mat-dialog-close>Annuler</button>
+                            <button class="btn btn-action" type="submit" >Envoyer</button>
+                        </div>
+                </div>
+        </form>
+    </div>
+</div>

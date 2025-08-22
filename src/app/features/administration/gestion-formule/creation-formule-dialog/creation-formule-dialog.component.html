@@ -1,0 +1,50 @@
+<h2 class="heading">Créer une formule</h2>
+<mat-divider></mat-divider>
+<div *ngIf="formuleCreationSuccess" class="alert alert-success">La formule N°{{idFormule}} a été créer avec succés</div>
+<div *ngIf="formuleCreationError" class="alert alert-danger">{{messageError}}</div>
+<mat-dialog-content class="mat-typography">
+    <form #formDirective="ngForm" [formGroup]="formCreationFormule" (ngSubmit)="submitCreationFormule(formDirective)"
+        class="login-form">
+
+        <mat-form-field class="col-md-12" appearance="outline">
+            <mat-label>Description</mat-label>
+            <input type="text" matInput placeholder="" formControlName="description">
+            <mat-error *ngIf="formCreationFormule.controls.description.errors" class="invalid-feedback">
+                <div *ngIf="formCreationFormule.controls.description.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Date debut</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dateDebut"
+                (dateChange)="debutDateChange($event.value)">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="formCreationFormule.controls.dateDebut.errors" class="invalid-feedback">
+                <div *ngIf="formCreationFormule.controls.dateDebut.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Date fin</mat-label>
+            <input matInput [min]="minDate" [matDatepicker]="picker2" formControlName="dateFin">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+            <mat-error *ngIf="formCreationFormule.controls.dateFin.hasError('matDatepickerMin')"
+                class="invalid-feedback">
+                <div> Date fin est inférieur à la date début</div>
+
+
+            </mat-error>
+        </mat-form-field>
+
+        <button class="btn btn-action" type="submit">Envoyer</button>
+        <button class="btn btn-cancel" mat-dialog-close>Annuler</button>
+    </form>
+</mat-dialog-content>
+<!-- <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions> -->

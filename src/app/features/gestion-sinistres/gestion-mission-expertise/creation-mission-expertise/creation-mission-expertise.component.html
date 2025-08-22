@@ -1,0 +1,217 @@
+
+
+<div class="container ">
+    <div class="header-container">
+        <h2 class="header-title">
+            <mat-icon aria-hidden="false"
+                class="material-symbols-outlined"
+                matTooltip="Retour"
+                matTooltipPosition="left"
+                routerLink="..">arrow_circle_left</mat-icon>
+            Mission expertise
+        </h2>
+
+    </div>
+    <mat-progress-bar mode="indeterminate" *ngIf="loaderInfoSinistre"></mat-progress-bar>
+    <!-- <div class="alert alert-success" *ngIf="successBody.statut">{{successBody.msg}}</div> -->
+    <div class="alert alert-danger" *ngIf="errorHandler.error">{{errorHandler.msg}}</div>
+    <form [formGroup]="formMissionExpertise" class="formExpertise"
+        (ngSubmit)="submitExpertise()"
+        *ngIf="formMissionExpertise && !loaderInfoSinistre">
+        <div class="row">
+            <!--Mode expertise  -->
+            <mat-form-field class="col-md-5"
+                appearance="outline">
+                <mat-label> Mode expertise </mat-label>
+                <mat-select formControlName="modeExpertise">
+                    <ng-container *ngFor="let mode of
+                        modeExpertise">
+                        <mat-option
+                            [value]="mode.idParam">{{mode.description}}</mat-option>
+                    </ng-container>
+
+                </mat-select>
+                <mat-error
+                    *ngIf="formMissionExpertise.controls.modeExpertise.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formMissionExpertise.controls.modeExpertise.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <!--Lieu véhicule  -->
+            <mat-form-field class="col-md-5" *ngIf="produit == '45A' || produit == '45F' || produit == '45L'"
+                appearance="outline">
+                <mat-label> Lieu véhicule </mat-label>
+                <mat-select formControlName="lieuVehicule">
+                    <ng-container *ngFor="let wilaya of
+                    wilayasArray">
+                        <mat-option
+                            [value]="wilaya.idWilaya">
+                            {{wilaya.description}}</mat-option>
+                    </ng-container>
+
+                </mat-select>
+                <mat-error
+                    *ngIf="formMissionExpertise.controls.lieuVehicule.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formMissionExpertise.controls.lieuVehicule.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <!--Type expertise   -->
+            <mat-form-field class="col-md-5" *ngIf="produit == '45A' || produit == '45F' || produit == '45L'"
+                appearance="outline">
+                <mat-label> Type expertise </mat-label>
+                <mat-select formControlName="typeExpertise"
+                    (selectionChange)="changeTypeExpertise($event.value)">
+                    <ng-container *ngFor="let type of
+                    typeExpertise">
+                        <mat-option
+                            [disabled]="type.code=='T04' && causeSinistre != 'AUT011'"
+                            [value]="type">{{type.description}}</mat-option>
+                    </ng-container>
+
+                </mat-select>
+                <mat-error
+                    *ngIf="formMissionExpertise.controls.typeExpertise.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formMissionExpertise.controls.typeExpertise.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <!--commentaire   -->
+            <mat-form-field class="col-md-5"
+                appearance="outline">
+                <mat-label> Commentaire </mat-label>
+                <input type="text" matInput placeholder
+                formControlName="commentaire">
+                <mat-error
+                    *ngIf="formMissionExpertise.controls.commentaire.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formMissionExpertise.controls.commentaire.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <mat-progress-bar mode="indeterminate" *ngIf="loaderCapitalBDG"
+            style="margin-bottom: 2rem;"></mat-progress-bar>
+        <div class="row" *ngIf="displayCpitalBDG && !loaderCapitalBDG">
+            <!--Capital BDG restant -->
+            <mat-form-field class="col-md-5"
+                appearance="outline">
+                <mat-label> Capital BDG restant </mat-label>
+                <input type="text" matInput placeholder
+                    formControlName="capitalBDG">
+                <mat-error
+                    *ngIf="formMissionExpertise.controls.capitalBDG.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formMissionExpertise.controls.capitalBDG.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <!--Eligibilité BDG-->
+            <mat-form-field class="col-md-5"
+                appearance="outline">
+                <mat-label> Eligibilité BDG</mat-label>
+                <input type="text" matInput placeholder
+                    formControlName="eligibiliteBDG">
+                <mat-error
+                    *ngIf="formMissionExpertise.controls.eligibiliteBDG.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formMissionExpertise.controls.eligibiliteBDG.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field class="col-md-5"
+                appearance="outline">
+                <mat-label> Expert </mat-label>
+                <mat-select formControlName="expert"
+                    (selectionChange)="changeExpertise($event.value)">
+                    <mat-select-filter
+                        [displayMember]="'raisonSocial'"
+                        [array]="experts"
+                        (filteredReturn)="filteredExperts=$event"></mat-select-filter>
+                    <ng-container *ngFor="let expert of
+                    filteredExperts">
+                        <mat-option
+                            [value]="expert">{{expert.raisonSocial}}</mat-option>
+                    </ng-container>
+
+                </mat-select>
+                <mat-error
+                    *ngIf="formMissionExpertise.controls.expert.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formMissionExpertise.controls.expert.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <!--Main d’œuvre-->
+            <mat-form-field class="col-md-5" *ngIf="produit == '45A' || produit == '45F' || produit == '45L'"
+                appearance="outline">
+                <mat-label> Main d'oeuvre</mat-label>
+                <input type="text" matInput placeholder
+                    formControlName="mainOeuvre">
+                <mat-error
+                    *ngIf="formMissionExpertise.controls.mainOeuvre.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formMissionExpertise.controls.mainOeuvre.errors.required">
+                        ce champs est obligatoire</div>
+                    <div
+                        *ngIf="formMissionExpertise.controls.mainOeuvre.errors?.['pattern']">
+                        ce champs n'est pas conforme</div>
+
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row" *ngIf="expertSelected">
+            <!--tel-->
+            <mat-form-field class="col-md-5"
+                appearance="outline">
+                <mat-label> N° téléphone</mat-label>
+                <input type="text" matInput placeholder
+                    formControlName="tel">
+                <span matPrefix>+213 &nbsp;</span>
+                <mat-error
+                    *ngIf="formMissionExpertise.controls.tel.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formMissionExpertise.controls.tel.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <!--email-->
+            <mat-form-field class="col-md-5"
+                appearance="outline">
+                <mat-label> Email</mat-label>
+                <input type="text" matInput placeholder
+                    formControlName="email">
+                <mat-error
+                    *ngIf="formMissionExpertise.controls.email.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formMissionExpertise.controls.email.errors.required">
+                        ce champs est obligatoire</div>
+                    <div
+                        *ngIf="formMissionExpertise.controls.email.errors.pattern">
+                        ce champs n'est pas conforme. </div>
+
+                </mat-error>
+
+            </mat-form-field>
+        </div>
+        <button class="btn btn-action" type="submit"
+            *ngIf="statutSinistre != 'CP355'  || statutSinistre != 'CP415' && !capitalBDGError">Enregistrer</button>
+    </form>
+</div>

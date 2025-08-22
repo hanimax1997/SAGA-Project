@@ -1,0 +1,67 @@
+<!--  -->
+<div class="container ">
+  <table mat-table [dataSource]="dataSource" class="referentiel-table mat-elevation-z8" >
+      <!-- Name Column  -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef > Nom </th>
+        <td mat-cell *matCellDef="let element" > <a [routerLink]="[element.path]" > {{element.name}} </a></td>
+      </ng-container>
+    
+      <!-- Description Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef s> Description </th>
+        <td mat-cell *matCellDef="let element" > {{element.description}} </td>
+      </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>    
+  <!-- <div class="row">
+    <div class="card col-md-5 ">
+      <div class="row">
+        <div class="col-md-2 img-card">
+          <img src="../../../../assets/img/icons-referentiel/garanties3.png">
+        </div>
+        <div class="col-md-10 text-card">
+          <span class="title-card">Garanties</span>
+          <p class="paragraph-card">Ce réferentiels permet d’acceder aux sous garanties, d’ajouter de nouvelles et de les modifier selon le produit</p>
+        </div>
+      </div>
+    </div>
+    <div class="card col-md-5 offset-md-1">
+      <div class="row">
+        <div class="col-md-2 img-card">
+          <img src="../../../../assets/img/icons-referentiel/questionnaire.png">
+        </div>
+        <div class="col-md-10 text-card">
+          <span class="title-card">Questionnaire</span>
+          <p class="paragraph-card">Ce réferentiels permet d’acceder aux questionnaires, d’ajouter de nouveaux et de les modifier</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="margin-top:2rem">
+    <div class="card col-md-5 ">
+      <div class="row">
+        <div class="col-md-2 img-card">
+          <img src="../../../../assets/img/icons-referentiel/typeRisque.png">
+        </div>
+        <div class="col-md-10 text-card">
+          <span class="title-card">Type Risque</span>
+          <p class="paragraph-card">Ce réferentiels permet d’acceder aux sous garanties, d’ajouter de nouvelles et de les modifier selon le produit</p>
+        </div>
+      </div>
+    </div>
+    <div class="card col-md-5 offset-md-1">
+      <div class="row">
+        <div class="col-md-2 img-card">
+          <img src="../../../../assets/img/icons-referentiel/questionnaire.png">
+        </div>
+        <div class="col-md-10 text-card">
+          <span class="title-card">Questionnaire</span>
+          <p class="paragraph-card">Ce réferentiels permet d’acceder aux questionnaires, d’ajouter de nouveaux et de les modifier</p>
+        </div>
+      </div>
+    </div>
+  </div> -->
+</div>

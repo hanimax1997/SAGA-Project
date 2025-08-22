@@ -1,0 +1,517 @@
+
+<div class="container ">
+    <h2 class="header-title">
+        <mat-icon aria-hidden="false"
+            class="material-symbols-outlined"
+            matTooltip="Retour"
+            matTooltipPosition="left"
+            (click)="goBack()">arrow_circle_left</mat-icon>
+        Consultation du devis N°{{idDevis}}</h2>
+    <mat-accordion class="example-headers-align" multi>
+        <!--Information assuré-->
+        <mat-expansion-panel hideToggle [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Information de l'assuré(e)
+                </mat-panel-title>
+                <!-- <mat-panel-description>
+                    Type your name and age
+                    <mat-icon>account_circle</mat-icon>
+                </mat-panel-description> -->
+            </mat-expansion-panel-header>
+            <div class="container " style="padding: 1rem 2rem;">
+
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Type Client: </div>
+                            <div class="col-md-6 value">{{informationsAssure.typeClient}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row infos"
+                    *ngIf="informationsAssure.typeClient=='personne physique';
+                    else personneMoral">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Nom: </div>
+                            <div class="col-md-6 value">{{informationsAssure.nom}}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Prénom:</div>
+                            <div class="col-md-6 value">{{informationsAssure.prenom}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ng-template #personneMoral>
+                    <div class="row infos">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6 key">Raison Social: </div>
+                                <div class="col-md-6 value">{{informationsAssure.raisonSocial}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Email: </div>
+                            <div class="col-md-6 value">{{informationsAssure.email}}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Téléphone:</div>
+                            <div class="col-md-6 value">{{informationsAssure.tel}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </mat-expansion-panel>
+        <!--Contrat-->
+        <mat-expansion-panel hideToggle [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Contrat
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="container " style="padding: 1rem 2rem;">
+
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Durée: </div>
+                            <div class="col-md-6 value">{{informationsContrat.duree}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Agence: </div>
+                            <div class="col-md-6 value">{{informationsContrat.agence}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Réduction: </div>
+                            <div class="col-md-6 value">{{informationsContrat.reduction}}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Convention:</div>
+                            <div class="col-md-6 value">{{informationsContrat.convention}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Audit User: </div>
+                            <div class="col-md-6 value">{{auditUser}}</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        
+                    </div>
+                </div>
+            </div>
+
+        </mat-expansion-panel>
+        <!--Informations Risque-->
+        <mat-expansion-panel hideToggle [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Informations du risque
+                </mat-panel-title>
+                <!-- <mat-panel-description>
+                    Type your name and age
+                    <mat-icon>account_circle</mat-icon>
+                </mat-panel-description> -->
+            </mat-expansion-panel-header>
+            <div class="container " style="padding: 1rem 2rem;">
+
+                <mat-accordion multi *ngIf="!multiRisque;else multirisque">
+                    <mat-expansion-panel hideToggle *ngFor="let risque of
+                        informationsRisque; let i= index" [expanded]="true"
+                        class="panel-risque">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="categoryTitle">
+                                {{risque[i]?.categorieParamRisque}}
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="row infos " *ngFor="let rs of risque">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6 key">{{rs.libelle}}</div> 
+                                    <div class="col-md-6 value"
+                                        *ngIf="rs.typeChamp?.description=='date'">{{rs.reponse?.valeur
+                                        | dateFormatPipe}}</div>
+                                    <div class="col-md-6 value"
+                                        *ngIf="rs.typeChamp?.description=='Number'">{{rs.reponse?.valeur}}</div>
+                                    <div class="col-md-6 value"
+                                        *ngIf="rs.typeChamp?.description=='Liste of values'">{{rs.reponse?.idParamReponse?.description
+                                        }}</div>
+                                    <div class="col-md-6 value"
+                                        *ngIf="rs.typeChamp?.description=='From Table'">{{rs.reponse?.description
+                                        }}</div>
+                                    <div class="col-md-6 value"
+                                        *ngIf="rs.typeChamp?.description!='Liste of values'
+                                        && rs.typeChamp?.description!='Number' && rs.typeChamp?.description!='From Table' &&
+                                        rs.typeChamp?.description!='date'">{{rs.reponse?.valeur
+                                        }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+                <ng-template #multirisque>
+                    <mat-accordion multi>
+                        <table
+                            mat-table
+                            [dataSource]="dataSourceGroupes"
+                            class="gestion-table"
+                            multiTemplateDataRows>
+                            <!-- Description Column -->
+                            <ng-container matColumnDef="description">
+                                <th mat-header-cell *matHeaderCellDef>Description</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{ element.description }}
+                                </td>
+                            </ng-container>
+                            <!-- pack Column -->
+                            <ng-container matColumnDef="pack">
+                                <th mat-header-cell *matHeaderCellDef>Pack</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{ element.pack.description }}
+                                </td>
+                            </ng-container>
+                            <!-- more Column -->
+                            <ng-container matColumnDef="more">
+                                <th mat-header-cell *matHeaderCellDef></th>
+
+                                <td mat-cell *matCellDef="let element">
+                                    <button
+                                        mat-icon-button
+                                        type="button"
+                                        aria-label
+                                        (click)="toggleRow(element)">
+                                        <mat-icon>{{
+                                            expandedElement === element ?
+                                            "expand_less" : "expand_more"
+                                            }}</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="expandedDetail">
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element"
+                                    [attr.colspan]="displayedColumnsRs.length">
+                                    <div
+                                        class="example-element-detail"
+                                        *ngIf="element.risques?.data?.length"
+                                        [@detailExpand]="
+                                element == expandedElement ? 'expanded' : 'collapsed'
+                              ">
+                                        <div
+                                            class="inner-table mat-elevation-z8"
+                                            *ngIf="expandedElement">
+                                            <table
+                                                #innerTables
+                                                mat-table
+                                                class
+                                                [dataSource]="element.risques"
+                                                matSort>
+                                                <!-- <ng-container
+                                                    matColumnDef="description">
+                                                    <th mat-header-cell
+                                                        *matHeaderCellDef>N°
+                                                        risque</th>
+                                                    <td mat-cell
+                                                        *matCellDef="let element">
+                                                        {{
+                                                        element.idRisque
+                                                        }}
+                                                    </td>
+                                                </ng-container> -->
+                                                <ng-container
+                                                    *ngFor="let column of displayedColumnsCol; let i = index"
+                                                    [matColumnDef]="column">
+
+                                                    <th mat-header-cell
+                                                        *matHeaderCellDef>
+                                                        {{column}}</th>
+                                                    <td mat-cell
+                                                        *matCellDef="let element">
+                                                        {{element.risque[i][column]}}
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container
+                                                    matColumnDef="action">
+                                                    <th mat-header-cell
+                                                        *matHeaderCellDef>
+                                                        Action </th>
+
+                                                    <td mat-cell
+                                                        *matCellDef="let element">
+                                                        <button mat-icon-button
+                                                            type="button"
+                                                            [matMenuTriggerFor]="menu"
+                                                            aria-label="menu contrat list">
+                                                            <mat-icon>more_vert</mat-icon>
+                                                        </button>
+                                                        <mat-menu
+                                                            #menu="matMenu"
+                                                            xPosition="after"
+                                                            class="menu-contrat">
+                                                            <button
+                                                                mat-menu-item
+                                                                (click)="consultRisque(element.idRisque,idGroupe)"
+                                                                type="button">
+                                                                <mat-icon>zoom_in</mat-icon>
+                                                                <span>Consulter
+                                                                    risque</span>
+                                                            </button>
+                                                        </mat-menu>
+                                                    </td>
+                                                </ng-container>
+                                                <tr mat-header-row
+                                                    *matHeaderRowDef="displayedColumnsRsInner"></tr>
+                                                <tr
+                                                    mat-row
+                                                    *matRowDef="let row; columns: displayedColumnsRsInner"></tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row
+                                *matHeaderRowDef="displayedColumnsRs"></tr>
+                            <tr
+                                mat-row
+                                *matRowDef="let element; columns: displayedColumnsRs"
+                                [class.example-element-row]="element.risques?.data?.length"
+                                [class.example-expanded-row]="expandedElement === element"></tr>
+                            <tr
+                                mat-row
+                                *matRowDef="let row; columns: ['expandedDetail']"
+                                class="example-detail-row"></tr>
+                        </table>
+                        <mat-paginator
+                            [pageSize]="10"
+                            [pageSizeOptions]="[5, 10]"
+                            aria-label="Select page of users"></mat-paginator>
+                    </mat-accordion>
+                </ng-template>
+            </div>
+
+        </mat-expansion-panel>
+        <!--Pack-->
+        <mat-expansion-panel hideToggle [expanded]="true" *ngIf="!multiRisque">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Pack et garanties "{{packName}}"
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table mat-table [dataSource]="dataSourcePack"
+                class="pack-table" multiTemplateDataRows>
+
+                <!-- description Column -->
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef> Garantie</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.description}}
+                    </td>
+                </ng-container>
+                <!-- plafond  Column -->
+                <ng-container matColumnDef="plafond">
+                    <th mat-header-cell *matHeaderCellDef> Plafond
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.plafond != '0' ? element.plafond : '-'}}
+                    </td>
+                </ng-container>
+                <!-- franchise Column -->
+                <ng-container matColumnDef="franchise">
+                    <th mat-header-cell *matHeaderCellDef> Franchise
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.franchise}}
+                    </td>
+                </ng-container>
+                <!-- formule Column -->
+                <ng-container matColumnDef="formule">
+                    <th mat-header-cell *matHeaderCellDef> Formule
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.formule}}
+                    </td>
+                </ng-container>
+                <!-- prime Column -->
+                <ng-container matColumnDef="prime">
+                    <th mat-header-cell *matHeaderCellDef> Prime
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.prime | number : '1.0-0' | money}}<sup>DA</sup>
+                    </td>
+                </ng-container>
+                <!-- Afficher sous garantie  Column -->
+                <ng-container matColumnDef="sousGarantie">
+                    <th mat-header-cell *matHeaderCellDef> </th>
+                    <td mat-cell *matCellDef="let element"
+                        class="example-element-row"
+                        [class.example-expanded-row]="expandedElementPack === element">
+
+                        <button mat-icon-button
+                            *ngIf="element.sousGarantieList.data.length!=0"
+                            type="button"
+                            aria-label
+                            (click)="expandedElementPack = expandedElementPack === element ? null : element">
+                            <mat-icon>{{expandedElementPack === element ?
+                                'indeterminate_check_box' :
+                                'add_box'}}</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="expandedDetail">
+                    <td mat-cell *matCellDef="let element"
+                        [attr.colspan]="displayedColumnsPack.length">
+                        <div class="example-element-detail"
+                            [@detailExpand]="element == expandedElementPack ? 'expanded' : 'collapsed'">
+
+                            <table mat-table
+                                [dataSource]="element.sousGarantieList"
+                                class="pack-table innertable"
+                                multiTemplateDataRows>
+
+                                <!-- description Column -->
+                                <ng-container matColumnDef="description">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        Sous
+                                        garantie</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.description}}
+                                    </td>
+                                </ng-container>
+                                <!-- plafond  Column -->
+                                <ng-container matColumnDef="plafond">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        Plafond
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.plafond != '0' ?
+                                        element.plafond : '-'}}
+                                    </td>
+                                </ng-container>
+                                <!-- franchise Column -->
+                                <ng-container matColumnDef="franchise">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        Franchise
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.franchise}}
+                                    </td>
+                                </ng-container>
+                                <!-- formule Column -->
+                                <ng-container matColumnDef="formule">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        Formule
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.formule}}
+                                    </td>
+                                </ng-container>
+                                <!-- prime Column -->
+                                <ng-container matColumnDef="prime">
+                                    <th mat-header-cell *matHeaderCellDef> Prime
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        {{element.prime | number : '1.0-0' | money}}<sup>DA</sup>
+                                    </td>
+                                </ng-container>
+                                <!-- formule Column -->
+                                <ng-container matColumnDef="empty1">
+                                    <th mat-header-cell *matHeaderCellDef>
+
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+
+                                    </td>
+                                </ng-container>
+                                <!-- formule Column -->
+                                <ng-container matColumnDef="empty2">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+
+                                    </td>
+                                </ng-container>
+                                
+                                <tr mat-header-row
+                                    *matHeaderRowDef="displayedColumnsPackSousGarantie"></tr>
+                                <tr mat-row *matRowDef="let row; columns:
+                            displayedColumnsPackSousGarantie;">
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsPack"></tr>
+                <tr mat-row
+                    *matRowDef="let element; columns: displayedColumnsPack;">
+                </tr>
+                <tr mat-row
+                    *matRowDef="let row; columns: ['expandedDetail']"
+                    class="example-detail-row">
+                </tr>
+            </table>
+        </mat-expansion-panel>
+        <!--Prime-->
+        <mat-expansion-panel hideToggle [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Prime
+                </mat-panel-title>
+
+                <!-- <mat-panel-description>
+                            Type your name and age
+                            <mat-icon>account_circle</mat-icon>
+                        </mat-panel-description> -->
+            </mat-expansion-panel-header>
+            <table class="resume">
+
+                <tr *ngFor="let element of primeListe">
+                    <ng-container *ngIf="element.typePrime.idParam==101">
+                        <td>{{element.typePrime.description}}</td>
+                        <td>{{element.prime | number : '1.0-0' | money}}
+                            <sup>DA</sup></td>
+                    </ng-container>
+                </tr>
+                <tr *ngFor="let element of taxeListe">
+                    <td>{{element.taxe.description}}</td>
+                    <td>{{element.prime | number : '1.0-0' | money}} <sup>DA</sup></td>
+                </tr>
+                <tr *ngFor="let element of primeListe">
+                    <ng-container *ngIf="element.typePrime.idParam==186">
+                        <td class="primeTotale">{{element.typePrime.description}}</td>
+                        <td class="primeTotale">{{element.prime | number :
+                            '1.0-0' | money}} <sup>DA</sup></td>
+                    </ng-container>
+                </tr>
+            </table>
+
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>

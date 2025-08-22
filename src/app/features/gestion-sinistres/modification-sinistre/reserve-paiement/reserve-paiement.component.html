@@ -1,0 +1,84 @@
+<div class="container ">
+    <div class="header-container">
+        <h2 class="header-title">
+            <mat-icon class="mat-icon material-symbols-outlined"
+                aria-label="directions_car" (click)="goBack()">arrow_circle_left</mat-icon>
+
+            <span>Tableau des réserves de paiement </span>
+        </h2>
+        <!-- // <button class="btn btn-action" (click)="editTier()" *ngIf="consultTierShow" >Modifier tier</button> -->
+    </div>
+    <app-entete-gestion></app-entete-gestion>
+
+    <table class="gestion-table">
+        <!--  numSinistre -->
+        <ng-container>
+            <th>Garantie </th>
+            <th> Réserve </th>
+            <th> Réserve Actuelle </th>
+            <th> OP </th>
+            <th> Réserve totale </th>
+            <th> Action</th>
+        </ng-container>
+        <ng-container *ngFor="let data of dataSource">
+            <tr class="garantie-line">
+                <td [attr.rowspan]="data.reserves.length +1">{{data.nomGarantie}}</td>
+                <td></td>
+                <td>{{data.reserveActuelle}}</td>
+                <td>{{data.op}}</td>
+                <td>{{data.reserveTotal}}</td>
+                <td></td>
+
+            </tr>
+            <ng-container *ngFor="let reserve of data.reserves; let i= index;">
+                <tr>
+                    <td>{{reserve.nomReserve}}</td>
+                    <td>{{reserve.reserveActuelle}}</td>
+                    <td>{{reserve.op}}</td>
+                    <td>{{reserve.reserveTotal}}</td>
+                    <td>
+
+                        <button mat-icon-button
+                            type="button"
+                            [matMenuTriggerFor]="menu"
+                            aria-label="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu"
+                            xPosition="after"
+                            class="menu-formule">
+                            <button mat-menu-item [disabled]="statutSinistre=='CP355'|| statutSinistre=='CP415'|| statutSinistre=='CP524' || statutSinistre=='CP525'|| statutSinistre=='CP526'"
+                            (click)="goTo('create-op',reserve.codeReserve,data.codeGarantie)"
+                                type="button">
+                                <mat-icon>add_circle</mat-icon>
+                                <span>OP sans PV </span>
+                            </button>
+                            <button mat-menu-item [disabled]="statutSinistre=='CP355' || statutSinistre=='CP415'|| statutSinistre=='CP524'  || statutSinistre=='CP525' || reserve.idreserve==null ||statutSinistre=='CP526'"
+                                type="button"
+                                (click)="calculateur(reserve.codeReserve,data.codeGarantie)">
+                                <mat-icon>add_circle</mat-icon>
+                                <span>PVE</span>
+                            </button>
+                            <button mat-menu-item [disabled]="statutSinistre=='CP355' ||statutSinistre=='CP415' ||reserve.idreserve==null || statutSinistre=='CP524'|| statutSinistre=='CP526'"
+                            type="button" (click)="cancelReserve(reserve.idreserve)">
+                            <mat-icon>cancel</mat-icon>
+                            <span>Annuler une réserve </span>
+                            </button>
+                            <button mat-menu-item [disabled]="statutSinistre=='CP355' || statutSinistre=='CP415'||  statutSinistre=='CP524'  || statutSinistre=='CP525' || statutSinistre=='CP526'|| data.codeGarantie!='G00' || privilage"
+                            type="button" (click)="modifierReserve(reserve.idreserve,data.codeGarantie,reserve.codeReserve)">
+                            <mat-icon>border_color</mat-icon>
+                            <span>Modifier Reserve Garantie </span>
+                            </button>
+
+
+                        </mat-menu>
+                    </td>
+                </tr>
+            </ng-container>
+
+        </ng-container>
+        <!-- Action Column -->
+
+    </table>
+
+</div>

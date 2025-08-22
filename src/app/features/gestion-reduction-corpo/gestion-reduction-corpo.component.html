@@ -1,0 +1,625 @@
+<div class="container ">
+    <div class="header-container">
+        <div class="back-container" *ngIf="step==1">
+            <mat-icon aria-hidden="false"
+                class="material-symbols-outlined"
+                matTooltip="Retour"
+                (click)="step=0;resetForm()"
+                matTooltipPosition="right">arrow_circle_left</mat-icon>
+        </div>
+        <h2 class="header-title">
+            <mat-icon class="mat-icon notranslate
+                material-symbols-outlined material-icons mat-icon-no-color"
+                aria-label="directions_car">redeem</mat-icon>
+            Réduction
+        </h2>
+
+    </div>
+    <ng-container *ngIf="step==0">
+        <!--type produit -->
+        <mat-form-field appearance="outline"
+            class="col-md-5 " style="padding-left: 2rem;">
+            <mat-label>Type produit</mat-label>
+            <mat-select
+                (selectionChange)="changeTypeProduit($event.value)">
+                <ng-container *ngFor="let type of
+                    typeProduits">
+                    <mat-option
+                        [value]="type">
+                        {{type.description}}
+                    </mat-option>
+                </ng-container>
+            </mat-select>
+        </mat-form-field>
+        <div class="alert alert-danger"*ngIf="emptyTable">Aucune réduction n'a
+            été ajoutée</div>
+        <table mat-table [dataSource]="dataSourceReduction"
+            class="gestion-table"
+            *ngIf="!emptyTable">
+
+
+            <!-- ID Column 
+            <ng-container matColumnDef="idReduction">
+                <th mat-header-cell *matHeaderCellDef> ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.idReduction}}
+                </td>
+            </ng-container>
+-->
+            <!-- nomReduction Column -->
+            <ng-container matColumnDef="nomReduction">
+                <th mat-header-cell *matHeaderCellDef> nom Réduction </th>
+                <td mat-cell *matCellDef="let element"> {{element.nomReduction}}
+                </td>
+            </ng-container>
+
+            <!-- dateDebut Column -->
+            <ng-container matColumnDef="dateDebut">
+                <th mat-header-cell *matHeaderCellDef> Date Debut </th>
+                <td mat-cell *matCellDef="let element"> {{element.dateDebut |
+                    dateFormatPipe}} </td>
+            </ng-container>
+            <!-- typeProduit Column -->
+            <ng-container matColumnDef="typeProduit">
+                <th mat-header-cell *matHeaderCellDef> Produit </th>
+                <td mat-cell *matCellDef="let element"> {{element.typeProduit}}
+                </td>
+            </ng-container>
+
+            <!-- Action Column -->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let element">
+
+                    <button mat-icon-button
+                        type="button"
+                        [matMenuTriggerFor]="menu"
+                        aria-label="menu reduction list">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu"
+                        xPosition="after">
+                        <button mat-menu-item
+                            type="button">
+                            <mat-icon>delete</mat-icon>
+                            <span>supprimer réduction</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsReductions"></tr>
+            <tr mat-row *matRowDef="let row; columns:
+                displayedColumnsReductions;"></tr>
+        </table>
+    </ng-container>
+    <ng-container *ngIf="step==1">
+
+        <mat-stepper #stepper>
+            <mat-step>
+                <ng-template matStepLabel>Informations Generales</ng-template>
+                <!-- info generale -->
+                <form [formGroup]="formInfoGeneral" class="form-infoGeneral">
+                    <div class="row">
+                        <!--nom réduction -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Nom Réduction</mat-label>
+                            <input type="text" matInput placeholder=""
+                                formControlName="nomReduction">
+                            <mat-error
+                                *ngIf="formInfoGeneral.controls.nomReduction.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formInfoGeneral.controls.nomReduction.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+
+
+                    </div>
+                    <div class="row">
+                        <!--date debut -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Date Début</mat-label>
+                            <input matInput
+                                [matDatepicker]="pickerDateDebut"
+                                formControlName="dateDebut"
+                                [min]=minDate>
+                            <mat-datepicker-toggle matSuffix
+                                [for]="pickerDateDebut"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerDateDebut></mat-datepicker>
+                            <mat-error
+                                *ngIf="formInfoGeneral.controls.dateDebut.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formInfoGeneral.controls.dateDebut.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--date fin -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Date fin</mat-label>
+                            <input matInput
+                                [matDatepicker]="pickerDateFin"
+                                formControlName="dateFin">
+                            <mat-datepicker-toggle matSuffix
+                                [for]="pickerDateFin"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerDateFin></mat-datepicker>
+                            <mat-error
+                                *ngIf="formInfoGeneral.controls.dateFin.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formInfoGeneral.controls.dateFin.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="row-button">
+                        <button class="btn btn-action" matStepperNext>Suivant</button>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Informations relatif au produit</ng-template>
+                <mat-accordion multi>
+                    <!-- info supplémenaire -->
+                    <form [formGroup]="infoProduit" class="form row">
+                        <!--risque-->
+                        <mat-expansion-panel hideToggle [expanded]="true"
+                            class="panel-risque">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="">
+                                    Risque
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <ng-container formGroupName="infoVehicule">
+                                <div class="row">
+                                    <!--Age vehicule minimum -->
+                                    <mat-form-field class="col-md-5"
+                                        appearance="outline">
+                                        <mat-label>Age vehicule minimum</mat-label>
+                                        <input type="text" matInput
+                                            placeholder=""
+                                            formControlName="ageVehiculeMin">
+                                        <mat-error
+                                            *ngIf="infoProduit.controls.infoVehicule.get('ageVehiculeMin').hasError('required')"
+                                            class="invalid-feedback">ce champs
+                                            est
+                                            obligatoire
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!--Age vehicule max -->
+                                    <mat-form-field class="col-md-5"
+                                        appearance="outline">
+                                        <mat-label>Age vehicule maximum</mat-label>
+                                        <input type="text" matInput
+                                            placeholder=""
+                                            formControlName="ageVehiculeMax">
+                                        <mat-error
+                                            *ngIf="infoProduit.controls.infoVehicule.get('ageVehiculeMax').hasError('required')"
+                                            class="invalid-feedback">
+                                            ce champs est obligatoire
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="row">
+                                    <!--Age conducteur min -->
+                                    <mat-form-field class="col-md-5"
+                                        appearance="outline">
+                                        <mat-label>Age conducteur minimum</mat-label>
+                                        <input type="text" matInput
+                                            placeholder=""
+                                            formControlName="ageConducteurMin">
+                                        <mat-error
+                                            *ngIf="infoProduit.controls.infoVehicule.get('ageConducteurMin').hasError('required')"
+                                            class="invalid-feedback">
+                                            ce champs est obligatoire
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!--Age conducteur max -->
+                                    <mat-form-field class="col-md-5"
+                                        appearance="outline">
+                                        <mat-label>Age conducteur maximum</mat-label>
+                                        <input type="text" matInput
+                                            placeholder=""
+                                            formControlName="ageConducteurMax">
+                                        <mat-error
+                                            *ngIf="infoProduit.controls.infoVehicule.get('ageConducteurMax').hasError('required')"
+                                            class="invalid-feedback">
+                                            ce champs est obligatoire
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="row">
+
+                                    <!--Genre conducteur -->
+                                    <mat-form-field appearance="outline"
+                                        class="col-md-5 ">
+                                        <mat-label>Genre conducteur</mat-label>
+                                        <mat-select
+                                            formControlName="genreConducteur"
+                                            multiple>
+                                            <ng-container *ngFor="let type of
+                                                typeProduits">
+                                                <mat-option
+                                                    [value]="type">
+                                                    {{type.description}}
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                        <mat-error
+                                            *ngIf="infoProduit.controls.infoVehicule.get('genreConducteur').hasError('required')"
+                                            class="invalid-feedback">
+                                            ce champs est obligatoire
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!--marque vehicule -->
+                                    <mat-form-field appearance="outline"
+                                        class="col-md-5 ">
+                                        <mat-label>Marque véhicule</mat-label>
+                                        <mat-select
+                                            formControlName="marqueVehicule"
+                                            multiple>
+                                            <ng-container *ngFor="let type of
+                                                typeProduits">
+                                                <mat-option
+                                                    [value]="type">
+                                                    {{type.description}}
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                        <mat-error
+                                            *ngIf="infoProduit.controls.infoVehicule.get('marqueVehicule').hasError('required')"
+                                            class="invalid-feedback">
+                                            ce champs est obligatoire
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                                <div class="row">
+
+                                    <!--Genre conducteur -->
+                                    <mat-form-field appearance="outline"
+                                        class="col-md-5 ">
+                                        <mat-label>Valeur vénale minimum</mat-label>
+                                        <input matInput
+                                            type="text"
+                                            formControlName="valeurVenaleMin">
+                                        <mat-error
+                                            *ngIf="infoProduit.controls.infoVehicule.get('valeurVenaleMin').hasError('required')"
+                                            class="invalid-feedback">
+                                            ce champs est obligatoire
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!--marque vehicule -->
+                                    <mat-form-field appearance="outline"
+                                        class="col-md-5 ">
+                                        <mat-label>Valeur vénale maximul</mat-label>
+                                        <input matInput
+                                            type="text"
+                                            formControlName="valeurVenaleMax">
+                                        <mat-error
+                                            *ngIf="infoProduit.controls.infoVehicule.get('valeurVenaleMax').hasError('required')"
+                                            class="invalid-feedback">
+                                            ce champs est obligatoire
+                                        </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </ng-container>
+                        </mat-expansion-panel>
+                        <!--supplémentaire-->
+                        <mat-expansion-panel hideToggle [expanded]="true"
+                            class="panel-risque">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title class="">
+                                    Information supplémenaire
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div class="row">
+                                <!--Agence -->
+                                <mat-form-field appearance="outline"
+                                    class="col-md-5 ">
+                                    <mat-label>Agence</mat-label>
+                                    <mat-select formControlName="agence"
+                                        multiple>
+                                        <ng-container *ngFor="let type of
+                                            typeProduits">
+                                            <mat-option
+                                                [value]="type">
+                                                {{type.description}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="infoProduit.controls.agence.errors"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf="infoProduit.controls.agence.errors.required">
+                                            ce champs est obligatoire</div>
+                                    </mat-error>
+                                </mat-form-field>
+                                <!--utilisateur -->
+                                <mat-form-field appearance="outline"
+                                    class="col-md-5 ">
+                                    <mat-label>Utilisateur</mat-label>
+                                    <mat-select
+                                        formControlName="utilisateur"
+                                        multiple>
+                                        <ng-container *ngFor="let type of
+                                            typeProduits">
+                                            <mat-option
+                                                [value]="type">
+                                                {{type.description}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="infoProduit.controls.utilisateur.errors"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf="infoProduit.controls.utilisateur.errors.required">
+                                            ce champs est obligatoire</div>
+                                    </mat-error>
+                                </mat-form-field>
+                                <!--Canal de distribution -->
+                                <mat-form-field appearance="outline"
+                                    class="col-md-5 ">
+                                    <mat-label>Canal de distribution
+                                    </mat-label>
+                                    <mat-select
+                                        formControlName="canalDistribution"
+                                        multiple>
+                                        <ng-container *ngFor="let type of
+                                            typeProduits">
+                                            <mat-option
+                                                [value]="type">
+                                                {{type.description}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="infoProduit.controls.canalDistribution.errors"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf="infoProduit.controls.canalDistribution.errors.required">
+                                            ce champs est obligatoire</div>
+                                    </mat-error>
+                                </mat-form-field>
+                                <!--segments-->
+                                <mat-form-field appearance="outline"
+                                    class="col-md-5 ">
+                                    <mat-label>Segment</mat-label>
+                                    <mat-select formControlName="segment"
+                                        multiple>
+                                        <ng-container *ngFor="let type of
+                                            typeProduits">
+                                            <mat-option
+                                                [value]="type">
+                                                {{type.description}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                    <mat-error
+                                        *ngIf="infoProduit.controls.segment.errors"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf="infoProduit.controls.segment.errors.required">
+                                            ce champs est obligatoire</div>
+                                    </mat-error>
+                                </mat-form-field>
+                                <!--Pack
+                            <mat-form-field appearance="outline"
+                                class="col-md-5 ">
+                                <mat-label>Pack </mat-label>
+                                <mat-select formControlName="pack">
+                                    
+                                    <mat-option *ngFor="let pack of
+                                        packs; let i=index"
+                                        [value]="pack.idPack0">
+                                        <mat-checkbox
+                                            (change)="onChangePack(pack,$event)">
+                                            {{pack.description}}</mat-checkbox>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-error
+                                    *ngIf="infoProduit.controls.pack.errors"
+                                    class="invalid-feedback">
+                                    <div
+                                        *ngIf="infoProduit.controls.pack.errors.required">
+                                        ce champs est obligatoire</div>
+                                </mat-error>
+                            </mat-form-field>
+                            -->
+                            </div>
+
+                            <div class="row-button">
+                                <button class="btn btn-action"
+                                    matStepperNext>Suivant</button>
+
+                                <button class="btn btn-cancel"
+                                    matStepperPrevious>Retour</button>
+
+                            </div>
+
+
+                        </mat-expansion-panel>
+                    </form>
+                </mat-accordion>
+
+            </mat-step>
+            <!--pack -->
+            <mat-step>
+                <ng-template matStepLabel>Pack</ng-template>
+                <!--Pack-->
+                <form [formGroup]="infoPack" class="form row">
+                    <mat-form-field appearance="outline"
+                        class="col-md-5 ">
+                        <mat-label>Pack </mat-label>
+                        <mat-select formControlName="pack">
+                            <mat-option *ngFor="let pack of
+                                packs; let i=index"
+                                [value]="pack.idPack0">
+                                <mat-checkbox
+                                    (change)="onChangePack(pack,$event)">
+                                    {{pack.description}}</mat-checkbox>
+                            </mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="infoPack.controls.pack.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="infoPack.controls.pack.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <div formArrayName="VORowsPacks">
+                        <mat-accordion multi>
+                            <ng-container *ngFor="let pack of
+                                VORowsPacks().controls; let
+                                packIndex=index">
+                                <mat-expansion-panel
+                                    [formGroupName]="packIndex"
+                                    [expanded]="true"
+                                    class="panel-risque">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title class="">
+                                            {{pack.value.description}}
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+
+                                    <!-- <ng-container
+                                        *ngFor="let garantie of
+                                        VORowsGaranties(packIndex).controls; let
+                                        garantieIndex=index">
+                                        <div [formGroupName]="garantieIndex">
+                                            {{garantieIndex}} Skill :
+                                            <mat-form-field appearance="outline"
+                                            class="col-md-5 ">
+                                            <mat-label>Pack </mat-label>
+                                            <input type="text" matInput placeholder="{{garantie}}"
+                                            formControlName="garantie">                                           
+                                        </mat-form-field>
+                                        </div>
+                                    </ng-container> -->
+                                    <table mat-table
+                                        [dataSource]="dataSourceGaranties[packIndex]"
+                                        class="pack-table"
+                                        *ngIf="loadTablePack"
+                                        formArrayName="garanties">
+
+                                        <!-- Garantie Column -->
+                                        <ng-container
+                                            matColumnDef="garantie">
+                                            <th mat-header-cell
+                                                *matHeaderCellDef>Garantie</th>
+                                            <td mat-cell *matCellDef="let
+                                                element;
+                                                let i= index"
+                                                [formGroup]="element">
+                                                <mat-form-field
+                                                    class="noUnderline">
+                                                    <input matInput
+                                                        type="text"
+                                                        formControlName="garantie"
+                                                        [readonly]="true">
+                                                </mat-form-field>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Franchise Column -->
+                                        <ng-container
+                                            matColumnDef="franchise">
+                                            <th mat-header-cell
+                                                *matHeaderCellDef>
+                                                Franchise</th>
+                                            <td mat-cell *matCellDef="let
+                                                element;
+                                                let
+                                                i=index"
+                                                [formGroup]="element">
+                                                <mat-form-field
+                                                    [ngClass]="{'noUnderline':
+                                                    !pack.get('garanties')?.value[i].isEditable}">
+                                                    <mat-label
+                                                        *ngIf="pack.get('garanties')?.value[i].isEditable">Franchise</mat-label>
+                                                    <input matInput
+                                                        type="text"
+                                                        formControlName="franchise"
+                                                        [readonly]="!pack.get('garanties')?.value[i].isEditable">
+                                                </mat-form-field>
+                                            </td>
+
+                                        </ng-container>
+                                        <!-- Franchise Column -->
+                                        <ng-container
+                                            matColumnDef="pourcentage">
+                                            <th mat-header-cell
+                                                *matHeaderCellDef>
+                                                Pourcentage</th>
+                                            <td mat-cell *matCellDef="let
+                                                element;
+                                                let
+                                                i=
+                                                index"
+                                                [formGroup]="element">
+                                                <mat-form-field
+                                                    [ngClass]="{'noUnderline':
+                                                    !pack.get('garanties')?.value[i].isEditable}">
+                                                    <mat-label
+                                                        *ngIf="pack.get('garanties')?.value[i].isEditable">Pourcentage</mat-label>
+                                                    <input matInput
+                                                        type="text"
+                                                        formControlName="pourcentage"
+                                                        [readonly]="!pack.get('garanties')?.value[i].isEditable">
+                                                </mat-form-field>
+                                            </td>
+                                        </ng-container>
+                                        <!-- Action Column -->
+                                        <ng-container matColumnDef="action">
+                                            <th mat-header-cell
+                                                *matHeaderCellDef>
+                                                Action
+                                            </th>
+                                            <td mat-cell *matCellDef="let
+                                                element;
+                                                let
+                                                i=
+                                                index"
+                                                [formGroup]="element">
+                                                <mat-icon
+                                                    (click)="EditGarantieLigne(pack,i)"
+                                                    *ngIf="!pack.get('garanties')?.value[i].isEditable">edit</mat-icon>
+                                                <mat-icon
+                                                    (click)="SaveGarantieLigne(pack,i)"
+                                                    *ngIf="pack.get('garanties')?.value[i].isEditable">check_circle</mat-icon>
+                                            </td>
+                                        </ng-container>
+                                        <tr mat-header-row
+                                            *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row;
+                                            columns:
+                                            displayedColumns;">
+                                        </tr>
+                                    </table>
+
+                                </mat-expansion-panel>
+                            </ng-container>
+                        </mat-accordion>
+
+
+
+                    </div>
+                    <div class="row-button">
+                        <button class="btn btn-action" type="button"
+                            (click)="saveReduction()">Enregistrer</button>
+                        <button class="btn btn-cancel"
+                            matStepperPrevious>Retour</button>
+
+                    </div>
+                </form>
+            </mat-step>
+        </mat-stepper>
+
+    </ng-container>
+</div>

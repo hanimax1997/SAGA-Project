@@ -1,0 +1,58 @@
+.container {
+    background-color: #ffff;
+    padding: 40px 43px;
+    height: 100%;
+   
+    overflow-x: hidden;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15)
+}
+.header-container{
+    font-size: 21px !important;
+    color: #00008f;
+    font-weight: 600 !important;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+}
+.head-display{
+    transform: scale(1.5);
+}
+
+
+
+h2.header-title {
+    padding: 0 24px;
+    font-size: 21px !important;
+    color: #00008f;
+    font-weight: 600 !important;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+}
+.header-title .mat-icon{
+    cursor:pointer;
+    width: fit-content;
+    height: fit-content;
+    font-size: 33px;
+}
+.formFiltre{
+    margin-top: 30px;   
+    margin-left: 25px;
+}
+.button-row .btn-action{
+    float: right;
+}
+.mat-menu-item {
+    font-size: 15px;
+
+}
+
+.mat-menu-item .mat-icon {
+    font-size: 18px;
+    height: fit-content;
+}
+
+.mat-menu-item:hover:not([disabled]),
+.mat-menu-item:hover:not([disabled]) .mat-icon {
+    color: #00008f
+}

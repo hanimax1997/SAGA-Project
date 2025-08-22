@@ -1,0 +1,85 @@
+
+<div class="container ">
+    <h2 class="header-title">
+        <mat-icon aria-hidden="false"
+            class="material-symbols-outlined"
+            matTooltip="Retour"
+            matTooltipPosition="left"
+            routerLink="../../">arrow_circle_left</mat-icon>
+        Consultation de la mission d'expertise N°{{idMissionExpertise}}</h2>
+    <div class="container-rows" *ngIf="getInfoReady">
+        <div class="row infos">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6 key">Mode expertise: </div>
+                    <div class="col-md-6 value">{{informationsMissionExpertise.modeExpertise.description}}</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6 key">Type expertise:</div>
+                    <div class="col-md-6 value">{{informationsMissionExpertise.typeExpertise.description}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row infos">
+            <div class="col-md-6" *ngIf="informationsMissionExpertise.lieuVehicule != null">
+                <div class="row">
+                    <div class="col-md-6 key">Lieu véhicule: </div>
+                    <div class="col-md-6 value">{{informationsMissionExpertise.lieuVehicule.description}}</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6 key">Commentaire: </div>
+                    <div class="col-md-6 value">{{informationsMissionExpertise.commentaire}}</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row infos">
+
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6 key">Expert:</div>
+                    <div class="col-md-6 value">{{informationsMissionExpertise.jsonExpert.raisonSocial}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" *ngIf="informationsMissionExpertise.mntMaindOeuvre != null">
+                <div class="row">
+                    <div class="col-md-6 key">Main D'oeuvre:</div>
+                    <div class="col-md-6 value">{{informationsMissionExpertise.mntMaindOeuvre}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row infos">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6 key">Email: </div>
+                    <div class="col-md-6 value">{{informationsMissionExpertise.jsonExpert.email}}</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6 key">Téléphone:</div>
+                    <div class="col-md-6 value">{{informationsMissionExpertise.jsonExpert.tel}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row infos" *ngIf="informationsMissionExpertise.motifRejet!=null">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6 key">Motif rejet:</div>
+                    <div class="col-md-6 value">{{informationsMissionExpertise.motifRejet}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

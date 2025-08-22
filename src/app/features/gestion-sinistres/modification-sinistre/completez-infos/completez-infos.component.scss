@@ -1,0 +1,34 @@
+.container {
+    background-color: #ffff;
+    padding: 40px 2rem;
+    height: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+h2.header-title {
+    // padding: 0 24px;
+    font-size: 21px !important;
+    color: #00008f;
+    font-weight: 600 !important;
+    letter-spacing: 1px;
+    display: flex;
+   // justify-content: space-between;
+}
+
+h2.header-title .mat-icon {
+    margin-right: 1rem;
+    font-size: 32px;
+    height: fit-content;
+    width: fit-content;
+}
+h2.header-title.title{
+    align-items: center;
+    display: flex;
+}
+.form.row{
+    flex-direction: column;
+    margin-top: 4rem;
+}
+.button-row .btn-action{
+    float: right;
+}

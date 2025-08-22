@@ -1,0 +1,601 @@
+<div class="container">
+  <div class="header-container">
+    <mat-icon
+    aria-hidden="false"
+    class="material-symbols-outlined head-display"
+    matTooltip="Retour"
+    matTooltipPosition="left"
+    (click)="goBack()">arrow_circle_left
+    </mat-icon> 
+      <h2 class="header-title">
+         Création OP  
+      </h2>   
+  </div>
+  <app-entete-gestion></app-entete-gestion>
+
+  <div style="margin-bottom: 20px; margin-top: 40px">
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Type de l'OP</mat-label>
+          <mat-select  (selectionChange)="selectTypeOp($event.value)">
+            <ng-container *ngFor="let typeOp of typeOpList">
+              <mat-option [value]="typeOp"
+                >{{ typeOp.description }}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <mat-divider style="margin-bottom: 40px; margin-top: 40px"></mat-divider>
+  </div>
+
+  <form
+    *ngIf="codeTypeOp.code == 'OPA'"
+    #formDirective="ngForm"
+    [formGroup]="formOpAssure"
+    class="formFiltre"
+    (ngSubmit)="submitOp()"
+  >
+    <h2 class="header-title">Op Assuré</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Bénificiaire</mat-label>
+          <mat-select
+            formControlName="typeAssureList">
+            <ng-container *ngFor="let type  of typeAssureList">
+              <mat-option [value]="type">{{ type.description }} </mat-option>
+            </ng-container>          
+          </mat-select>
+          <mat-error *ngIf="formOpAssure.controls.typeAssureList.errors" class="invalid-feedback">
+            <div *ngIf="formOpAssure.controls.typeAssureList.errors.required">
+              ce champs est obligatoire
+            </div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <!--div class="row" *ngIf="formOpAssure.value.typeAssureList.code == 'CP522'">
+      
+    </div--> 
+    <div *ngIf="formOpAssure.value.typeAssureList.code == 'CP523'"> 
+      <div class="row">
+        <div class="col-md-6" >
+          <mat-form-field class="col-md-10" appearance="outline">
+            <mat-label>Type bénéficiaire</mat-label>
+            <mat-select formControlName="typeBenificiaire">            
+              <ng-container *ngFor="let type  of typeBenificiaire">
+                <mat-option [value]="type">{{ type.description }} </mat-option>
+              </ng-container>         
+            </mat-select>
+            <mat-error *ngIf="formOpAssure.controls.typeBenificiaire.errors" class="invalid-feedback">
+              <div *ngIf="formOpAssure.controls.typeBenificiaire.errors.required">
+                ce champs est obligatoire
+              </div>
+            </mat-error>
+          </mat-form-field>
+        </div>  
+      </div> 
+    <div class="row">  
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Nom bénificiaire</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder
+            formControlName="nomBenificiaire"/>
+          <mat-error *ngIf="formOpAssure.controls.nomBenificiaire.errors" class="invalid-feedback">
+            <div *ngIf="formOpAssure.controls.nomBenificiaire.errors.required">
+              ce champs est obligatoire
+            </div>
+          </mat-error>
+        </mat-form-field>
+      </div>    
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Prénom bénificiaire</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder
+            formControlName="prenomBenificiaire"/>
+          <mat-error *ngIf="formOpAssure.controls.prenomBenificiaire.errors" class="invalid-feedback">
+            <div *ngIf="formOpAssure.controls.prenomBenificiaire.errors.required">
+              ce champs est obligatoire
+            </div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+   
+  </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Référence document</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder
+            formControlName="refOpAssure"
+          />
+          <mat-error *ngIf="formOpAssure.controls.refOpAssure.errors" class="invalid-feedback">
+            <div *ngIf="formOpAssure.controls.refOpAssure.errors.required">
+              ce champs est obligatoire
+            </div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Montant TTC</mat-label>
+          <input
+            type="number"           
+            matInput
+            placeholder
+            formControlName="opHtcAssure"
+          />
+          <mat-error *ngIf="formOpAssure.controls.opHtcAssure.errors" class="invalid-feedback">
+            <div *ngIf="formOpAssure.controls.opHtcAssure.errors.required">
+              ce champs est obligatoire
+            </div>
+            <div *ngIf="formOpAssure.controls.opHtcAssure.errors.invalidDecimal">
+              {{ formOpAssure.controls.opHtcAssure.errors.invalidDecimal.message }}
+            </div>
+           
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+ 
+    <div class="button-row">
+      <button class="btn btn-action" type="submit">
+        <mat-spinner color="white" diameter="30" *ngIf="createOp"></mat-spinner>
+        <span *ngIf="!createOp"> Créer </span>
+      </button>
+    </div>
+  </form>
+
+  <form
+    *ngIf="codeTypeOp.code == 'OPP'"
+    #formDirective="ngForm"
+    [formGroup]="formOpPrestataire"
+    class="formFiltre"
+    (ngSubmit)="submitOp()"
+  >
+    <h2 class="header-title">Op Prestataire</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Prestataire</mat-label>
+          <mat-select formControlName="opPrestataireList"  >
+             <mat-option   value="0">Autre..</mat-option>
+            <ng-container *ngFor="let expert of expertList">             
+              <mat-option  [value]="expert.idExpert"
+                >{{ expert.raisonSocial }}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+          <mat-error *ngIf="formOpPrestataire.controls.opPrestataireList.errors" class="invalid-feedback">
+            <div *ngIf="formOpPrestataire.controls.opPrestataireList.errors.required">
+              ce champs est obligatoire
+            </div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row" *ngIf="formOpPrestataire.value.opPrestataireList == '0'">
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Type prestataire</mat-label>
+          <mat-select formControlName="typePrestataire">
+            <ng-container *ngFor="let type  of typePrestataire">
+              <mat-option [value]="type">{{ type.description }} </mat-option>
+            </ng-container>         
+          </mat-select>         
+          <mat-error *ngIf="formOpPrestataire.controls.typePrestataire.errors" class="invalid-feedback">
+            <div *ngIf="formOpPrestataire.controls.typePrestataire.errors.required">
+              ce champs est obligatoire
+            </div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    
+    </div>
+    <div class="row" *ngIf="formOpPrestataire.value.opPrestataireList == '0'">
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Nom prestataire</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder
+            formControlName="nomPrestataire"
+          />
+          <mat-error *ngIf="formOpPrestataire.controls.nomPrestataire.errors" class="invalid-feedback">
+            <div *ngIf="formOpPrestataire.controls.nomPrestataire.errors.required">
+              ce champs est obligatoire
+            </div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Prénom prestataire</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder
+            formControlName="pernomPrestataire"
+          />
+          <mat-error *ngIf="formOpPrestataire.controls.pernomPrestataire.errors" class="invalid-feedback">
+            <div *ngIf="formOpPrestataire.controls.pernomPrestataire.errors.required">
+              ce champs est obligatoire
+            </div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Référence document</mat-label>
+          <input
+            type="text"
+            matInput
+            placeholder
+            formControlName="refOpPrestataire"
+          />
+          <mat-error *ngIf="formOpPrestataire.controls.refOpPrestataire.errors" class="invalid-feedback">
+            <div *ngIf="formOpPrestataire.controls.refOpPrestataire.errors.required">
+              ce champs est obligatoire
+            </div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Base TVA</mat-label>
+          <input
+            type="number"
+            matInput
+            placeholder
+            formControlName="opBaseTva"
+          />
+          
+          <mat-error *ngIf="formOpPrestataire.controls.opBaseTva.errors" class="invalid-feedback">
+            <div *ngIf="formOpPrestataire.controls.opBaseTva.errors.required">
+              ce champs est obligatoire
+            </div>
+            <div *ngIf="formOpPrestataire.controls.opBaseTva.errors.invalidDecimal">
+              {{ formOpPrestataire.controls.opBaseTva.errors.invalidDecimal.message }}
+            </div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Total HT</mat-label>
+          <input
+            type="number"
+            formControlName="totalHt"
+            [value]="jsonOp.montantTTCPrestataire ? jsonOp.montantTTCPrestataire : null"
+            matInput
+            placeholder />
+            <mat-error *ngIf="formOpPrestataire.controls.totalHt.errors" class="invalid-feedback">
+              <div *ngIf="formOpPrestataire.controls.totalHt.errors.required">
+                ce champs est obligatoire
+              </div>
+              <div *ngIf="formOpPrestataire.controls.totalHt.errors.invalidDecimal">
+                {{ formOpPrestataire.controls.totalHt.errors.invalidDecimal.message }}
+              </div>
+            </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>TVA </mat-label>
+          <mat-select formControlName="opTvaPrestataire">
+            <ng-container *ngFor="let tva of tvaList">
+              <mat-option [value]="tva"
+                >{{ tva.description }} %</mat-option
+              >
+            </ng-container>
+          </mat-select>
+          <mat-error *ngIf="formOpPrestataire.controls.opTvaPrestataire.errors" class="invalid-feedback">
+            <div *ngIf="formOpPrestataire.controls.opTvaPrestataire.errors.required">
+              ce champs est obligatoire
+            </div>
+          </mat-error>
+        </mat-form-field>
+      </div>     
+    </div>
+    <div class="row">      
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Valeur Total</mat-label>
+          <input
+            type="text"
+            [value]="jsonOp.montantTTCPrestataire ? jsonOp.montantTTCPrestataire : null"
+            matInput
+            placeholder
+            [disabled]="true"
+          />
+        </mat-form-field>
+      </div>
+      <!--div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Montant TTC</mat-label>
+          <input
+            type="text"
+            [value]="jsonOp.montantTTCPrestataire ? jsonOp.montantTTCPrestataire : null"
+            matInput
+            placeholder
+            [disabled]="true"
+          />
+        </mat-form-field>
+      </div-->
+    </div>
+    <div class="button-row">
+      <button class="btn btn-action" type="submit">
+        <mat-spinner color="white" diameter="30" *ngIf="createOp"></mat-spinner>
+        <span *ngIf="!createOp"> Créer </span>
+      </button>
+    </div>
+  </form>
+
+  <form
+    *ngIf="codeTypeOp.code == 'OPT'"
+    #formDirective="ngForm"
+    [formGroup]="formOpTier"
+    class="formFiltre"
+    (ngSubmit)="submitOp()"
+  >
+    <h2 class="header-title">Op tiers</h2>
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Type tiers </mat-label>
+          <mat-select  
+          formControlName="typeTier"
+          (selectionChange)="selectTypeTier($event.value)">        
+            <ng-container *ngFor="let type of typeTiersList">
+              <mat-option [value]="type"
+                >{{ type.description }} 
+              </mat-option>
+            </ng-container>
+          </mat-select>
+        
+        </mat-form-field>
+      </div>
+    </div>
+    <div  *ngIf="formOpTier.value.typeTier.code == 'CD09'">
+    <!--div  *ngIf="selectedType.code == 'CD09'"-->
+      <!--Tiers -->
+      <div class="row" >
+        <div class="col-md-6">
+          <mat-form-field class="col-md-10" appearance="outline">
+            <mat-label>Liste des tiers </mat-label>
+            <mat-select  (selectionChange)="selectAdversaire($event.value)"
+            formControlName="adversaire">
+              <ng-container *ngFor="let adversaire of adversaireTab">
+                <mat-option [value]="adversaire.idSinistrePersonne"
+                  >{{ adversaire.nom }} {{ adversaire.prenom }}
+                </mat-option>
+              </ng-container>
+            </mat-select>
+            <mat-error *ngIf="formOpTier.controls.adversaire.errors" class="invalid-feedback">
+              <div *ngIf="formOpTier.controls.adversaire.errors.required">
+                ce champs est obligatoire
+              </div>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      
+        <div class="col-md-6">
+          <mat-form-field class="col-md-10" appearance="outline">
+            <mat-label>type Bénéficiaire</mat-label>
+            <mat-select 
+            formControlName="typeBeneficiairetier"           
+            [(ngModel)]="selectedBeneficiaire">
+
+            <mat-option value="01">Lui Même</mat-option>
+              <ng-container *ngFor="let type of typeBenificiaire">
+                <mat-option [value]="type"
+                  >{{ type.description }} 
+                </mat-option>
+              </ng-container>
+            </mat-select>
+            <mat-error *ngIf="formOpTier.controls.typeBeneficiairetier.errors" class="invalid-feedback">
+              <div *ngIf="formOpTier.controls.typeBeneficiairetier.errors.required">
+                ce champs est obligatoire
+              </div>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>  
+      <div class="row"  *ngIf="selectedBeneficiaire == '01'">
+        <div class="col-md-6">
+          <mat-form-field class="col-md-10" appearance="outline">
+            <mat-label>Compagnie adverse</mat-label>           
+          <input
+            type="text"
+            matInput
+            placeholder
+            formControlName="companyAdverse"        
+          />
+          </mat-form-field>
+        </div> 
+        <div class="col-md-6" >
+          <mat-form-field class="col-md-10" appearance="outline">
+            <mat-label>Bénéficiaire</mat-label>           
+          <input
+            type="text"
+            matInput
+            placeholder
+            formControlName="beneficiaire"        
+          />
+          </mat-form-field>
+        </div>     
+      </div>   
+      
+      <div class="row"  *ngIf="selectedBeneficiaire != '01' && selectedBeneficiaire != null">
+        <div class="col-md-6">
+          <mat-form-field class="col-md-10" appearance="outline">
+            <mat-label>Nom bénificiaire</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder
+              formControlName="nomBenificiaire"/>
+            <mat-error *ngIf="formOpAssure.controls.nomBenificiaire.errors" class="invalid-feedback">
+              <div *ngIf="formOpAssure.controls.nomBenificiaire.errors.required">
+                ce champs est obligatoire
+              </div>
+            </mat-error>
+          </mat-form-field>
+        </div>    
+        <div class="col-md-6">
+          <mat-form-field class="col-md-10" appearance="outline">
+            <mat-label>Prénom bénificiaire</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder
+              formControlName="prenomBenificiaire"/>
+            <mat-error *ngIf="formOpAssure.controls.prenomBenificiaire.errors" class="invalid-feedback">
+              <div *ngIf="formOpAssure.controls.prenomBenificiaire.errors.required">
+                ce champs est obligatoire
+              </div>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    
+    </div>      
+
+    <div class="row"  *ngIf="formOpTier.value.typeTier.code == 'CD10'">
+       <!-- Blessés Décés -->
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Liste des Blessés décés </mat-label>
+          <mat-select  (selectionChange)="selectBlesse($event.value)"
+          formControlName="blesse">
+            <ng-container *ngFor="let blesse of blessesList">
+              <mat-option [value]="blesse.idSinistrePersonne"
+                >{{ blesse.nom }} {{ blesse.prenom }}
+              </mat-option>
+            </ng-container>
+          </mat-select>
+          <mat-error *ngIf="formOpTier.controls.blesse.errors" class="invalid-feedback">
+            <div *ngIf="formOpTier.controls.blesse.errors.required">
+              ce champs est obligatoire
+            </div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>type Bénéficiaire</mat-label>
+          <mat-select 
+          formControlName="typeBeneficiairetier"
+          [(ngModel)]="selectedBeneficiaire"
+          >
+           <mat-option value="01">Lui Même</mat-option>
+              <ng-container *ngFor="let type of typeBenificiaire">
+                <mat-option [value]="type"
+                  >{{ type.description }} 
+                </mat-option>
+              </ng-container>
+            </mat-select>
+          <mat-error *ngIf="formOpTier.controls.typeBeneficiairetier.errors" class="invalid-feedback">
+            <div *ngIf="formOpTier.controls.typeBeneficiairetier.errors.required">
+              ce champs est obligatoire
+            </div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="row"  *ngIf="selectedBeneficiaire == '01'">       
+        <div class="col-md-6" >
+          <mat-form-field class="col-md-10" appearance="outline">
+            <mat-label>Bénéficiaire</mat-label>           
+          <input
+            type="text"
+            matInput
+            placeholder
+            formControlName="beneficiaireBless"        
+          />
+          </mat-form-field>
+        </div>     
+      </div> 
+      <div class="row"  *ngIf="selectedBeneficiaire != '01' && selectedBeneficiaire != null">
+        <div class="col-md-6">
+          <mat-form-field class="col-md-10" appearance="outline">
+            <mat-label>Nom bénificiaire</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder
+              formControlName="nomBenificiaire"/>
+            <mat-error *ngIf="formOpAssure.controls.nomBenificiaire.errors" class="invalid-feedback">
+              <div *ngIf="formOpAssure.controls.nomBenificiaire.errors.required">
+                ce champs est obligatoire
+              </div>
+            </mat-error>
+          </mat-form-field>
+        </div>    
+        <div class="col-md-6">
+          <mat-form-field class="col-md-10" appearance="outline">
+            <mat-label>Prénom bénificiaire</mat-label>
+            <input
+              type="text"
+              matInput
+              placeholder
+              formControlName="prenomBenificiaire"/>
+            <mat-error *ngIf="formOpAssure.controls.prenomBenificiaire.errors" class="invalid-feedback">
+              <div *ngIf="formOpAssure.controls.prenomBenificiaire.errors.required">
+                ce champs est obligatoire
+              </div>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>  
+    </div>
+    <div class="row">       
+      <div class="col-md-6" >
+        <mat-form-field class="col-md-10" appearance="outline">
+          <mat-label>Montant indémnisation </mat-label>           
+        <input
+          type="number"
+          matInput
+          placeholder
+          formControlName="montantIndmnt"        
+        />
+        <mat-error *ngIf="formOpTier.controls.montantIndmnt.errors" class="invalid-feedback">
+          <div *ngIf="formOpTier.controls.montantIndmnt.errors.required">
+            ce champs est obligatoire
+          </div>
+          <div *ngIf="formOpTier.controls.montantIndmnt.errors.invalidDecimal">
+            {{ formOpTier.controls.montantIndmnt.errors.invalidDecimal.message }}
+          </div>
+          
+        </mat-error>
+        </mat-form-field>
+      </div>     
+    </div> 
+
+    <div class="button-row">
+      <button class="btn btn-action" type="submit">
+        <mat-spinner color="white" diameter="30" *ngIf="createOp"></mat-spinner>
+        <span *ngIf="!createOp"> Créer </span>
+      </button>
+    </div>
+  </form>
+</div>

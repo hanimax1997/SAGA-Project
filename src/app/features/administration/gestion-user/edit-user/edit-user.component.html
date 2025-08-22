@@ -1,0 +1,187 @@
+
+<div class="container ">
+    <h2 class="header-title"><mat-icon class="mat-icon notranslate
+            material-symbols-outlined material-icons mat-icon-no-color"
+            aria-label="directions_car">redeem</mat-icon>
+        Modifier Utilisateur</h2>
+        <!--div class="alert alert-success" *ngIf="userSuccess">user {{codeuser}} a été créer avec succés </div-->
+        <div class="alert alert-danger" *ngIf="errorHandler.error">{{errorHandler.msg}}</div>
+    <form #formDirective="ngForm" [formGroup]="formModifier" (ngSubmit)="submit()" >
+        <mat-accordion multi>
+
+            <mat-expansion-panel hideToggle [expanded]="true"
+                class="panel-risque">
+                <mat-expansion-panel-header>
+                    <mat-panel-title class="">
+                        Informations Utilisateur
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="form row">
+                    <!--nom user -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Nom </mat-label>
+                        <input type="text" matInput placeholder=""
+                            formControlName="nom">
+                            <mat-error
+                            *ngIf="formModifier.controls.nom.errors"
+                            class="invalid-feedback">
+                            <div *ngIf="formModifier.controls.nom.errors.required"> ce champs est obligatoire</div>
+                            <div *ngIf="formModifier.controls.nom.errors.invalidName">
+                                {{ formModifier.controls.nom.errors.invalidName.message }}
+                              </div>
+                        </mat-error>
+                    </mat-form-field>
+
+                      <!--prenom user -->
+                    <mat-form-field class="col-md-5"
+                      appearance="outline">
+                      <mat-label>Préom </mat-label>
+                      <input type="text" matInput placeholder=""
+                          formControlName="prenom">
+                          <mat-error
+                          *ngIf="formModifier.controls.prenom.errors"
+                          class="invalid-feedback">
+                          <div *ngIf="formModifier.controls.prenom.errors.required"> ce champs est obligatoire</div>
+                          <div *ngIf="formModifier.controls.prenom.errors.invalidName">
+                            {{ formModifier.controls.prenom.errors.invalidName.message }}
+                          </div>
+                      </mat-error>
+                    </mat-form-field>
+
+                    <!--email user -->
+                    <mat-form-field class="col-md-5"
+                     appearance="outline">
+                     <mat-label>E-mail </mat-label>
+                     <input type="text" matInput placeholder=""
+                         formControlName="email">
+                         <mat-error *ngIf="formModifier.controls.email.errors" class="invalid-feedback">
+                            <div *ngIf="formModifier.controls.email.errors.required"> Ce champs est obligatoire</div>
+                            <div *ngIf="formModifier.controls.email.errors.email">Adresse email Invalid </div>
+                            <div *ngIf="formModifier.controls.email.errors.invalidEmail">
+                              {{ formModifier.controls.email.errors.invalidEmail.message }}
+                            </div>
+                          </mat-error>
+                    </mat-form-field>            
+
+
+                
+                    <!--Agence user -->
+
+                    <mat-form-field appearance="outline"
+                    class="col-md-5 ">
+                    <mat-label>Agences</mat-label>
+                    <mat-select formControlName="agence" multiple
+                        #mySelAgences>
+
+                        <mat-option [value]="null"
+                            (click)="toggleAllSelection(mySelAgences)">Tout
+                            sélectionner</mat-option>
+                        <ng-container *ngFor="let agence of
+                            agences">
+                            <mat-option [value]="agence.idAgence">
+                                {{agence.nomAgence}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="formModifier.controls.agence.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formModifier.controls.agence.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+
+                    <!--mat-form-field appearance="outline"
+                    class="col-md-5 ">
+                    <mat-label>Agences</mat-label>
+                    <mat-select formControlName="agence" multiple>
+                        <ng-container *ngFor="let agence of agences">
+                            <mat-option [value]="agence.codeAgence">
+                                {{agence.nomAgence}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="formCreation.controls.agence.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formCreation.controls.agence.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                    </mat-form-field-->
+               
+
+                    <!--role user -->
+                    <mat-form-field appearance="outline"
+                    class="col-md-5 ">
+                    <mat-label>Rôle </mat-label>
+                    <mat-select formControlName="role" multiple
+                        #mySelRole>
+   
+                        <mat-option [value]="null"
+                            (click)="toggleAllSelectionRole(mySelRole)">Tout
+                            sélectionner</mat-option>
+                        <ng-container *ngFor="let role of
+                            roles">
+                            <mat-option [value]="role.id">
+                                {{role.description}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="formModifier.controls.role.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formModifier.controls.role.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+
+                    <!--mat-form-field appearance="outline"
+                    class="col-md-5 ">
+                    <mat-label>Rôles</mat-label>
+                        <mat-select formControlName="role"  multiple>
+                            <ng-container *ngFor="let role of roles">
+                                <mat-option [value]="role.id">
+                                    {{role.description}} 
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                    </mat-form-field-->
+                  
+
+                    <mat-form-field class="col-md-5" appearance="outline">
+                      <mat-label>Etat </mat-label>
+                      <mat-select formControlName="etat">
+                       
+                            <ng-container>
+                                <mat-option value="1">
+                                    Actif
+                                </mat-option>
+                                 <mat-option value="2">
+                                    inactif
+                                </mat-option>
+                            </ng-container>
+                         
+                        </mat-select>
+                  
+                      <mat-error
+                          *ngIf="formModifier.controls.etat.errors"
+                          class="invalid-feedback">
+                          <div
+                              *ngIf="formModifier.controls.etat.errors.required">
+                              ce champs est obligatoire</div>
+                      </mat-error>
+                    </mat-form-field>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <button class="btn btn-cancel" mat-dialog-close type="button"  [routerLink]="['/gestion-user']">Annuler</button>
+        <div class="row-button">
+            <button class="btn btn-action" type="submit">Enregistrer</button>
+        </div>
+    </form>
+</div>                    

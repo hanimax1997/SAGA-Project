@@ -1,0 +1,148 @@
+.container {
+    background-color: #ffff;
+    padding: 40px 0px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+::ng-deep.mat-horizontal-content-container{
+    margin-top: 2rem;
+}
+h2.header-title {
+    padding: 0 24px;
+    font-size: 21px !important;
+    color: #00008f;
+    font-weight: 600 !important;
+    letter-spacing: 1px;
+    display: flex;
+    // justify-content: flex-end;
+}
+
+h2.header-title .mat-icon {
+    margin-right: 1rem;
+    font-size: 32px;
+    height: fit-content;
+    width: fit-content;
+}
+
+.form.row {
+    flex-direction: column
+}
+.row-button{
+    margin-top: 2rem;
+}
+.row-button .btn.btn-action{
+    float: right;
+}
+.row-button .btn.btn-cancel{
+    float: left;
+}
+.mat-expansion-panel {
+    
+    margin-bottom: 2rem;
+
+}
+.mat-expansion-panel-header {
+    background: #c7c7c733 !important;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+    height: 48px;
+}
+
+::ng-deep.mat-step-header .mat-step-icon-state-edit {
+    background-color: #d14624;
+}
+
+.mat-expansion-panel-header-title {
+    color: #00008F;
+}
+::ng-deep.mat-expansion-panel-content {
+    padding: 1rem;
+}
+
+//table 
+table {
+    width: 100%;
+}
+
+.mat-row:nth-child(even),
+.mat-header-row {
+    background-color: rgb(247, 247, 249);
+}
+
+.mat-header-row th {
+    color: #00008F;
+
+}
+
+table th,
+table td {
+    font-size: 16px;
+    padding-top: 9px;
+}
+table .mat-icon {
+    height: fit-content;
+    font-size: 26px;
+    width: fit-content;
+    cursor: pointer;
+}
+
+table .mat-cell .mat-icon {
+    color: #00008f;
+}
+.mat-header-cell {
+    color: #333333;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 15px;
+    width: 165px;
+
+}
+.noUnderline::ng-deep .mat-form-field-underline {
+    display: none;
+}
+.mat-menu-item {
+    font-size: 16px;
+
+}
+.mat-menu-item .mat-icon{
+    margin-right: 16px;
+    font-size: 21px;
+    height: fit-content;
+}
+.mat-menu-item:hover:not([disabled]) {
+    color: #00008f
+}
+
+.mat-menu-item:hover:not([disabled]) .mat-icon {
+    color: #00008f
+}
+
+.title-table{
+
+    margin-bottom: 2rem;
+    font-weight: 600 !important;
+    font-size: 19px !important;
+    color: #00008F !important;
+    display: flex;
+    align-items: center;
+}
+.title-table .mat-icon{
+    margin-right: 1rem;
+}
+.form-infoGeneral{
+    padding: 0rem 2rem;
+}
+.header-container{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+}
+.back-container .mat-icon{
+    font-size: 31px ;
+    color: #00008F ;
+    margin-left: 1rem;
+}

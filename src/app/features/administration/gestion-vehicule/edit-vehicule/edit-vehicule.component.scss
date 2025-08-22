@@ -1,0 +1,53 @@
+
+.container {
+    background-color: #ffff;
+    padding: 40px 23px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)
+}
+
+h2.header-title {
+    padding: 0 24px;
+    font-size: 21px !important;
+    color: #00008f;
+    font-weight: 600 !important;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: flex-end;
+}
+.btn.btn-cancel {
+    float: left;   
+    margin-top: 25px;
+}
+
+h2.header-title .mat-icon {
+    margin-right: 1rem;
+    font-size: 32px;
+    height: fit-content;
+    width: fit-content;
+}
+
+.form.row {
+    flex-direction: column;
+    padding: 1rem;
+}
+.row-button .btn.btn-action{
+    float: right;
+    margin-top: 2rem;
+}
+
+.mat-expansion-panel-header {
+    background: #c7c7c733 !important;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+    height: 48px;
+}
+
+.mat-expansion-panel-header-title {
+    color: #00008F;
+}

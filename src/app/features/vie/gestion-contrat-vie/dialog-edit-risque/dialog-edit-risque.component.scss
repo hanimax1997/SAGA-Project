@@ -1,0 +1,31 @@
+.container {
+    background-color: #ffff;
+    padding: 40px 0px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+h2.header-title {
+    padding: 0 24px;
+    font-size: 21px !important;
+    color: #00008f;
+    font-weight: 600 !important;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+h2.header-title .mat-icon {
+    margin-right: 1rem;
+}
+
+.btn.btn-action {
+    margin-top: 2rem;
+    float: right;
+}
+
+.btn.btn-cancel {
+    margin-top: 2rem;
+    float: left;
+}

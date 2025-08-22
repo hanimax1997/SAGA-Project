@@ -1,0 +1,76 @@
+.container {
+    background-color: #ffff;
+    padding: 40px 23px;
+    height: 100%;
+    overflow-y: auto;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)
+}
+
+.row-fields {
+    padding: 2rem 2rem;
+}
+
+.mat-expansion-panel-header {
+    background: #3333330d;
+}
+
+.mat-expansion-panel-header-title,
+.mat-expansion-panel-header[aria-disabled=true] {
+    color: #00008F;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.row-button {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 3rem;
+    margin-top: 2rem;
+}
+
+.header {
+    margin-bottom: 3rem;
+    padding: 1rem;
+}
+
+.title-form {
+    font-weight: 700 !important;
+    color: #00008F;
+    letter-spacing: 1px;
+    font-size: 27px !important;
+    width: 100%;
+    margin-bottom: 0rem;
+    margin-left: 1rem;
+}
+
+.header .mat-icon {
+    font-size: 30px;
+    color: #00008F;
+}
+
+.add-col {
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 2rem;
+}
+
+.add-col button {
+    display: flex;
+    align-items: center;
+}
+
+.deleteContact {
+    display: flex;
+    align-items: center;
+    color: #d14624;
+}
+
+.deleteContact .mat-icon {
+    cursor: pointer;
+}
+
+.personLink {
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline
+}

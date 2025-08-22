@@ -1,0 +1,44 @@
+<h2 class="heading">Selectionnez le type d'avenant</h2>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mat-typography">
+    <form #formDirective="ngForm" class="login-form row"
+        (ngSubmit)="submitAvenant()" [formGroup]="formTypeAvenant">
+        <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>Type d'Avenant</mat-label>
+            <mat-select formControlName="typeAvenant" [(ngModel)]="typeAvenant"
+                (selectionChange)="getInfoAvenant()">
+                <ng-container *ngFor="let type_avenant of types_avenant">
+                    <mat-option
+                        [value]="type_avenant">
+                        {{type_avenant.description}}
+                    </mat-option>
+                </ng-container>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="col-md-6"
+            *ngIf="multiRisque">
+            <mat-label>Risque</mat-label>
+            <mat-select formControlName="risque"
+                [multiple]="typeAvenant.code!='A11'">
+                <mat-select-filter
+                    [displayMember]="'description'"
+                    [array]="risques"
+                    (filteredReturn)="filteredcausesRisques=$event"></mat-select-filter>
+             
+                <ng-container *ngFor="let rs of risques">
+                    <mat-option
+                        [value]="rs" [class.hide]="!isFiltered(rs)">
+                        {{rs.description}}
+                    </mat-option>
+                </ng-container>
+            </mat-select>
+        </mat-form-field>
+        <div class="row-button">
+            <button class="btn btn-cancel"
+                mat-dialog-close>Annuler</button>
+            <button
+                type="submit" class="btn btn-action">Soumettre</button>
+        </div>
+    </form>
+</mat-dialog-content>

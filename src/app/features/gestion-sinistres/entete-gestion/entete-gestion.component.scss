@@ -1,0 +1,36 @@
+// table.resumeSinistre  {
+//     font-size: 17px;
+//     padding: 12px 19px;
+//     border: 1px solid rgba(0, 0, 0, .12);
+// }
+
+// table.resumeSinistre .value {
+//     color: #00008F;
+//     font-weight: 600;
+// }
+table.resumeSinistre {
+  //  width: 100%;
+    background-color: rgba(0, 0, 143, 0.05);
+    font-weight: 600;
+    margin: 2rem auto
+}
+
+table.resumeSinistre,
+table.resumeSinistre th,
+table.resumeSinistre td {
+    border: 1px solid rgba(0, 0, 0, .12);
+    border-collapse: collapse;
+    font-size: 17px;
+}
+
+table.resumeSinistre th,
+table.resumeSinistre td {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+table.resumeSinistre .value {
+    color: #00008F;
+}

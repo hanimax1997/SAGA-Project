@@ -1,0 +1,676 @@
+<div class="container ">
+    <div class="header-container">
+        <div class="back-container" *ngIf="step==1 &&
+            typeReduction==261">
+            <mat-icon aria-hidden="false"
+                class="material-symbols-outlined"
+                matTooltip="Retour"
+                (click)="step=0;"
+                matTooltipPosition="right">arrow_circle_left</mat-icon>
+        </div>
+        <h2 class="header-title">
+            <mat-icon class="mat-icon notranslate
+                material-symbols-outlined material-icons mat-icon-no-color"
+                aria-label="directions_car">redeem</mat-icon>
+            Réduction
+        </h2>
+
+    </div>
+    <div class="alert alert-success" *ngIf="reductionSuccess &&
+        typeReduction==261">La réduction corpo {{codeReduction}} a été modifier avec
+        succés, veuillez
+        revenir vers la page creation convention, et cliquer sur rafrachir la
+        liste </div>
+    <div class="alert alert-success" *ngIf="reductionSuccess &&
+        typeReduction==262">La réduction retail {{codeReduction}} a été modifier
+        avec succés.</div>
+ 
+    <ng-container *ngIf="(step==0 && typeReduction==261) ||
+        typeReduction==262">
+        <mat-stepper #stepper linear>
+            <!-- [stepControl]="formInfosAssure" [editable]="true" -->
+            <mat-step>
+                <ng-template matStepLabel>Informations générales</ng-template>
+                <form [formGroup]="formInfoGeneral"  *ngIf="formInfoGeneral"class="form row"
+                    (ngSubmit)="submitInfoGenerales()">
+                    <!--nom réduction -->
+                    <div class="row">
+                       
+                        <mat-form-field appearance="outline"
+                            class="col-md-5 " >
+
+                            <mat-label>type produit</mat-label>
+                            <input type="text" matInput placeholder
+                            formControlName="typeProduit"
+                           >
+                        <mat-error
+                            *ngIf="formInfoGeneral?.controls?.nomReduction.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formInfoGeneral?.controls?.nomReduction.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                          
+                           
+                        </mat-form-field>
+
+                   
+                    </div>
+
+
+
+                    <div class="row">
+                        <!--date debut -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Date Début</mat-label>
+                            <input matInput
+                                [matDatepicker]="pickerDateDebut"
+                                formControlName="dateDebut"
+                                [min]=minDate
+                               
+                                (dateChange)="setDateDebut($event.value)
+                                ">
+                            <mat-datepicker-toggle matSuffix
+                                [for]="pickerDateDebut"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerDateDebut></mat-datepicker>
+                            <mat-error
+                                *ngIf="formInfoGeneral?.controls?.dateDebut.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formInfoGeneral?.controls?.dateDebut.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field  class="col-md-5"
+                         appearance="outline">
+                            <mat-label>Date Fin</mat-label>
+                            <input matInput
+                                   [matDatepicker]="pickerDateFin"
+                                   formControlName="dateFin"
+                                   [min]="dateDebut"
+                                   (dateChange)="setDateFin($event.value)">
+                            <mat-datepicker-toggle matSuffix [for]="pickerDateFin"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerDateFin></mat-datepicker> <!-- Unicité ici -->
+                            <mat-error *ngIf="formInfoGeneral?.controls?.dateFin.errors">
+                              <div *ngIf="formInfoGeneral?.controls?.dateFin.errors.required">Ce champ est obligatoire</div>
+                            </mat-error>
+                          </mat-form-field>
+                        <!--date fin -->
+                     
+                    </div>
+                    <div class="row">
+                        <!--type produit -->
+                        <mat-form-field appearance="outline"
+                            class="col-md-5 " *ngIf="typeReduction==262">
+                            <mat-label>Type produit</mat-label>
+                            <mat-select [(ngModel)]="typeProduit"
+                                formControlName="typeProduit"
+                                (selectionChange)="changeTypeProduit($event.value)">
+                                <ng-container *ngFor="let type of
+                                    typeProduits">
+                                    <mat-option
+                                        >
+                                        {{reduction?.produit.description}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formInfoGeneral?.controls?.typeProduit.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formInfoGeneral?.controls?.typeProduit.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--Agence -->
+                        <mat-form-field appearance="outline"
+                            class="col-md-5 ">
+                            <mat-label>Agences</mat-label>
+                            <mat-select formControlName="agences" multiple
+                                #mySelAgences>
+                                <mat-option 
+                               
+                                    (click)="toggleAllSelection(mySelAgences)">Tout
+                                    sélectionner</mat-option>
+                                <ng-container *ngFor="let agence of
+                                    agences">
+                                    <mat-option [value]="agence.idAgence">
+                                        {{agence.nomAgence}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formInfoGeneral?.controls?.agences.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formInfoGeneral?.controls?.agences.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="row">
+
+                        <!--Mouvemants Police -->
+                        <mat-form-field appearance="outline"
+                            class="col-md-5 ">
+                            <mat-label>Mouvemants Police</mat-label>
+                            <mat-select #mySelMouv
+                                formControlName="mouvementsPolice"
+                                multiple>
+                                <mat-option [value]="null"
+                                    (click)="toggleAllSelection(mySelMouv)">Tout
+                                    sélectionner</mat-option>
+                                <ng-container *ngFor="let mvPolice of
+                                    mouvements">
+                                    <mat-option [value]="mvPolice.idParam">
+                                        {{mvPolice.description}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formInfoGeneral?.controls?.mouvementsPolice.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formInfoGeneral?.controls?.mouvementsPolice.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--Canal distribution -->
+                        <mat-form-field appearance="outline"
+                            class="col-md-5 ">
+                            <mat-label>Canal de distribution</mat-label>
+                            <mat-select #mySelCanal
+                                formControlName="canalDistribution"
+                                multiple>
+                                <mat-option [value]="null"
+                                    (click)="toggleAllSelection(mySelCanal)">Tout
+                                    sélectionner</mat-option>
+                                <ng-container *ngFor="let canal of
+                                    canalDistributions">
+                                    <mat-option [value]="canal.idParam">
+                                        {{canal.description}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formInfoGeneral?.controls?.canalDistribution.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formInfoGeneral?.controls?.canalDistribution.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+
+                    </div>
+                    <div class="row">
+                        <!--user -->
+                        <!-- <mat-form-field appearance="outline"
+                        class="col-md-5 ">
+                        <mat-label>Utilisteurs</mat-label>
+                        <mat-select #mySelUsers
+                            formControlName="utilisateurs" multiple>
+                            <mat-option [value]="null"
+                                (click)="toggleAllSelection(mySelUsers)">Tout
+                                sélectionner</mat-option>
+                            <ng-container *ngFor="let user of users">
+                                <mat-option [value]="user.userid">
+                                    {{user.nom}} {{user.prenom}}
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formInfoGeneral.controls.utilisateurs.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formInfoGeneral.controls.utilisateurs.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field> -->
+
+                    <mat-form-field appearance="outline"
+                            class="col-md-5 ">
+                            <mat-label>Utilisteurs</mat-label>
+                            <mat-select #mySelUsers
+                                formControlName="utilisateurs" multiple>
+                                <mat-option [value]="null"
+                                    (click)="toggleAllSelection(mySelUsers)">Tout
+                                    sélectionner</mat-option>
+                                <ng-container *ngFor="let user of users">
+                                    <mat-option [value]="user.userid">
+                                        {{user.nom}} {{user.prenom}}
+                                    </mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formInfoGeneral.controls.utilisateurs.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formInfoGeneral.controls.utilisateurs.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--app automatique -->
+                      
+                          
+                        <mat-radio-group formControlName="appAutomatique"
+                            class="col-md-5 ">
+                            <mat-label>Application Automatique</mat-label>
+                            <mat-radio-button class="example-margin"
+                                value="true" [checked]="reduction?.appAutomatique==true">Oui</mat-radio-button>
+                            <mat-radio-button class="example-margin"
+                                value="false" [checked]="reduction?.appAutomatique==false">Non</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+
+                    <div class="row-button">
+                        <button class="btn btn-action" type="submit">Suivant</button>
+                    </div>
+                </form>
+            </mat-step>
+            <!-- type produit -->
+            <mat-step>
+                <ng-template matStepLabel>Informations relatif au produit</ng-template>
+                <mat-accordion multi>
+                    <!--risque-->
+
+                    <mat-expansion-panel hideToggle
+                        [expanded]="true"
+                        class="panel-risque">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title
+                                class="categoryTitle">
+                                Risque
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <form [formGroup]="infoVehicule"  *ngIf="infoVehicule"
+                            (ngSubmit)="submitParamRisque()" class="form row">
+                            <ng-container *ngFor="let rs of
+                                paraRisqueProduit">
+
+
+                                <!--from table -->
+                                <mat-form-field appearance="outline"
+                                    class="col-md-5"
+                                    *ngIf=" rs.typeChamp?.description=='From Table'">
+                                    <mat-label>{{rs.libelle}}
+                                    </mat-label>
+                                    <mat-select #mySelDist
+                                        formControlName="{{rs.formName}}"
+                                        multiple>
+                                        <mat-option [value]="null"
+                                       (click)="toggleAllSelection(mySelDist)">Tout
+                                        sélectionner</mat-option>
+                                        <ng-container *ngFor="let
+                                        response of
+                                        rs.reponses">
+                                            <mat-option
+                                                [value]="response.id">
+                                                {{response.description}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                    <mat-error
+                                        class="invalid-feedback"
+                                        *ngIf="infoVehicule.get(rs.formName).errors?.['required']">
+                                        ce champs est obligatoire
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="infoVehicule.get(rs.formName).errors?.bloquant
+                                    " class="invalid-feedback">
+                                        {{infoVehicule.get(rs.formName).errors?.msg}}
+                                    </mat-error>
+                                </mat-form-field>
+                                <!--select-->
+                                <mat-form-field
+                                    appearance="outline"
+                                    class="col-md-5"
+                                    *ngIf="rs.typeChamp?.description=='Liste of values'">
+                                    <mat-label>{{rs.libelle}}
+                                    </mat-label>
+                                    <mat-select
+                                        formControlName="{{rs.formName}}"
+                                        multiple>
+                                  
+                                        <ng-container
+                                            *ngFor="let
+                                            response of
+                                            rs.reponses">
+                                            <mat-option
+                                                [value]="response.idParam">
+                                                {{response.description}}
+                                            </mat-option>
+                                        </ng-container>
+                                    </mat-select>
+                                    <mat-error
+                                        class="invalid-feedback"
+                                        *ngIf="infoVehicule.get(rs.formName).errors?.['required']">
+                                        ce champs est
+                                        obligatoire
+                                    </mat-error>
+                                    <mat-error
+                                        *ngIf="infoVehicule.get(rs.formName).errors?.bloquant
+                                        "
+                                        class="invalid-feedback">
+                                        {{infoVehicule.get(rs.formName).errors?.msg}}
+                                    </mat-error>
+                                </mat-form-field>
+                                <!--type valeur -->
+                                <div style="display:flex;flex-direction:
+                                    column;"
+                                    *ngIf="((rs.typeChamp?.description=='String'||
+                                    rs.typeChamp?.description=='Number'))&&
+                                    rs.formName!='Marque'">
+                                    <mat-label style=" margin-bottom: 2rem;
+                                        font-size: 16px;
+                                        font-weight: 600;
+                                        color: #00008f;">{{rs.libelle}}</mat-label>
+                                    <mat-form-field
+                                        appearance="outline"
+                                        class="col-md-5">
+                                        <mat-label>Type valeur</mat-label>
+                                        <mat-select
+                                            (selectionChange)="changeTypeValeur($event.value,rs.idParamRisque)"
+                                            formControlName="typeValeur{{rs.formName}}">
+                                            <ng-container *ngFor="let
+                                                type of
+                                                typeValues">
+                                                <mat-option
+                                                    [value]="type.id">
+                                                    {{type.description}} 
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                    </mat-form-field>
+                                </div>
+                                <div formArrayName="{{rs.formName}}">
+                                    <div *ngFor="let vl of
+                                        valeurs(rs.formName).controls; let
+                                        i=index">
+                                        <div [formGroupName]="i">
+                                            <mat-form-field
+                                                appearance="outline"
+                                                class="col-md-5">
+
+                                                <!-- <mat-label *ngIf="i==0 && type.type==2;else valeurMax">Valeur min</mat-label>
+                                                        <ng-template #valeurMax>
+                                                            <mat-label *ngIf="i==1 && type.type==2;else valeurUnique">Valeur max</mat-label>
+                                                            <ng-template #valeurUnique>
+                                                                <mat-label >Valeur</mat-label>
+                                                            </ng-template>
+                                                        </ng-template> -->
+                                                <mat-label *ngIf="i==0">Valeur
+                                                </mat-label>
+                                                <mat-label *ngIf="i==1">Valeur
+                                                    Max</mat-label>
+
+                                                <input type="text"
+                                                    matInput
+                                                    formControlName=valeur >
+                                                <mat-error
+                                                    class="invalid-feedback"
+                                                    *ngIf="infoVehicule.get(rs.formName).errors?.['required']">
+                                                    ce champs est
+                                                    obligatoire
+                                                </mat-error>
+                                                <mat-error
+                                                    class="invalid-feedback"
+                                                    *ngIf="infoVehicule.get(rs.formName).errors?.['pattern']
+                                                    ||
+                                                    infoVehicule.get(rs.formName).errors?.['maxlength']
+                                                    ">
+                                                    ce champs n'est pas
+                                                    conforme
+                                                </mat-error>
+                                                <mat-error
+                                                    *ngIf="infoVehicule.get(rs.formName).errors?.bloquant
+                                                    "
+                                                    class="invalid-feedback">
+                                                    {{infoVehicule.get(rs.formName).errors?.msg}}
+                                                </mat-error>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--marque -->
+                                <mat-form-field appearance="outline"
+                                    class="col-md-5"
+                                    *ngIf="rs.formName=='Marque'">
+                                    <mat-label>{{rs.libelle}}
+                                    </mat-label>
+                                    <mat-select #mySelMarque
+                                        formControlName="{{rs.formName}}"
+                                        multiple >
+                                        <mat-option [value]="null"
+                                            (click)="toggleAllSelection(mySelMarque)">Tout
+                                            sélectionner</mat-option>
+                                            <ng-container *ngFor="let marque
+                                            of marques">
+                                                <mat-option
+                                                    [value]="marque.idParam">
+                                                    {{marque.marque}}
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                        <mat-error
+                                            *ngIf="rs.obligatoire"
+                                            class="invalid-feedback">
+                                            <div> ce champs est obligatoire</div>
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="infoVehicule.get(rs.formName).errors?.bloquant
+                                        " class="invalid-feedback">
+                                            {{infoVehicule.get(rs.formName).errors?.msg}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!--Date-->
+
+                                    <mat-form-field
+                                        class="col-md-5"
+                                        appearance="outline"
+                                        *ngIf="rs.typeChamp?.description=='date'">
+                                        <mat-label>{{rs.libelle}}</mat-label>
+                                        <input matInput
+                                            [matDatepicker]="picker"
+                                            formControlName="{{rs.formName}}">
+                                        <mat-datepicker-toggle
+                                            matSuffix
+                                            [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker></mat-datepicker>
+                                        <mat-error
+                                            class="invalid-feedback"
+                                            *ngIf="infoVehicule.get(rs.formName).errors?.['required']">
+                                            ce champs est
+                                            obligatoire
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="infoVehicule.get(rs.formName).errors?.bloquant
+                                        "
+                                            class="invalid-feedback">
+                                            {{infoVehicule.get(rs.formName).errors?.msg}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                </ng-container>
+                                <div class="row-button">
+                                    <button class="btn btn-action"
+                                        type="submit">Suivant</button>
+                                </div>
+                            </form>
+                        </mat-expansion-panel>
+
+                </mat-accordion>
+
+            </mat-step>
+            <!--pack -->
+            <mat-step>
+                <ng-template matStepLabel>Pack</ng-template>
+                <!--Pack-->
+                <form [formGroup]="infoPack" class="form row"
+                    (ngSubmit)="submitInfoProduit()">
+
+                    <mat-form-field appearance="outline"
+                        class="col-md-5 ">
+                        <mat-label>Pack </mat-label>
+                        <mat-select formControlName="pack">
+                            <mat-option *ngFor="let pack of
+                                packs; let i=index"
+                                   >
+                                    <mat-checkbox
+                                    [checked]=""
+                                        (change)="onChangePack(pack,$event)">
+                                        {{pack.description}}</mat-checkbox>
+                                </mat-option>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="infoPack.controls.pack.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="infoPack.controls.pack.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <div formArrayName="VORowsPacks">
+                            <mat-accordion multi>
+                                <ng-container *ngFor="let pack of
+                                VORowsPacks().controls; let
+                                packIndex=index">
+                                <mat-expansion-panel
+                                    [formGroupName]="packIndex"
+                                    [expanded]="true"
+                                    class="panel-risque">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title class>
+                                            {{pack.value.description}}
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+
+                                        <!-- <ng-container
+                                        *ngFor="let garantie of
+                                        VORowsGaranties(packIndex).controls; let
+                                        garantieIndex=index">
+                                        <div [formGroupName]="garantieIndex">
+                                            {{garantieIndex}} Skill :
+                                            <mat-form-field appearance="outline"
+                                            class="col-md-5 ">
+                                            <mat-label>Pack </mat-label>
+                                            <input type="text" matInput placeholder="{{garantie}}"
+                                            formControlName="garantie">                                           
+                                        </mat-form-field>
+                                        </div>
+                                    </ng-container> -->
+                                        <table mat-table
+                                            [dataSource]="dataSourceGaranties[packIndex]"
+                                            class="pack-table"
+                                            *ngIf="loadTablePack"
+                                            formArrayName="garanties">
+
+                                            <!-- Garantie Column -->
+                                            <ng-container
+                                                matColumnDef="garantie">
+                                                <th mat-header-cell
+                                                    *matHeaderCellDef>Garantie</th>
+                                                <td mat-cell *matCellDef="let
+                                                element;
+                                                let i= index"
+                                                    [formGroup]="element">
+                                                    <mat-form-field
+                                                        class="noUnderline">
+                                                        <input matInput
+                                                            type="text"
+                                                            formControlName="garantie"
+                                                            [readonly]="true">
+                                                    </mat-form-field>
+                                                </td>
+                                            </ng-container>
+
+                                            <!-- Franchise Column -->
+                                            <ng-container
+                                                matColumnDef="franchise">
+                                                <th mat-header-cell
+                                                    *matHeaderCellDef>
+                                                    Franchise</th>
+                                                <td mat-cell *matCellDef="let
+                                                element;
+                                                let
+                                                i=index"
+                                                    [formGroup]="element">
+                                                    <mat-form-field
+                                                        [ngClass]="{'noUnderline':
+                                                    !pack.get('garanties')?.value[i].isEditable}">
+                                                        <mat-label
+                                                            *ngIf="pack.get('garanties')?.value[i].isEditable">Franchise</mat-label>
+                                                        <input matInput
+                                                            type="text"
+                                                            formControlName="franchise"
+                                                            [readonly]="!pack.get('garanties')?.value[i].isEditable">
+                                                    </mat-form-field>
+                                                </td>
+
+                                            </ng-container>
+                                            <!-- Franchise Column -->
+                                            <ng-container
+                                                matColumnDef="pourcentage">
+                                                <th mat-header-cell
+                                                    *matHeaderCellDef>
+                                                    Pourcentage</th>
+                                                <td mat-cell *matCellDef="let
+                                                element;
+                                                let
+                                                i=
+                                                index"
+                                                    [formGroup]="element">
+                                                    <mat-form-field
+                                                        [ngClass]="{'noUnderline':
+                                                    !pack.get('garanties')?.value[i].isEditable}">
+                                                        <mat-label
+                                                            *ngIf="pack.get('garanties')?.value[i].isEditable">Pourcentage</mat-label>
+                                                        <input matInput
+                                                            type="text"
+                                                            formControlName="pourcentage"
+                                                            [readonly]="!pack.get('garanties')?.value[i].isEditable">
+                                                    </mat-form-field>
+                                                </td>
+                                            </ng-container>
+                                            <!-- Action Column -->
+                                            <ng-container matColumnDef="action">
+                                                <th mat-header-cell
+                                                    *matHeaderCellDef>
+                                                    Action
+                                                </th>
+                                                <td mat-cell *matCellDef="let
+                                                element;
+                                                let
+                                                i=
+                                                index"
+                                                    [formGroup]="element">
+                                                    <mat-icon
+                                                        (click)="EditGarantieLigne(pack,i)"
+                                                        *ngIf="!pack.get('garanties')?.value[i].isEditable">edit</mat-icon>
+                                                    <mat-icon
+                                                        (click)="SaveGarantieLigne(pack,i)"
+                                                        *ngIf="pack.get('garanties')?.value[i].isEditable">check_circle</mat-icon>
+                                                </td>
+                                            </ng-container>
+                                            <tr mat-header-row
+                                                *matHeaderRowDef="displayedColumns"></tr>
+                                            <tr mat-row *matRowDef="let row;
+                                            columns:
+                                            displayedColumns;">
+                                            </tr>
+                                        </table>
+
+                                    </mat-expansion-panel>
+                                </ng-container>
+                            </mat-accordion>
+
+                    </div>
+                    <div class="row-button">
+                        <button class="btn btn-action"
+                            (click)="submitReduction()">Enregistrer</button>
+                    </div>
+                </form>
+            </mat-step>
+        </mat-stepper>
+    </ng-container>
+</div>

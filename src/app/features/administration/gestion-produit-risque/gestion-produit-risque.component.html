@@ -1,0 +1,83 @@
+<div class="container ">
+  <div class="header">
+
+    <h2 class="title-table">Listes des produits</h2>
+
+    <button class="btn btn-secondary" style="display: flex;
+      align-items: center;" (click)="openCreateDialog()">
+
+      <mat-icon aria-hidden="false" aria-label="ajouter durée "
+        class="material-symbols-outlined">add_circle</mat-icon>
+
+      Ajouter un nouveau produit
+    </button>
+  </div>
+  <mat-divider></mat-divider>
+  <table mat-table [dataSource]="dataSource" class="gestion-table">
+
+
+    <!-- ID Column -->
+    <ng-container matColumnDef="idProduit">
+      <th mat-header-cell *matHeaderCellDef> ID </th>
+      <td mat-cell *matCellDef="let element"> {{element.idCodeProduit}} </td>
+    </ng-container>
+
+    <!-- Description Column -->
+    <ng-container matColumnDef="description">
+      <th mat-header-cell *matHeaderCellDef style="width:40%"> Description </th>
+      <td mat-cell *matCellDef="let element" style="width:40%">
+        {{element.description}} </td>
+    </ng-container>
+
+    <!-- Date debut Column -->
+    <ng-container matColumnDef="dateDebut">
+      <th mat-header-cell *matHeaderCellDef> Date debut </th>
+      <td mat-cell *matCellDef="let element"> {{element.dateDebut |
+        date:"dd/MM/yyyy"}} </td>
+    </ng-container>
+
+    <!-- Date fin Column -->
+    <ng-container matColumnDef="dateFin">
+      <th mat-header-cell *matHeaderCellDef> Date fin </th>
+      <td mat-cell *matCellDef="let element"> {{element.dateFin |
+        date:"dd/MM/yyyy"}} </td>
+    </ng-container>
+
+    <!-- Action Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef> Action </th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="">
+          <mat-icon style="padding-top: 5px;">more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="editProduit(element.idCodeProduit)">
+            <mat-icon aria-hidden="false" aria-label="edit produit-risque"
+              class="material-symbols-outlined"
+              matTooltip="Modifier Produit" matTooltipPosition="right">edit
+            </mat-icon>
+            <span>Modifier le produit</span>
+          </button>
+          <button mat-menu-item (click)="viewProduit(element.idCodeProduit)">
+            <mat-icon aria-hidden="false" aria-label="view produit-risque"
+              class="material-symbols-outlined" style="margin-left: 4px;"
+              matTooltip="Détails Produit" matTooltipPosition="right">
+              visibility</mat-icon>
+            <span>Détails Produit</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"
+      class="example-second-header-row">
+    </tr>
+
+
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+  </table>
+  <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]"
+    aria-label="Select page of users"></mat-paginator>
+
+</div>

@@ -1,0 +1,191 @@
+.container {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.card {
+    background-color: #ffff;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+    padding: 2rem;
+}
+
+//heading 
+h2.heading {
+    color: #00008f;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+}
+
+::ng-deep .mat-step-header:hover:not([aria-disabled]),
+::ng-deep .mat-step-header.cdk-keyboard-focused,
+::ng-deep .mat-step-header.cdk-program-focused {
+    background-color: transparent !important;
+
+    .mat-step-icon {
+        background-color: #d14723;
+    }
+}
+
+.btn.btn-action {
+    float: right;
+}
+
+.form-group {
+    display: flex;
+}
+
+.addGarantieIcon {
+    font-size: 40px;
+    margin-left: 59px;
+    margin-top: 10px;
+}
+
+.addGarantieIcon:hover {
+    color: #00008f;
+    cursor: pointer;
+}
+
+::ng-deep .mat-checkbox .mat-checkbox-inner-container {
+    margin-left: 8px;
+    margin-right: 0px;
+    order: 1;
+}
+
+.mat-checkbox {
+    font-size: 15px;
+    padding: 10px;
+}
+
+// table 
+
+.mat-header-cell {
+    color: #333333;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 15px;
+    width: 165px;
+
+}
+
+.header-tab {
+    display: flex;
+    align-items: center;
+}
+
+.header-tab .mat-icon {
+    margin-right: 10px;
+    float: right;
+}
+
+.mat-paginator {
+    background-color: transparent;
+    margin: auto;
+    width: 80%;
+    margin-top: 20px;
+}
+
+.example-first-header-row {
+    background-color: #00008f;
+}
+
+.example-first-header-row th.mat-header-cell {
+    border: none;
+    color: #ffff;
+    font-size: 18px;
+}
+
+// .mat-column-valeur.mat-cell{
+//     text-align: center;
+// }
+.searchInput {
+    height: 50px !important;
+    padding: 10px !important;
+}
+
+::ng-deep .mat-select-panel-wrap .mat-select-panel {
+    overflow-x: hidden;
+}
+
+.table {
+    width: 100%;
+    margin-top: 2rem;
+
+}
+
+.mat-paginator {
+    background-color: transparent;
+    margin: auto;
+    width: 80%;
+    margin-top: 20px;
+}
+
+.mat-header-cell {
+    color: #333333;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 15px;
+    width: 165px;
+
+}
+
+.first-header-row {
+    background-color: #00008f;
+}
+
+
+.first-header-row th.mat-header-cell {
+    border: none;
+    color: #ffff;
+    font-size: 18px;
+}
+
+.mat-cell .mat-icon {
+    height: 100%;
+    font-size: 36px;
+    width: fit-content;
+    color: #00008f;
+}
+
+.mat-header-cell.mat-icon {
+    color: #ffffff;
+}
+
+.mat-cell .mat-icon:hover,
+.mat-header-cell .mat-icon:hover {
+    color: #d14723;
+    cursor: pointer;
+}
+
+::ng-deep .mat-tooltip {
+    font-size: 14px;
+}
+
+
+.mat-menu-item {
+    font-size: 16px;
+
+}
+
+.mat-menu-item:hover:not([disabled]) {
+    color: #00008f
+}
+
+.mat-menu-item:hover:not([disabled]) .mat-icon {
+    color: #00008f
+}
+
+.categoryTabForm .mat-select {
+    width: 70%;
+}
+
+::ng-deep.mat-form-field-underline:read-only {
+    display: none;
+}
+
+::ng-deep .mat-select-disabled .mat-select-value {
+    color: inherit;
+}
+
+::ng-deep .disabled-select .mat-select-arrow {
+    visibility: hidden;
+}

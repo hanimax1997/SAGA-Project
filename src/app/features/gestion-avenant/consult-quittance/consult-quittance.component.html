@@ -1,0 +1,151 @@
+
+<div class="container" *ngIf="quittance">
+    <h2 class="header-title">
+        <mat-icon aria-hidden="false"
+            class="material-symbols-outlined"
+            matTooltip="Retour"
+            matTooltipPosition="left"
+            [routerLink]="codeProduit == '20A' || codeProduit == '20G' ? ['/consultation-avenants/vie/' +codeProduit+'/' + quittance?.idContrat] : ['/consultation-avenants/' +codeProduit+'/' + quittance?.idContrat]">arrow_circle_left</mat-icon>
+        Consultation quittance N°{{quittance.idQuittance}}</h2>
+    <mat-accordion class="example-headers-align" multi>
+        <!--Contrat-->
+        <mat-expansion-panel hideToggle [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Quittance
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="container " style="padding: 1rem 2rem;">
+
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Numéro de police : </div>
+                            <div class="col-md-6 value">{{quittance.idContrat}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Numéro quittance : </div>
+                            <div class="col-md-6 value">{{quittance.idQuittance}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Etat de la quittance :
+                            </div>
+                            <div class="col-md-6 value">{{quittance.statue.description}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </mat-expansion-panel>
+        <ng-container *ngIf=" this.quittance.risqueList.length!=0" >
+            <mat-expansion-panel hideToggle [expanded]="true" *ngFor="let rs of tabRisquesPack">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Risque N°{{rs.idRisque}}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+    
+                <!--Pack-->
+                <mat-expansion-panel hideToggle [expanded]="true" class="child-expansion">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Pack
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <table mat-table [dataSource]="rs.garanties"
+                        class="pack-table">
+    
+                        <!-- description Column -->
+                        <ng-container matColumnDef="description">
+                            <th mat-header-cell *matHeaderCellDef> Garantie</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.description}}
+                            </td>
+                        </ng-container>
+                        <!-- plafond  Column -->
+                        <ng-container matColumnDef="plafond">
+                            <th mat-header-cell *matHeaderCellDef> Plafond
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.plafond}}
+                            </td>
+                        </ng-container>
+                        <!-- franchise Column -->
+                        <ng-container matColumnDef="franchise">
+                            <th mat-header-cell *matHeaderCellDef> Franchise
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.franchise}}
+                            </td>
+                        </ng-container>
+                        <!-- formule Column -->
+                        <ng-container matColumnDef="formule">
+                            <th mat-header-cell *matHeaderCellDef> Formule
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.formule}}
+                            </td>
+                        </ng-container>
+                        <!-- prime Column -->
+                        <ng-container matColumnDef="prime">
+                            <th mat-header-cell *matHeaderCellDef> Prime
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.prime}}<sup>DA</sup>
+                            </td>
+                        </ng-container>
+    
+                        <tr mat-header-row
+                            *matHeaderRowDef="displayedColumnsPack"></tr>
+                        <tr mat-row *matRowDef="let row; columns:
+                        displayedColumnsPack;">
+                        </tr>
+                    </table>
+                </mat-expansion-panel>
+            </mat-expansion-panel>
+        </ng-container>
+
+        <!--Prime-->
+        <mat-expansion-panel hideToggle [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Prime
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <table class="resume">
+
+                <tr *ngFor="let element of dataSourcePrime">
+                    <ng-container *ngIf="element.typePrime.idParam==101">
+                        <td>{{element.typePrime.description}}</td>
+                        <td>{{element.primeProrata | number : '1.0-0' | money}}
+                            <sup>DA</sup></td>
+                    </ng-container>
+                </tr>
+                <tr *ngFor="let element of dataSourceTaxe">
+                    <td>{{element.taxe.description}}</td>
+                    <td>{{element.primeProrata | number : '1.0-0' | money}} <sup>DA</sup></td>
+                </tr>
+                <tr *ngFor="let element of dataSourcePrime">
+                    <ng-container *ngIf="element.typePrime.idParam==186">
+                        <td class="primeTotale">{{element.typePrime.description}}</td>
+                        <td class="primeTotale">{{element.primeProrata | number
+                            :
+                            '1.0-0' | money}} <sup>DA</sup></td>
+                    </ng-container>
+                </tr>
+            </table>
+
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>
+<div class="center-spinner">
+    <mat-spinner *ngIf="!quittance" diameter=100></mat-spinner>
+</div>

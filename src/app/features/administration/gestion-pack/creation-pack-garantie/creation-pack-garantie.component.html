@@ -1,0 +1,26 @@
+<h2 class="heading" *ngIf="data.type=='garantie'">Ajouter la garantie "{{data.description}}" au pack</h2>
+<h2 class="heading" *ngIf="data.type=='sousGarantie'">Ajouter la sous garantie "{{data.description}}" au pack </h2>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mat-typography">
+    <form #formDirective="ngForm" [formGroup]="FormCreationPackGarantie"
+        (ngSubmit)="submitCreationPackGarantie()"
+        class="creation-form">
+        <div style="display: flex;flex-direction: column;align-items: center;">
+            <!--obligatoire-->
+            <mat-label style="font-size: 17px;">Cette garantie est-elle
+                obligatoire</mat-label>
+            <mat-radio-group
+                aria-label="Select an option" formControlName="obligatoire">
+                <mat-radio-button value="true">Obligatoire</mat-radio-button>
+                <mat-radio-button value="false">Facultatif</mat-radio-button>
+            </mat-radio-group>
+        </div>
+        <!-- <mat-checkbox formControlName="obligatoire">Cette garantie est-elle
+            obligatoire</mat-checkbox> -->
+        <div class="row-button">
+            <button class="btn btn-cancel" mat-dialog-close type="button">Retour</button>
+            <button class="btn btn-action" type="submit">Ajouter</button>
+        </div>
+    </form>
+</mat-dialog-content>

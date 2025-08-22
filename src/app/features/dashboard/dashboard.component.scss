@@ -1,0 +1,95 @@
+.row.numbers {
+    justify-content: center;
+}
+
+.card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    margin-left: 3rem;
+    transition: box-shadow 0.3s ease-in-out;
+}
+.card:hover{
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+.row.general-numbers .card h2 {
+    color: #606060;
+    line-height: 26px !important
+}
+
+.row.general-numbers .card .number {
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.col-img {
+    display: flex;
+    align-items: center;
+}
+.row.products-details h2{
+font-weight: 600!important   ;
+}
+.row.products-details{
+    margin-top: 3rem;
+}
+.products-details .card,.products-numbers{
+    margin-top: 1rem;
+}
+.voyage .mat-icon{
+    color: #183b66;
+}
+.sante .mat-icon{
+    color: #6a4a86;
+}
+.auto .mat-icon{
+    color: #b9538a;
+}
+.entreprises .mat-icon{
+    color: #f66a73;
+}
+.habitation .mat-icon{
+    color: #ff9c4f;
+}
+.prevoyance .mat-icon{
+    color: #ffdb38;
+}
+.products-details .mat-icon{
+    font-size: 20px;
+    margin-right: 10px;
+}
+::ng-deep.mat-list-item-content{
+    justify-content: space-between;
+}
+.mat-list-item .icon-title{
+display: flex;
+}
+.row.progress{
+    margin-top: 2rem;
+}
+.row.progress span{
+    font-size: 15px;
+    font-weight: 600;
+}
+.value-bar{
+    display: flex;
+    align-items: center;
+} 
+.value-bar span{
+    margin-left: 2rem;
+}
+::ng-deep .mat-progress-bar-fill::after {
+    background-color: #00008f;
+}
+
+::ng-deep .mat-progress-bar-buffer {
+    background: #E4E8EB;
+}
+
+@media (min-width: 768px) {
+    .col-md-2 {
+        flex: 0 0 auto;
+        width: 20.666667%;
+    }
+}

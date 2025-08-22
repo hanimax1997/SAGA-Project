@@ -1,0 +1,36 @@
+<h2 class="heading">
+    Consulter le parametre du produit
+    <span style="float: right; font-size: 24px;" >
+        <mat-icon aria-hidden="false" aria-label="" class="material-symbols-outlined"
+                matTooltip="" matTooltipPosition="right" mat-dialog-close> close
+              </mat-icon>
+    </span>
+</h2>
+<mat-divider></mat-divider>
+<div class="row" style="margin-bottom: 3%; display: flex; justify-content: center;">
+    <mat-dialog-content class="mat-typography"></mat-dialog-content>
+    <div class="col-md-12" style="padding-left: 2%;padding-right: 2%;">
+        <mat-form-field *ngFor="let produit of data.paramRisqueProduit" class="col-md-6" style="padding-right: 1%;" appearance="outline">
+            <mat-label>{{ produit.iddictionnaire.libelle }}</mat-label>
+            <input type="text"  [value]="produit.valeur" matInput placeholder="" disabled>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+            <mat-label> Workflow</mat-label>
+            <mat-select [(value)]="selectedProduit" multiple disabled>
+                <ng-container *ngFor="let worklow of data.paramRisqueWorkflows" >
+                    <mat-option [value]="worklow.dictionnaire.idParam">{{worklow.dictionnaire.description}}</mat-option>
+                  </ng-container>
+            </mat-select>
+        </mat-form-field> 
+
+        <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label> Obligatoire</mat-label>
+            <mat-select [(value)]="selectedWorkflow" multiple disabled>
+                <ng-container *ngFor="let worklow of data.paramRisqueWorkflows" >
+                    <mat-option [value]="worklow.dictionnaire.idParam">{{worklow.dictionnaire.description}}</mat-option>
+                  </ng-container>
+            </mat-select>
+        </mat-form-field> 
+    </div>
+</div>

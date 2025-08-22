@@ -1,0 +1,224 @@
+<div class="container">
+  <div class="header">
+    <h2 class="title-table">
+      <!-- <mat-icon aria-hidden="false"
+                aria-label="ajouter pack "
+                class="material-symbols-outlined">car_crash</mat-icon> -->
+      Listes des instances du sinistre N° {{ codeSinistre }}
+    </h2>
+  </div>
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    class="gestion-table"
+    multiTemplateDataRows
+    *ngIf="loadInstance">
+    <!-- idInstance Column -->
+    <ng-container matColumnDef="idInstance">
+      <th mat-header-cell *matHeaderCellDef>N°</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.idInstance }}
+      </td>
+    </ng-container>
+
+    <!-- statut Column -->
+    <ng-container matColumnDef="statut">
+      <th mat-header-cell *matHeaderCellDef>Statut</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.statutInstance.description }}
+      </td>
+    </ng-container>
+    <!-- MontnatPV Column -->
+    <ng-container matColumnDef="MontnatPV">
+      <th mat-header-cell *matHeaderCellDef>Montant PV</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.montant }}
+      </td>
+    </ng-container>
+    <!-- Garantie Column -->
+    <ng-container matColumnDef="Garantie">
+      <th mat-header-cell *matHeaderCellDef>Garantie</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.garantie }}
+      </td>
+    </ng-container>
+    <!-- Reserve Column -->
+    <ng-container matColumnDef="Reserve">
+      <th mat-header-cell *matHeaderCellDef>Réserve</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.reserve }}
+      </td>
+    </ng-container>
+
+    <!-- Action Column -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>Action</th>
+
+      <td mat-cell *matCellDef="let element">
+        <button
+          mat-icon-button
+          type="button"
+          [matMenuTriggerFor]="menu"
+          aria-label="menu devis list">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" xPosition="after" class="menu-devis">
+          <button [disabled]="!roleExist || isCdcDa ||status =='CP415'||statusM[element.idInstance] " mat-menu-item type="button" (click)="goToPaiement( element)">
+            <mat-icon>credit_card</mat-icon>
+            <span>Procéder au paiement</span>
+          </button>
+          <button [disabled]="!roleExist || isCdcDa ||status =='CP415'" mat-menu-item type="button"
+            (click)="openDialog(element.idInstance)">
+
+            <mat-icon>add_circle</mat-icon>
+            <span>Ajouter documents</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+    <!-- more Column -->
+    <ng-container matColumnDef="more">
+      <th mat-header-cell *matHeaderCellDef></th>
+
+      <td mat-cell *matCellDef="let element">
+        <button
+          mat-icon-button
+          type="button"
+          aria-label
+          (click)="toggleRow(element)">
+          <mat-icon>{{
+            expandedElement === element ? "expand_less" : "expand_more"
+            }}</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="expandedDetail">
+      <td
+        mat-cell
+        *matCellDef="let element"
+        [attr.colspan]="displayedColumns.length">
+        <div
+          class="example-element-detail"
+          *ngIf="element.instanceDocument?.data?.length"
+          [@detailExpand]="
+            element == expandedElement ? 'expanded' : 'collapsed'
+          ">
+          <div class="inner-table mat-elevation-z8" *ngIf="expandedElement">
+            <table
+              #innerTables
+              mat-table
+              class
+              [dataSource]="element.instanceDocument"
+              matSort>
+              <ng-container matColumnDef="desc">
+                <th mat-header-cell *matHeaderCellDef>document</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.document.description }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="commentaire">
+                <th mat-header-cell *matHeaderCellDef>Commentaire</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.description }}
+                </td>
+              </ng-container>
+              <!-- Empty Column -->
+              <ng-container matColumnDef="empty">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+
+                </td>
+              </ng-container>
+              <!-- typeInstance Column -->
+              <ng-container matColumnDef="typeInstance">
+                <th mat-header-cell *matHeaderCellDef>Type instance</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.typeInstance?.description }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="statut">
+                <th mat-header-cell *matHeaderCellDef>Statut</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.statutDocument.description }}
+                </td>
+              </ng-container>
+
+              <!-- Action Column -->
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>Action</th>
+
+                <td mat-cell *matCellDef="let element">
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [matMenuTriggerFor]="menu"
+                    aria-label="menu devis list">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <!--status == 'CP415'-->
+                  <mat-menu
+                    #menu="matMenu"
+                    xPosition="after"
+                    class="menu-devis">
+                    <button [disabled]="!roleExist || isCdcDa" mat-menu-item type="button"
+                      (click)="openEditDialog(element)">
+
+                      <mat-icon>edit</mat-icon>
+                      <span>Modifier instance</span>
+                    </button>
+                  </mat-menu>
+                </td>
+              </ng-container>
+              <!-- More Column -->
+              <ng-container matColumnDef="more">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element"
+                  style="visibility: hidden">
+                  <button
+                    mat-icon-button
+                    type="button"
+                    aria-label
+                    (click)="toggleRow(element)">
+                    <!-- <mat-icon>{{
+                      expandedElement === element
+                        ? "expand_less"
+                        : "expand_more"
+                    }}</mat-icon> -->
+                  </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="innerDisplayedColumns"></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: innerDisplayedColumns"></tr>
+            </table>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr
+      mat-row
+      *matRowDef="let element; columns: displayedColumns"
+      [class.example-element-row]="element.instanceDocument?.data?.length"
+      [class.example-expanded-row]="expandedElement === element"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: ['expandedDetail']"
+      class="example-detail-row"></tr>
+  </table>
+  <mat-paginator
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10]"
+    aria-label="Select page of users"></mat-paginator>
+
+  <!--tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+            [class.example-element-row]="element.instanceDocument?.data.length"
+            [class.example-expanded-row]="expandedElement === element">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']"
+            class="example-detail-row"></tr>
+    </table-->
+</div>

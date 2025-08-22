@@ -1,0 +1,151 @@
+a {
+  text-decoration: none;
+}
+
+ul {
+  padding: 0px;
+}
+
+ul li {
+  list-style-type: none;
+}
+
+.aside-container {
+  position: fixed;
+  z-index: 50;
+  height: 100%;
+  background-color: #ffff;
+  overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#aside_menu {
+  width: 360px;
+  background-color: #ffff;
+}
+.navbar-header {
+  width: 100%;
+  //margin: 20px;
+  padding-left: 2rem;
+  margin-bottom: 3rem;
+}
+.navbar-brand {
+  float: none;
+  height: 100%;
+  padding: 15px 15px;
+  font-size: inherit;
+}
+
+.brand-name-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-brand img {
+  width: 45%;
+}
+a.nav-link {
+  padding: 15px;
+  color: #333333;
+  font-size: 16px;
+  font-weight: 300;
+
+  .mat-icon {
+    margin-right: 10px;
+  }
+  .nav-link-content{
+    display: flex;
+    align-items: center;
+  }
+}
+
+.lvl2 .mat-expansion-panel-header{
+  padding-left: 3.75rem;
+}
+
+.lvl3  .mat-expansion-panel-header {
+  padding-left: 4.75rem
+
+}
+.lvl3  .mat-expansion-panel-header:hover{
+    background: rgba(0,0,0,.04);
+}
+.lvl1 .mat-expansion-panel-header.mat-expanded {
+  a.nav-link, ::ng-deep.mat-expansion-indicator:after {
+    font-weight: 600;
+    color: #00008f;
+  }
+}
+
+.lvl1 .mat-expansion-panel-header{
+  // flex-direction: row-reverse; 
+}
+.lvl2 .mat-expansion-panel-header{
+  flex-direction: row;
+}
+a[data-toggle="collapse"].lvl1 .material-symbols-outlined::before,
+a[data-toggle="collapse"].lvl2 .material-symbols-outlined::before {
+  content: "expand_more";
+
+}
+
+a[data-toggle="collapse"][aria-expanded="true"].lvl1 .material-symbols-outlined::before,
+a[data-toggle="collapse"][aria-expanded="true"].lvl2 .material-symbols-outlined::before{
+  content: "expand_less";
+
+}
+
+.lvl4-list {
+  display: flex;
+  flex-direction: column;
+
+  .lvl4-header {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    background-color: #E5E5E5;
+  }
+
+  .nav-link {
+    padding: 0px;
+
+  }
+
+  ul li {
+
+    padding: 7px;
+    font-size: 14px;
+  }
+}
+
+// expansion panel angular material 
+::ng-deep.mat-expansion-panel-content > .mat-expansion-panel-body{
+  padding: 0px !important;
+}
+.mat-expansion-panel{
+  box-shadow: none;
+}
+
+.tryThis{
+  z-index: 105;
+  position: fixed;
+  inset: 0px auto auto 0px;
+  margin: 0px;
+  transform: translate(360px, 0px);
+}
+
+
+@media only screen and (max-width: 1900px) and (min-width: 1280px)  {
+ 
+    #aside_menu {
+      width: 285px;
+    }
+    table.referentiel-table {
+      width: 90%;
+    }
+    a.nav-link{
+      font-size: 15px;
+    }
+
+}

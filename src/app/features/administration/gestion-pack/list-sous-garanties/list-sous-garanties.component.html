@@ -1,0 +1,92 @@
+<div class="container ">
+    <div class="header" >
+        <h2 class="title-table">
+            <mat-icon aria-hidden="false"
+            class="material-symbols-outlined"
+            matTooltip="Retour" (click)="back()"
+            matTooltipPosition="left">arrow_circle_left</mat-icon>
+            Listes des sous garanties</h2>
+
+
+    </div>
+    <mat-divider></mat-divider>
+    <div class="filter">
+        <form #formDirective="ngForm" [formGroup]="formFilter" class="row"
+            style="margin-left: 1rem;">
+            <mat-form-field class="col-md-5" >
+                <mat-label>Description</mat-label>
+                <input type="text" matInput placeholder="" (keyup)="applyFilter($event)"
+                    formControlName="description">
+            </mat-form-field>
+
+        </form>
+    </div>
+    <table mat-table [dataSource]="dataSourceSousGaranties" class="table" [@enterAnimation]>
+        <!-- <ng-container matColumnDef="header">
+            <th mat-header-cell *matHeaderCellDef
+                attr.colspan={{lengthColumns}}>
+                <div class="header-tab">
+                    <mat-icon aria-hidden="false"
+                        class="material-symbols-outlined"
+                        matTooltip="Retour" (click)="back()"
+                        matTooltipPosition="right">arrow_circle_left</mat-icon>
+                    <span>Liste des sous garanties </span>
+                </div>
+
+            </th>
+        </ng-container> -->
+        <!-- garantie id Column -->
+        <ng-container matColumnDef="idSousgarantie">
+            <th mat-header-cell *matHeaderCellDef> Sous Garantie </th>
+            <td mat-cell *matCellDef="let element" > {{element.sousGarantie.idSousGarantie}}
+            </td>
+        </ng-container>
+        <!-- categorieValeur Column -->
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> Description </th>
+            <td mat-cell *matCellDef="let element"> {{element.sousGarantie.description}}
+            </td>
+        </ng-container>
+        <!-- typeValeur Column -->
+        <ng-container matColumnDef="obligatoire">
+            <th mat-header-cell *matHeaderCellDef> Obligatoire </th>
+            <td mat-cell *matCellDef="let element"> {{element.obligatoire}}
+            </td>
+        </ng-container>
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button
+                    type="button"
+                    [matMenuTriggerFor]="menu"
+                    aria-label="menu pack list">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu"
+                    xPosition="after"
+                    class="menu-pack">
+                    <button mat-menu-item (click)="seeParam(element.sousGarantie.idSousGarantie)"
+                        type="button">
+                        <mat-icon>format_list_bulleted</mat-icon>
+                        <span>Afficher paramètre(s)</span>
+                    </button>
+                </mat-menu>
+            </td>
+        </ng-container>
+
+
+
+        <!-- <tr mat-header-row *matHeaderRowDef="['header']"
+            class="first-header-row">
+        </tr> -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsSousGarantie"
+            class="second-header-row">
+        </tr>
+
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsSousGarantie;"></tr>
+    </table>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10]"
+        aria-label="Select page of users"></mat-paginator>
+</div>

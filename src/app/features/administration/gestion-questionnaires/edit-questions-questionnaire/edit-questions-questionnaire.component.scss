@@ -1,0 +1,102 @@
+//button action 
+.buttons.row{
+    justify-content: space-between;
+    padding: 0px 21px;
+  }
+  //heading 
+  h2.heading{
+    color: #00008f;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+  }
+  .mat-dialog-content{
+    padding-top: 15px;
+  }
+  .mat-radio-button {
+    margin: 0 12px;
+  }
+  .mat-form-field{
+    padding-top: 15px;
+  }
+  .mat-error{
+    font-size: 11px;
+  }
+
+  .container{
+    background-color: #ffff;
+    padding: 40px 0px;
+    height: 100%;
+    overflow: auto;
+  }
+
+  .container::-webkit-scrollbar {
+    display: none;
+  }
+
+  table.question-table{
+    width: 96%;
+    margin: auto;
+  }
+  .mat-header-cell {
+    color: #333333;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 15px;
+    width: 165px;
+  
+  }
+  .header-tab{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .mat-paginator{
+    background-color: transparent;
+    margin: auto;
+    width: 96%;
+    margin-top: 20px;
+  }
+  .example-first-header-row{
+    background-color: #00008f;
+  }
+  .example-first-header-row th.mat-header-cell{
+    border: none;
+    color: #ffff;
+    font-size: 18px;
+  }
+  .mat-column-valeurGarantie.mat-cell,
+  .mat-column-valeurEnvloppe.mat-cell{
+      text-align: center;
+  }
+  //icon 
+  .mat-icon{
+    height: 100%;
+    font-size: 36px;
+    width: fit-content;
+  }
+  .mat-cell .mat-icon{
+    color: #00008f;
+  }
+  .mat-header-cell.mat-icon{
+    color: #ffffff;
+  }
+  .mat-cell .mat-icon:hover,
+  .mat-header-cell .mat-icon:hover{
+    color: #d14723;
+    cursor: pointer;
+  }
+  ::ng-deep .mat-tooltip {
+    font-size: 14px;
+  }
+
+  ::ng-deep .mat-horizontal-stepper-header{
+    pointer-events: none !important;
+  }
+  
+  .row-button {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 3rem;
+    margin-top: 2rem;
+  }
+

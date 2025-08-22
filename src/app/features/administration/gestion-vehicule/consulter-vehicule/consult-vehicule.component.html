@@ -1,0 +1,119 @@
+
+<div class="container ">
+    <h2 class="header-title">
+        <mat-icon aria-hidden="false"
+            class="material-symbols-outlined"
+            matTooltip="Retour"
+            matTooltipPosition="left"
+            (click)="goBack()"
+           >arrow_circle_left</mat-icon>
+        Consultation  véhicule N° {{vehiculeInfo.idVehicule}}
+    </h2>
+   
+
+    <mat-accordion class="example-headers-align" multi>
+        <!--Contrat-->
+        <mat-expansion-panel hideToggle [expanded]="true">
+       
+            <div class="container "   style="padding: 1rem 2rem;">
+           
+                <div>
+                 
+               
+                </div>
+  
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Marque :</div>
+                            <div class="col-md-6 value">
+                                {{vehiculeInfo.marque.description}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Modele : </div>
+                            <div class="col-md-6 value">
+                                {{vehiculeInfo.modele.description}}
+                            </div>
+                        </div>
+                    </div>                  
+                </div>  
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Type Vehicule : </div>
+                            <div class="col-md-6 value">
+                                {{vehiculeInfo.typeVehicule.description}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">puissanceFiscale: </div>
+                            <div class="col-md-6 value">
+                                {{vehiculeInfo.puissanceFiscale}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Nombre de places :</div>
+                            <div class="col-md-6 value">
+                                {{vehiculeInfo.nbPlace}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Poids total en charge : </div>
+                            <div class="col-md-6 value">
+                                {{vehiculeInfo.poidsTotalEnCharge}}
+                            </div>
+                        </div>
+                    </div>                  
+                </div>  
+                
+          
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Date Debut :</div>
+                            <div class="col-md-6 value">
+                                {{vehiculeInfo.auditDate | date: 'dd/MM/yyyy'}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Date Fin: </div>
+                            <div class="col-md-6 value">
+                                {{vehiculeInfo.dateFin | date: 'dd/MM/yyyy'}}                     
+                                 
+                            </div>
+                        </div>
+                    </div>                  
+                </div>  
+
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Energie :</div>
+                            <div class="col-md-6 value">
+                                {{vehiculeInfo.energie.description}}
+                            </div>
+                        </div>
+                    </div>                                
+                </div>   
+                                           
+            </div>
+
+         
+
+        </mat-expansion-panel>
+      
+    </mat-accordion>
+</div>

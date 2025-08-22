@@ -1,0 +1,36 @@
+
+<div mat-dialog-title class="dialog-header">
+    <span class="heading">Désactiver réduction</span>
+
+    <!-- <mat-icon class="btn btn-cross" mat-dialog-close>close</mat-icon> -->
+</div>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mat-typography">
+
+    <form #formDirective="ngForm" [formGroup]="FormDesactiveReduction"
+        (ngSubmit)="submitDateFin(formDirective)" class="row">
+        <mat-form-field class="col-md-6"
+            appearance="outline">
+            <mat-label>Date fin</mat-label>
+            <input matInput [matDatepicker]="pickerDatefin" [min]="minDate"
+                formControlName="dateFin">
+            <mat-datepicker-toggle matSuffix [for]="pickerDatefin"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDatefin></mat-datepicker>
+            <mat-error
+                *ngIf="FormDesactiveReduction.controls.dateFin.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="FormDesactiveReduction.controls.dateFin.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+
+
+        <div class="row-button">
+            <button class="btn btn-cancel" mat-dialog-close type="button">Retour</button>
+            <button class="btn btn-action col-button-add" type="submit">Enregistrer</button>
+        </div>
+    </form>
+</mat-dialog-content>

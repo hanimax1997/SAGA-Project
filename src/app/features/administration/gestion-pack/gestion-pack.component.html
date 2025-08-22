@@ -1,0 +1,124 @@
+<div class="container ">
+    <div class="header" >
+        <h2 class="title-table">Listes des packs</h2>
+        <button class="btn btn-secondary" (click)="navigateToCreatePack()" style="display: flex;
+        align-items: center;">
+                    <mat-icon aria-hidden="false" aria-label="ajouter pack "
+                    class="material-symbols-outlined" 
+                    >add_circle</mat-icon>
+                    Ajouter un nouveau pack
+
+        </button>
+
+    </div>
+    <mat-divider></mat-divider>
+    <!-- <div class="filter" *ngIf="!packEmptyVar">
+        <form #formDirective="ngForm" [formGroup]="formFilter" class="row"
+            style="margin-left: 1rem;">
+            <mat-form-field class="col-md-3" appearance="outline">
+                <mat-label>Code pack</mat-label>
+                <input type="text" matInput placeholder=""
+                    formControlName="codePack">
+            </mat-form-field>
+            <mat-form-field class="col-md-3" appearance="outline">
+                <mat-label>Description</mat-label>
+                <input type="text" matInput placeholder=""
+                    formControlName="description">
+            </mat-form-field>
+            <div class="col-md-5 row-button">
+                <button class="btn btn-action ">Filtrer</button>
+            </div>
+
+        </form>
+    </div> -->
+
+    <!-- mat-elevation-z8 -->
+    <table mat-table [dataSource]="dataSourceAllPack" class="gestion-table" [@enterAnimation] >
+        <!-- 
+        <ng-container matColumnDef="header-taxe">
+            <th mat-header-cell *matHeaderCellDef
+                attr.colspan={{lengthColumns}}>
+                <!-- <div class="header-tab">
+                    <span>Liste des packs </span>
+                    <mat-icon aria-hidden="false" aria-label="ajouter pack "
+                        class="material-symbols-outlined" matTooltip="Ajouter un
+                        nouveau pack"
+                        matTooltipPosition="right"
+                        (click)="navigateToCreatePack()">add</mat-icon>
+                </div> 
+
+            </th>
+        </ng-container> -->
+        <!-- id_taxe Column -->
+        <ng-container matColumnDef="codePack">
+            <th mat-header-cell *matHeaderCellDef> code Pack </th>
+            <td mat-cell *matCellDef="let element"> {{element.codePack}} </td>
+        </ng-container>
+        <!-- description Column -->
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef> Description </th>
+            <td mat-cell *matCellDef="let element"> {{element.description}}
+            </td>
+        </ng-container>
+
+        <!-- date_Debut Column -->
+        <ng-container matColumnDef="dateDebut">
+            <th mat-header-cell *matHeaderCellDef> Date début </th>
+            <td mat-cell *matCellDef="let element"> {{element.dateDebut |
+                dateFormatPipe }} </td>
+        </ng-container>
+        <!-- date_Fin Column -->
+        <ng-container matColumnDef="dateFin">
+            <th mat-header-cell *matHeaderCellDef> Date fin </th>
+            <td mat-cell *matCellDef="let element">{{element.dateFin |
+                dateFormatPipe }} </td>
+        </ng-container>
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button
+                    type="button"
+                    [matMenuTriggerFor]="menu"
+                    aria-label="menu pack list">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu"
+                    xPosition="after"
+                    class="menu-pack">
+                    <button mat-menu-item (click)="editPack(element.idPack0)"
+                        type="button">
+                        <mat-icon>edit</mat-icon>
+                        <span>Modifier pack</span>
+                    </button>
+                    <button mat-menu-item (click)="seeParam(element.idPack0)"
+                        type="button">
+                        <mat-icon>format_list_bulleted</mat-icon>
+                        <span>Afficher paramètre(s)</span>
+                    </button>
+                    <button mat-menu-item
+                        (click)="seeGarantie(element.idPack0)"
+                        type="button">
+                        <mat-icon>format_list_bulleted</mat-icon>
+                        <span>Afficher garantie(s)</span>
+                    </button>
+                </mat-menu>
+            </td>
+        </ng-container>
+
+
+        <!-- <tr mat-header-row *matHeaderRowDef="['header-taxe']"
+            class="example-first-header-row">
+        </tr> -->
+        <tr mat-header-row *matHeaderRowDef="displayedPackColumns"
+            class="example-second-header-row">
+        </tr>
+
+
+        <tr mat-row *matRowDef="let row; columns: displayedPackColumns;"></tr>
+    </table>
+    <div class="alert alert-danger" *ngIf="packEmptyVar">Aucun pack n'existe pour le moment, Veuillez cliquer sur le bouton au dessus pour en créer.</div>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10,50]"
+        aria-label="Select page of users"></mat-paginator>
+
+</div>

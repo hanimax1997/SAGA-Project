@@ -1,0 +1,39 @@
+.wrapper {
+
+    padding-bottom: 20px;
+    padding-left: 0px; 
+    height: 100%;
+}
+
+@media screen and (min-width: 1500px) {
+    .wrapper.open{
+        padding-left: 360px; 
+    }
+}
+
+@media screen and (max-width: 1499px) {
+    .wrapper.open{
+        padding-left: 290px; 
+    }
+}
+
+.body-outlet{
+    margin-top: 1rem;
+    // height: 100%;
+}
+// material 
+// fields font size
+::ng-deep .mat-form-field {
+
+    font-size: 15px
+}
+//inputs color
+::ng-deep .mat-form-field-label {
+    /*change color of label*/
+    color: #333333;
+}
+// delete top suffix
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-suffix {
+    top: 0 !important;
+}
+

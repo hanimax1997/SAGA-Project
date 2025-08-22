@@ -1,0 +1,35 @@
+<h2 class="heading">
+    Veuillez choisir une personne du tableau
+</h2>
+<mat-divider></mat-divider>
+<div class="row" style="margin-bottom: 3%; display: flex; justify-content: center;">
+    <mat-dialog-content class="mat-typography"></mat-dialog-content>
+    <div class="col-md-12" style="padding-left: 2%;padding-right: 2%;">
+        <div class="mat-elevation-z8 p-0">
+            <table mat-table [dataSource]="dataSource" matSort style="width: 100%; overflow: auto;">
+                <!-- idClient Column -->
+                <ng-container matColumnDef="idClient">
+                    <th mat-header-cell *matHeaderCellDef style="background: #00008F; color: white; font-size: large;"> N° Client </th>
+                    <td mat-cell *matCellDef="let element" (click)="selectPersonne(element.idClient)" appBorderRow> {{element.idClient}} </td>
+                </ng-container>
+
+                <!-- nom Column -->
+                <ng-container matColumnDef="nom">
+                    <th mat-header-cell *matHeaderCellDef style="background: #00008F; color: white; font-size: large;"> Assuré </th>
+                    <td mat-cell *matCellDef="let element" (click)="selectPersonne(element.idClient)" appBorderRow> {{element.nom != null ? element.nom+" "+element.prenom1:element.raisonSocial}} </td>
+                </ng-container>
+
+                <!-- dateNaissance Column -->
+                <ng-container matColumnDef="dateNaissance">
+                    <th mat-header-cell *matHeaderCellDef="let element" style="background: #00008F; color: white; font-size: large;"> {{'date Naissance / d\'ouverture'}} </th>
+                    <td mat-cell *matCellDef="let element" (click)="selectPersonne(element.idClient)" appBorderRow> {{element.dateNaissance != null ? (element.dateNaissance | date:"dd/MM/yyyy"):(element.dateOuverture | date:"dd/MM/yyyy")}}</td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsPhysique"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsPhysique;"></tr>
+            </table>
+          
+            <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label=""></mat-paginator>
+        </div>  
+    </div>
+</div>

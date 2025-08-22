@@ -1,0 +1,304 @@
+
+<div class="container">
+    <h2 class="header-title">
+        <mat-icon aria-hidden="false"
+            class="material-symbols-outlined"
+            matTooltip="Retour"
+            matTooltipPosition="left"
+            [routerLink]="['/gestion-sinistre/'+codeProduit+'/'+nomProduit]">arrow_circle_left</mat-icon>
+        <div> Gestion sinistre
+            <button mat-icon-button
+                type="button"
+                [matMenuTriggerFor]="menu"
+                aria-label="menu  list">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu"
+                xPosition="after">
+                <button *ngIf="infoSinistreReady.statut=='true'" mat-menu-item
+                    type="button" (click)="confirmationDialog('cloturer')"
+                    [disabled]="!roleExist || infoSinistre.statut.code === 'CP355'|| isCdcDa || infoSinistre.statut.code === 'CP415'||infoSinistre.statut.code === 'CP524' ||infoSinistre.statut.code === 'CP525' ||infoSinistre.statut.code === 'CP526'">
+                    <mat-icon>block</mat-icon>
+                    <span>Cloturer sinistre</span>
+                </button>
+                <button *ngIf="infoSinistreReady.statut=='true'" mat-menu-item
+                    type="button" (click)="confirmationDialog('annuler')"
+                    [disabled]="!roleExist || infoSinistre.statut.code === 'CP355'|| isCdcDa || infoSinistre.statut.code === 'CP415' || infoSinistre.statut.code === 'CP524' ||infoSinistre.statut.code === 'CP525' ||infoSinistre.statut.code === 'CP526'">
+                    <mat-icon>cancel</mat-icon>
+                    <span>Annuler sinistre</span>
+                </button>
+                <button *ngIf="!roleExist || infoSinistreReady.statut=='true'" mat-menu-item
+                type="button" (click)="confirmationDialog('reouvrir')" [disabled]="isCdcDa || infoSinistre.statut.code === 'CP415' ">
+                <mat-icon>folder_open</mat-icon>
+                <span>Reouvrir sinistre</span>
+            </button>
+                <button  mat-menu-item
+                type="button" (click)="transferRecour()" [disabled]="!roleExist || infoSinistre.statut.code==='CP336' || infoSinistre.statut.code === 'CP14010' || infoSinistre.statut.code === 'CP14008'">
+                <mat-icon>folder_open</mat-icon>
+                <span>Transfer recours</span>
+            </button>
+
+            </mat-menu></div>
+    </h2>
+    <section class="content" *ngIf="infoSinistreReady.statut=='true'">
+        <app-entete-gestion></app-entete-gestion>
+        <!-- <div class="infoSinistre">
+            <table class="resumeSinistre">
+                <tr>
+                    <td class="key">N° sinistre</td>
+                    <td class="value">{{infoSinistre.codeSinistre}}</td>
+                </tr>
+                <tr>
+                    <td class="key">N° police</td>
+                    <td class="value">{{infoSinistre.contratHistorique.idContrat.idContrat}}</td>
+                </tr>
+                <tr>
+                    <td class="key">date de survenance</td>
+                    <td class="value">{{infoSinistre.dateSurvenance |
+                        dateFormatPipe}}</td>
+                </tr>
+                <tr>
+                    <td class="key">immatriculation</td>
+                    <td class="value">{{infoSinistre.immatriculation}}</td>
+                </tr>
+                <tr>
+                    <td class="key">code risque</td>
+                    <td class="value">{{infoSinistre.codeRisque}}</td>
+                </tr>
+            </table>
+
+        </div> -->
+        <div class="row cards"
+        [ngClass]="{'disabled-cards': !roleExist || infoSinistre.statut.code === 'CP355'|| isCdcDa || infoSinistre.statut.code === 'CP415'||  infoSinistre.statut.code === 'CP524' ||  infoSinistre.statut.code === 'CP525' ||  infoSinistre.statut.code === 'CP526'}">
+            <div class="card col-md-3" (click)="goTo('infos')">
+                <mat-icon aria-hidden="false"
+                    class="material-symbols-outlined">edit_note</mat-icon>
+                <span class="title-card">Informations sinistre</span>
+                <p>Completez les Informations du sinistre.</p>
+            </div>
+            <div class="card col-md-3" (click)="goTo('assistance')">
+                <mat-icon aria-hidden="false"
+                    class="material-symbols-outlined">draft_orders</mat-icon>
+                <span class="title-card">Assistance</span>
+                <p>Completez les Informations du sinistre.</p>
+            </div>
+            <div class="card col-md-3" (click)="goTo('tiers')">
+                <mat-icon aria-hidden="false"
+                    class="material-symbols-outlined">manage_accounts</mat-icon>
+                <span class="title-card">Adversaires</span>
+                <p>Modifiez, supprimez, et ajoutez des adversaires.</p>
+
+            </div>
+        </div>
+        <div class="row cards"
+        [ngClass]="{'disabled-cards': !roleExist || infoSinistre.statut.code === 'CP355'||isCdcDa || infoSinistre.statut.code === 'CP415' || infoSinistre.statut.code === 'CP524' ||  infoSinistre.statut.code === 'CP525' ||  infoSinistre.statut.code === 'CP526'}">
+            <div class="card col-md-3" (click)="goTo('blesse')">
+                <mat-icon aria-hidden="false"
+                    class="material-symbols-outlined">manage_accounts</mat-icon>
+                <span class="title-card">Blesses/décés</span>
+                <p>Modifiez, supprimez, et ajoutez des Blesses/décés.</p>
+
+            </div>
+            <div class="card col-md-3" (click)="goTo('withdrawal')">
+                <mat-icon aria-hidden="false"
+                    class="material-symbols-outlined">block</mat-icon>
+                <span class="title-card">Désistement de client </span>
+                <p>Modifiez, supprimez, et ajoutez des Blesses/décés.</p>
+
+            </div>
+            <div class="card col-md-3" (click)="goTo('fraude')">
+                <mat-icon aria-hidden="false"
+                    class="material-symbols-outlined">bug_report</mat-icon>
+                <span class="title-card">Fraude et contentieux </span>
+                <p>Le sinistre peut être tagger comme état fraude ou état
+                    contentieux.</p>
+
+            </div>
+        </div>
+        
+        <div class="row cards"
+        [ngClass]="{'disabled-cards': infoSinistre.statut.code === 'CP355'|| isCdcDa || infoSinistre.statut.code === 'CP415'||  infoSinistre.statut.code === 'CP524' ||  infoSinistre.statut.code === 'CP525' ||  infoSinistre.statut.code === 'CP526'}">
+            <div [ngClass]="{'disabled-cards card-disabled': !roleExist || isCdcDa, 'card': roleExist && !isCdcDa}" class="col-md-3" (click)="goTo('reservePaiement')">
+                <mat-icon aria-hidden="false"
+                    class="material-symbols-outlined">edit_note</mat-icon>
+                <span class="title-card">Réserves de paiement</span>
+                <p> </p>
+
+            </div>
+            <div [ngClass]="{'disabled-cards card-disabled': !roleExist || isCdcDa, 'card': roleExist && !isCdcDa}" class="col-md-3" [style]="!roleExist || isCdcDa?'margin: 0 0 0 26px':''" (click)="goTo('reserveRecours')">
+                <mat-icon aria-hidden="false"
+                    class="material-symbols-outlined">draft_orders</mat-icon>
+                <span class="title-card">Réserve de recours</span>
+                <p></p>
+
+            </div>
+            <div class="card col-md-3" (click)="goTo('gestionOp')" >
+                <mat-icon aria-hidden="false"
+                    class="material-symbols-outlined">manage_accounts</mat-icon>
+                <span class="title-card">OP et Instances</span>
+                <p></p>
+
+
+            </div>
+        </div>
+        <!-- <app-gestionnaire-sinistre></app-gestionnaire-sinistre> -->
+        <!-- <div class>
+        <form [formGroup]="formReserve" class="row reserve">
+            <div class="col-md-4 main-col">
+                <mat-label>Réserves totale</mat-label>
+                <mat-form-field class="col-md-5"
+                    appearance="outline">
+    
+                    <input type="text" matInput placeholder
+                        formControlName="reservesTotale">
+                </mat-form-field>
+                <mat-form-field class="col-md-5"
+                    appearance="outline">
+                    <mat-label> Réserves actuel</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="reservesActuel">
+                </mat-form-field>
+            </div>
+            <div class="col-md-8 main-col">
+                <mat-form-field class="col-md-2"
+                    appearance="outline">
+                    <mat-label> OP's Emis</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="OPSEmisFirst">
+                </mat-form-field>
+                <mat-form-field class="col-md-2"
+                    appearance="outline">
+                    <mat-label>OP's Perçu</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="OPSPercuFirst">
+                </mat-form-field>
+                <mat-form-field class="col-md-2"
+                    appearance="outline">
+                    <mat-label>Recours</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="recours">
+                </mat-form-field>
+                <mat-form-field class="col-md-2"
+                    appearance="outline">
+                    <mat-label> OP's Emis</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="OPSEmisSecond">
+                </mat-form-field>
+                <mat-form-field class="col-md-2"
+                    appearance="outline">
+                    <mat-label>OP's Perçu</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="OPSPercuSecond">
+                </mat-form-field>
+            </div>
+        </form>
+    </div> -->
+        <section class="reserve-section">
+            <h2 class="reserve-header">Réserve & OP</h2>
+            <div class="row reserve" *ngIf="infoReserveReady">
+
+                <div class="col-md-4 main-col">
+                    <!-- Réserves totale -->
+                    <div class="col-md-5 sub-col">
+                        <span class="key">
+                            Réserves totale
+                        </span>
+                        <span class="value">
+                            {{tabReserve.reserveTotal}}
+                        </span>
+                    </div>
+                    <!-- Réserves actuel -->
+                    <div class="col-md-5 sub-col">
+                        <span class="key">
+                            Réserves actuelle
+                        </span>
+                        <span class="value">
+                            {{tabReserve.reserveActuelle}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-8 main-col">
+                    <!-- OP's Emis -->
+                    <div class="col-md-2 sub-col">
+                        <span class="key">
+                            OP's Emis
+                        </span>
+                        <span class="value">
+                            {{tabReserve.opEmis}}
+                        </span>
+                    </div>
+                    <!-- OP's Perçu -->
+                    <div class="col-md-2 sub-col">
+                        <span class="key">
+                            OP's Perçu
+                        </span>
+                        <span class="value">
+                            {{tabReserve.opercu}}
+                        </span>
+                    </div>
+                    <!-- Recours -->
+                    <div class="col-md-2 sub-col">
+                        <span class="key">
+                            Recours
+                        </span>
+                        <span class="value">
+                            {{tabReserve.recours}}
+                        </span>
+                    </div>
+                    <!-- OP's Emis -->
+                    <div class="col-md-2 sub-col">
+                        <span class="key">
+                            OR's Emis
+                        </span>
+                        <span class="value">
+                            {{tabReserve.orEmis}}
+                        </span>
+                    </div>
+                    <!-- OP's Perçul -->
+                    <div class="col-md-2 sub-col">
+                        <span class="key">
+                            OR's Perçu
+                        </span>
+                        <span class="value">
+                            {{tabReserve.orPercu}}
+                        </span>
+                    </div>
+                </div>
+                <!-- <table class="tab">
+                <tr>
+                    <td class="key">Réserves totale </td>
+                    <td class="value">241153,08</td>
+                </tr>
+                <tr>
+                    <td class="key">Réserves actuel </td>
+                    <td class="value">150000</td>
+                </tr>
+                <tr>
+                    <td class="key">OP's Emis </td>
+                    <td class="value">91153,08</td>
+                </tr>
+                <tr>
+                    <td class="key">OP's Perçu </td>
+                    <td class="value">91153,08</td>
+                </tr>
+                <tr>
+                    <td class="key">Recours</td>
+                    <td class="value">0</td>
+                </tr>
+                <tr>
+                    <td class="key">OP's Emis </td>
+                    <td class="value">0</td>
+                </tr>
+                <tr>
+                    <td class="key">OP's Perçu </td>
+                    <td class="value">0</td>
+                </tr>
+            </table> -->
+            </div>
+        </section>
+    </section>
+    <section class="error" *ngIf="infoSinistreReady.statut=='error'">
+        <div class="alert alert-danger">{{infoSinistreReady.msg}}</div>
+    </section>
+</div>

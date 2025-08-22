@@ -1,0 +1,61 @@
+<h2 class="heading">Création une question
+    <span style="float: right; font-size: 24px;" >
+        <mat-icon aria-hidden="false" aria-label="" class="material-symbols-outlined"
+                matTooltip="" matTooltipPosition="right" mat-dialog-close> close
+              </mat-icon>
+    </span>
+</h2>
+<mat-divider></mat-divider>
+<div *ngIf="questionCreationSuccess" class="alert alert-success">Question ajouté avec succés</div>
+<mat-dialog-content class="mat-typography">
+    <form #formDirective="ngForm" [formGroup]="formCreationQuestion" class="login-form">
+        <mat-form-field class="col-md-12" appearance="outline">
+            <mat-label>Question</mat-label>
+            <input type="text" matInput placeholder="" formControlName="description">
+            <mat-error *ngIf="formCreationQuestion.controls.description.errors" class="invalid-feedback">
+                <div *ngIf="formCreationQuestion.controls.description.errors.required">
+                    ce champ est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-4" style="padding-right: 1%;" appearance="outline">
+            <mat-label>Numéro d'ordre</mat-label>
+            <input type="nummber" matInput placeholder="" formControlName="numeroOrdre">
+            <mat-error
+                *ngIf="formCreationQuestion.controls.numeroOrdre.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formCreationQuestion.controls.numeroOrdre.errors.required">
+                    ce champ est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-4" style="padding-right: 1%; padding-left: 1%;" appearance="outline">
+            <mat-label>Date debut</mat-label>
+            <input matInput [matDatepicker]="pickerDateDebut2" formControlName="dateDebut"
+                (dateChange)="debutDateChange($event.value)">
+            <mat-datepicker-toggle matSuffix [for]="pickerDateDebut2"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDateDebut2></mat-datepicker>
+            <mat-error *ngIf="formCreationQuestion.controls.dateDebut.errors" class="invalid-feedback">
+                <div *ngIf="formCreationQuestion.controls.dateDebut.errors.required">
+                    ce champ est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-4" style="padding-left: 1%;" appearance="outline">
+            <mat-label>Date fin</mat-label>
+            <input matInput [min]="minDate" [matDatepicker]="pickerDateFin2" formControlName="dateFin">
+            <mat-datepicker-toggle matSuffix [for]="pickerDateFin2"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDateFin2></mat-datepicker>
+            <mat-error *ngIf="formCreationQuestion.controls.dateFin.hasError('matDatepickerMin')"
+                class="invalid-feedback">
+                <div> Date fin est inférieur à la date début</div>
+            </mat-error>
+        </mat-form-field>
+
+        <div class="row-button">
+            <button class="btn btn-cancel" mat-dialog-close>Annuler</button>
+            <button class="btn btn-action" (click)="AjouterQuestion(formDirective)">Ajouter Question</button>
+        </div>
+    </form>
+</mat-dialog-content>

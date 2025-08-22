@@ -1,0 +1,575 @@
+
+<div class="container ">
+    <h2 class="header-title">
+        <mat-icon aria-hidden="false"
+            class="material-symbols-outlined"
+            matTooltip="Retour"
+            matTooltipPosition="left"
+            (click)="goBack()"
+           >arrow_circle_left</mat-icon>
+        Consultation OP N° {{idOp}}
+    </h2>
+    <app-entete-gestion></app-entete-gestion>
+
+    <mat-accordion class="example-headers-align" multi>
+        <!--Contrat-->
+        <mat-expansion-panel hideToggle [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title *ngIf="typeOpCode == 'OPA'" >
+                 OP
+                </mat-panel-title>
+                <mat-panel-title *ngIf="typeOpCode == 'OR' " >
+                 OR
+                </mat-panel-title>	
+                
+                <mat-panel-title *ngIf="typeOpCode == 'ROR'" >
+                    Règlement après recours
+                </mat-panel-title>
+                
+            </mat-expansion-panel-header>
+            <div class="container " *ngIf="code == 'OPA'" style="padding: 1rem 2rem;">
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Type OP : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.typeOp.description}}
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+                <div *ngIf="beneficiaire; else typeBenif">
+                    <div class="row infos">
+                        <!--div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6 key">Bénécifiaire </div>
+                                <div class="col-md-6 value">
+                                    {{"Assuré"}}
+                                </div>
+                            </div>
+                        </div-->                    
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6 key">Type bénécifiaire  : </div>
+                                <div class="col-md-6 value">
+                                    {{decompteOp.decompteOp.benificiaire.description }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row infos">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6 key">Nom bénécifiaire  : </div>
+                                <div class="col-md-6 value">
+                                    {{decompteOp.decompteOp.nom != null ? decompteOp.decompteOp.nom: decompteOp.nom}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6 key">Prénom bénécifiaire  : </div>
+                                <div class="col-md-6 value">
+                                    {{decompteOp.decompteOp.prenom != null ? decompteOp.decompteOp.prenom:decompteOp.prenom }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ng-template #typeBenif>
+                    <div class="row infos">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6 key">Nom bénécifiaire  : </div>
+                                <div class="col-md-6 value">
+                                    {{decompteOp.nom}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6 key">Prénom bénécifiaire  : </div>
+                                <div class="col-md-6 value">
+                                    {{decompteOp.prenom }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>  
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Référence document :</div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.decompteOp.referenceDocument != null ?decompteOp.decompteOp.referenceDocument:decompteOp.modeRecouvrement.description}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Montant TTC : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.montant | number: '1.1-2' }} DZD
+                            </div>
+                        </div>
+                    </div>                  
+                </div>  
+                
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Date validation OP :</div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.dateValidation | date: 'dd/MM/yyyy'}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">User création OP : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.userCreation.nom}}   {{decompteOp.userCreation.prenom}}
+                            </div>
+                        </div>
+                    </div>                  
+                </div>  
+                
+          
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">User validation OP :</div>
+                            <div class="col-md-6 value" *ngIf="userValidation">
+                                {{decompteOp.userValidation.nom}}   {{decompteOp.userValidation.prenom}}
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col-md-6" *ngIf="rib">
+                        <div class="row">
+                            <div class="col-md-6 key">RIB : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.referencePaiement}}
+                            </div>
+                        </div>
+                    </div>                  
+                </div>  
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Agence :</div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.agence.idPersonneMorale.raisonSocial}}
+                            </div>
+                        </div>
+                    </div>                                
+                </div>   
+                                           
+            </div>
+
+            <div class="container " *ngIf="code == 'OPP'" style="padding: 1rem 2rem;">
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Type OP : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.typeOp.description}}
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+                <div *ngIf="expert">
+                    <div class="row infos">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6 key">Type prestataire : </div>
+                                <div class="col-md-6 value">
+                                    {{decompteOp.decompteOp.expert.description}}
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                    <div class="row infos">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6 key">Préstataire : </div>
+                                <div class="col-md-6 value">
+                                    {{decompteOp.decompteOp?.expert?.idPersonneMorale?.raisonSocial}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div> 
+                <div *ngIf="!expert">
+                    <div class="row infos">
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-6 key">Préstataire : </div>
+                                <div class="col-md-6 value">
+                                    {{decompteOp.decompteOp.nom  }} {{decompteOp.decompteOp.prenom}}
+                                </div>
+                            </div>
+                        </div>                    
+                    </div>
+                </div>
+                 
+                <div class="row infos">                    
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Référence document : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.decompteOp.referenceDocument != null ?decompteOp.decompteOp.referenceDocument:decompteOp.modeRecouvrement.description}}
+                            </div>
+                        </div>
+                    </div>                   
+                </div>
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">TVA : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.decompteOp.tva != null ? decompteOp.decompteOp.tva.description + "%" : "" }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Montant TTC: </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.montant | number: '1.1-2'}} DZD
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Date validation OP :</div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.dateValidation | date: 'dd/MM/yyyy'}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">User création OP : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.userCreation.nom}}   {{decompteOp.userCreation.prenom}}
+                            </div>
+                        </div>
+                    </div>                  
+                </div> 
+                
+          
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">User validation OP :</div>
+                            <div class="col-md-6 value" *ngIf="userValidation">
+                                {{decompteOp.userValidation.nom}}   {{decompteOp.userValidation.prenom}}
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col-md-6" *ngIf="rib">
+                        <div class="row">
+                            <div class="col-md-6 key">RIB : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.referencePaiement}}
+                            </div>
+                        </div>
+                    </div>                  
+                </div>  
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Agence :</div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.agence.idPersonneMorale.raisonSocial}}
+                            </div>
+                        </div>
+                    </div>                                
+                </div>    
+             
+            </div>
+
+            <div class="container " *ngIf="code == 'OPT'" style="padding: 1rem 2rem;">
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Type OP : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.typeOp.description}}
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Type tier : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.decompteOp.typeBenificiaire.description}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6"  *ngIf="!!beneficiaire">
+                        <div class="row">
+                            <div class="col-md-6 key">Type bénéficiaire : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.decompteOp.benificiaire.description}}
+                            </div>
+                        </div>
+                    </div>  
+                </div>        
+               
+                <div *ngIf="!beneficiaire">
+                    <div class="row infos">
+                        <div class="col-md-6">    
+                            <div class="row">                        
+                                <div class="col-md-6 key">Compagnie adverse : </div>
+                                <div class="col-md-6 value">
+                                    {{decompteOp.decompteOp.sinistrePersonne.compagnyAdverse.description}}
+                                </div>      
+                            </div>                      
+                        </div>
+                        <div class="col-md-6">  
+                            <div class="row">                         
+                                <div class="col-md-6 key"> Bénéficiaire: </div>
+                                    <div class="col-md-6 value"
+                                            *ngIf="compagnieAdverse=='CP405'">
+                                        {{ decompteOp.decompteOp.sinistrePersonne.nom }}
+                                        {{ decompteOp.decompteOp.sinistrePersonne.prenom }}                              
+                                    </div>
+                                    <div class="col-md-6 value"
+                                    *ngIf="compagnieAdverse!='CP405'">
+                                    {{decompteOp.decompteOp.sinistrePersonne.compagnyAdverse.description}}                             
+                                </div>
+                            </div>
+                        </div>                
+                    </div>
+                </div>
+                 
+                <div *ngIf="!!beneficiaire">
+                    <div class="row infos">
+                        <div class="col-md-6">   
+                            <div class="row">                                
+                                <div class="col-md-6 key">Nom bénéficiaire  : </div>
+                                <div class="col-md-6 value">
+                                    {{decompteOp.decompteOp.nom}}
+                                </div>     
+                            </div>                       
+                        </div>
+                        <div class="col-md-6">   
+                            <div class="row">                             
+                                <div class="col-md-6 key">Prénom bénéficiaire :  </div>
+                                <div class="col-md-6 value">
+                                    {{decompteOp.decompteOp.prenom}}
+                                </div>
+                            </div>                            
+                        </div>                                    
+                    </div>
+                </div> 
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Montant d'indémnisisation  : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.decompteOp.montantTTC | number: '1.1-2'}} DZD
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Date validation OP :</div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.dateValidation | date: 'dd/MM/yyyy'}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">User création OP : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.userCreation.nom}}   {{decompteOp.userCreation.prenom}}
+                            </div>
+                        </div>
+                    </div>                  
+                </div>  
+                
+          
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">User validation OP :</div>
+                            <div class="col-md-6 value" *ngIf="userValidation">
+                                {{decompteOp.userValidation.nom}}   {{decompteOp.userValidation.prenom}}
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col-md-6" *ngIf="rib">
+                        <div class="row">
+                            <div class="col-md-6 key">RIB : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.referencePaiement}}
+                            </div>
+                        </div>
+                    </div>                  
+                </div>  
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Agence :</div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.agence.idPersonneMorale.raisonSocial}}
+                            </div>
+                        </div>
+                    </div>                                
+                </div> 
+            </div>              
+            <div class="container " *ngIf="typeOpCode == 'OR'" style="padding: 1rem 2rem;">
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Montant reçu : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.montant}} DZD
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Part assureur  : </div>
+                            <div class="col-md-6 value">
+                                {{ decompteOp.montant - decompteOp.partAssure}} DZD
+                            </div>
+                        </div>
+                    </div>                   
+                </div>
+               
+                <div class="row infos">                        
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Mode de recouvrement  : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.modeRecouvrement.description }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Référencement de recouvrement : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.referencePaiement}}
+                            </div>
+                        </div>
+                    </div>      
+                </div>  
+                <div class="row infos">                        
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">User création OR : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.userCreation.nom}}  {{decompteOp.userCreation.prenom}}
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Date de création : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.decompteRecours.auditDate | date: 'dd/MM/yyyy' }}
+                            </div>
+                        </div>
+                    </div>      
+                </div>                  
+                             
+            </div>
+            <div class="container " *ngIf="typeOpCode == 'ROR'" style="padding: 1rem 2rem;">
+                <div class="row infos">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Nom bénéficiaire : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.nom}} 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Prénom bénéficiaire : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.prenom}} 
+                            </div>
+                        </div>
+                    </div>                   
+                </div>
+               
+                <div class="row infos">                        
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Montant : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.montant }} DZD
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>  
+                <div class="row infos">  
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Mode de paiement bénéficiaire: </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.modeRecouvrement.description}}
+                            </div>
+                        </div>
+                    </div>                          
+                    
+                    <div class="col-md-6" *ngIf="rib != null">
+                        <div class="row">
+                            <div class="col-md-6 key">Référence de paiement : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.referencePaiement }}
+                            </div>
+                        </div>
+                    </div>    
+                
+                </div>     
+                <div class="row infos">  
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">User création OR : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.userCreation.nom}}  {{decompteOp.userCreation.prenom}}
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-6 key">Date de création : </div>
+                            <div class="col-md-6 value">
+                                {{decompteOp.userCreation.createdate | date: 'dd/MM/yyyy' }}
+                            </div>
+                        </div>
+                    </div>      
+                </div>
+                    
+                
+                
+                
+                             
+            </div>
+        </mat-expansion-panel>
+      
+    </mat-accordion>
+</div>

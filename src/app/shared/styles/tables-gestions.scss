@@ -1,0 +1,77 @@
+.container {
+    background-color: #ffff;
+    padding: 40px 0px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+// table 
+.gestion-table {
+    width: 100%;
+   // margin-top: 2rem;
+
+    th,
+    td {
+        font-size: 16px;
+    }
+
+    .mat-header-cell {
+        color: #00008F;
+        font-weight: 600;
+    }
+
+    .mat-row:nth-child(even),
+    .mat-header-row {
+        background-color: rgb(247, 247, 249);
+    }
+
+    .mat-paginator {
+        background-color: transparent;
+        margin: auto;
+        width: 80%;
+        margin-top: 20px;
+    }
+
+    .mat-icon {
+        height: 100%;
+        font-size: 26px;
+        color: #00008F;
+        width: fit-content;
+    }
+
+
+}
+.mat-menu-item {
+    font-size: 15px;
+
+}
+.mat-menu-item .mat-icon{
+    font-size: 18px;
+    height: fit-content;
+}
+.mat-menu-item:hover:not([disabled]), 
+.mat-menu-item:hover:not([disabled]) .mat-icon {
+    color: #00008f
+}
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 2rem;
+}
+
+.header .mat-icon {
+    height: fit-content;
+    font-size: 29px;
+    margin-right: 1rem;
+    width: fit-content;
+}
+
+.title-table {
+
+    margin-bottom: 0rem;
+    font-weight: 800 !important;
+    font-size: 23px !important;
+    color: #00008F !important;
+}

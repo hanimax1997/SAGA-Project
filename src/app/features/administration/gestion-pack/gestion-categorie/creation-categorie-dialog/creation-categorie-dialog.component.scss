@@ -1,0 +1,73 @@
+.mat-dialog-content {
+    padding-top: 15px;
+}
+
+.creation-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.mat-form-field {
+    padding-top: 15px;
+}
+
+.mat-error {
+    font-size: 11px;
+}
+
+.btn.btn-cancel {
+    float: left;
+}
+
+.btn.btn-action {
+    float: right;
+}
+
+.row-button {
+    display: flex;
+    justify-content: space-between;
+}
+
+.col-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.col-button-add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.col-button-add .mat-icon {
+    vertical-align: middle;
+}
+
+button.btn.add {
+    border-radius: 50%;
+}
+
+.dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alert-warning {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn.btn-alert {
+    float: right;
+    background: transparent;
+    border: none;
+    color: #d4edda;
+    background-color: #155724;
+    border-radius: 5px;
+}
+
+.btn.btn-alert:hover {
+    color: #155724;
+    background-color: #d4edda;
+}

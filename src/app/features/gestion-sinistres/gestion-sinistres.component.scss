@@ -1,0 +1,40 @@
+@import "../../shared/styles/tables-gestions.scss";
+
+.row.formFiltre{
+    width: 100%;
+    padding: 0 2rem;
+    margin-top: 2rem;
+}
+.mat-divider{
+    margin-bottom:2rem
+
+}
+.mat-expansion-panel{
+    box-shadow:none;
+}
+.mat-expansion-panel-header {
+    background: #c7c7c733 !important;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+    height: 48px;
+}
+
+
+
+.mat-expansion-panel-header-title {
+    color: #00008F;
+}
+.row-buttons{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.row-buttons .mat-icon{
+    color:#00008F;
+    cursor: pointer;
+    margin-left: 2rem;
+    
+}

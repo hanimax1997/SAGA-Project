@@ -1,0 +1,76 @@
+<div class="container ">
+    <div class="header">
+        <h2 class="title-table">
+            <mat-icon aria-hidden="false"
+                class="material-symbols-outlined"
+                matTooltip="Retour" (click)="back()"
+                matTooltipPosition="left">arrow_circle_left</mat-icon>
+            Listes des paramétres {{titleCell}}</h2>
+
+
+    </div>
+
+    <mat-divider></mat-divider>
+    <!-- <div class="filter">
+        <form #formDirective="ngForm" [formGroup]="formFilter" class="row"
+            style="margin-left: 1rem;">
+            <mat-form-field class="col-md-5">
+                <mat-label>Catégorie de valeur</mat-label>
+                <input type="text" matInput placeholder=""
+                    (keyup)="applyFilter($event)"
+                    formControlName="codePack">
+            </mat-form-field>
+
+        </form>
+    </div> -->
+    <table mat-table [dataSource]="dataSourceCategory" class="table"
+        [@enterAnimation]>
+        <!-- code Pack id Column -->
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> {{titleCell}}</th>
+            <td mat-cell *matCellDef="let element"> {{titleCellId}}
+            </td>
+        </ng-container>
+
+        <!-- categorieValeur Column -->
+        <ng-container matColumnDef="categorieValeur">
+            <th mat-header-cell *matHeaderCellDef> Categorie de valeur </th>
+            <td mat-cell *matCellDef="let element"> {{element.categorie.description}}
+            </td>
+        </ng-container>
+        <!-- sous categorieValeur Column -->
+        <ng-container matColumnDef="souscategories">
+            <th mat-header-cell *matHeaderCellDef> Sous categorie de valeur </th>
+            <td mat-cell *matCellDef="let element"> {{element.souscategorieList[0].souscategorie.description}}
+            </td>
+        </ng-container>
+        <!-- typeValeur Column -->
+        <ng-container matColumnDef="typeValeur">
+            <th mat-header-cell *matHeaderCellDef> Type Valeur </th>
+            <td mat-cell *matCellDef="let element"> {{element.dictionnaire.description}} </td>
+        </ng-container>
+        <!-- valeur Column -->
+        <ng-container matColumnDef="valeur">
+            <th mat-header-cell *matHeaderCellDef> Valeur </th>
+            <td mat-cell *matCellDef="let element"> {{element.valeur}}
+            </td>
+        </ng-container>
+
+
+
+
+
+        <!-- The table will render two header rows, one data row per data object, and two footer rows.
+        <tr mat-header-row *matHeaderRowDef="['header']"
+            class="first-header-row">
+        </tr> -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"
+            class="second-header-row">
+        </tr>
+
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10]"
+        aria-label="Select page of users"></mat-paginator>
+</div>

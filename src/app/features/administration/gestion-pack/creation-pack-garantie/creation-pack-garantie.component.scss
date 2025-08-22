@@ -1,0 +1,63 @@
+.form-group {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.mat-dialog-content {
+    padding-top: 15px;
+}
+
+.creation-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.mat-form-field {
+    padding-top: 15px;
+}
+
+.mat-error {
+    font-size: 11px;
+}
+
+.btn.btn-cancel {
+    float: left;
+}
+
+.btn.btn-action {
+    float: right;
+}
+
+.mat-radio-group {
+    margin-top: 2rem;
+    margin-bottom: 4rem;
+}
+
+.mat-radio-group .mat-radio-button:nth-child(2) {
+    margin-left: 4rem;
+}
+
+:ng-deep .mat-radio-label-content {
+    font-size: 16px;
+}
+
+.mat-radio-button {
+    font-size: 16px;
+
+}
+
+::ng-deep .danger-snackbar {
+    background: #721c24;
+    color: #ffff;
+    font-size: 15px;
+    .mat-simple-snackbar-action {
+        color: #ffff !important;
+        font-size: 21px;
+    }
+}
+.row-button {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 3rem;
+    margin-top: 2rem;
+  }

@@ -1,0 +1,117 @@
+a {
+  text-decoration: none;
+}
+
+ul {
+  padding: 0px;
+}
+
+ul li {
+  list-style-type: none;
+}
+
+.aside-container {
+  position: absolute;
+  z-index: 50;
+  height: 100%;
+  background-color: #ffff;
+}
+
+#aside_menu {
+  width: 360px;
+  background-color: #ffff;
+}
+.navbar-header {
+  width: 100%;
+  margin-bottom: 20px;
+
+}
+.navbar-brand {
+  float: none;
+  height: 100%;
+  padding: 15px 15px;
+  font-size: inherit;
+}
+.navbar-brand img {
+  width: 65%;
+}
+a.nav-link {
+  padding: 15px;
+  color: #333333;
+  font-size: 16px;
+  font-weight: 300;
+
+  .mat-icon {
+    margin-right: 10px;
+  }
+  .nav-link-content{
+    display: flex;
+    align-items: center;
+  }
+}
+
+.lvl2 .nav-link {
+  padding-left: 3.75rem;
+}
+
+.lvl2.menu-item.show {
+  background-color: #E5E5E5;
+
+  .nav-link.menu-link {
+    font-weight: 600;
+  }
+}
+
+a[data-toggle="collapse"].lvl1 .material-symbols-outlined::before {
+  content: "expand_more";
+
+}
+
+a[data-toggle="collapse"][aria-expanded="true"].lvl1 .material-symbols-outlined::before {
+  content: "expand_less";
+
+}
+
+.lvl4-list {
+  display: flex;
+  flex-direction: column;
+
+  .lvl4-header {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    background-color: #E5E5E5;
+  }
+
+  .nav-link {
+    padding: 0px;
+
+  }
+
+  ul li {
+
+    padding: 7px;
+    font-size: 14px;
+  }
+}
+
+// expansion panel angular material 
+::ng-deep.mat-expansion-panel-content > .mat-expansion-panel-body{
+  padding: 0px !important;
+}
+.mat-expansion-panel{
+  box-shadow: none;
+}
+
+.tryThis{
+  z-index: 105;
+  position: fixed;
+  inset: 0px auto auto 0px;
+  margin: 0px;
+  transform: translate(360px, 0px);
+}
+
+
+
+
+

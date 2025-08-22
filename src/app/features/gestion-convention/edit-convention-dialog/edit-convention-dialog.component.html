@@ -1,0 +1,67 @@
+
+<div mat-dialog-title class="dialog-header">
+    <span class="heading">Modification convention</span>
+
+    <!-- <mat-icon class="btn btn-cross" mat-dialog-close>close</mat-icon> -->
+</div>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mat-typography">
+
+    <form *ngIf="formReady" #formDirective="ngForm" [formGroup]="formEditConvention"
+        (ngSubmit)="submitDateFin(formDirective)" class="row">
+        <mat-form-field class="col-md-5"
+            appearance="outline">
+            <mat-label>Nom convention</mat-label>
+            <input type="text" matInput placeholder=""
+                formControlName="nomConvention">
+            <mat-error
+                *ngIf="formEditConvention.controls.nomConvention.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formEditConvention.controls.nomConvention.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-5"
+            appearance="outline">
+            <mat-label>Date début</mat-label>
+            <input matInput [matDatepicker]="pickerDateDebut" [min]="minDate"
+                formControlName="dateDebut"
+                 >
+            <mat-datepicker-toggle matSuffix [for]="pickerDateDebut"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDateDebut></mat-datepicker>
+            <mat-error
+                *ngIf="formEditConvention.controls.dateDebut.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formEditConvention.controls.dateDebut.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-5"
+            appearance="outline">
+            <mat-label>Date fin</mat-label>
+            <input matInput [matDatepicker]="pickerDatefin" [min]="minDate"
+                formControlName="dateFin">
+            <mat-datepicker-toggle matSuffix [for]="pickerDatefin"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDatefin></mat-datepicker>
+            <mat-error
+                *ngIf="formEditConvention.controls.dateFin.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formEditConvention.controls.dateFin.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+
+
+        <div class="row-button">
+            <button class="btn btn-cancel" mat-dialog-close type="button">Retour</button>
+            <button class="btn btn-action col-button-add" type="submit">Enregistrer</button>
+        </div>
+    </form>
+</mat-dialog-content>

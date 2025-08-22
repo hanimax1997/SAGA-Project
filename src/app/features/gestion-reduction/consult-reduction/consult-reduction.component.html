@@ -1,0 +1,171 @@
+<div class="container ">
+    <h2 class="header-title">
+        <mat-icon aria-hidden="false"
+            class="material-symbols-outlined"
+            matTooltip="Retour"
+            matTooltipPosition="left"
+            [routerLink]="['/gestion-reduction']">arrow_circle_left</mat-icon>
+        Consultation de la réduction N°{{idReduction}}</h2>
+        <div class="infos" *ngIf="reductionReady">
+            <div class="row mini-info">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 key">Code réduction: </div>
+                        <div class="col-md-6 value">{{reduction.codeReduction}}</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 key">Nom réduction: </div>
+                        <div class="col-md-6 value">{{reduction.nomReduction}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mini-info">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 key">date début: </div>
+                        <div class="col-md-6 value">{{reduction.dateDebut | dateFormatPipe}}</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row ">
+                        <div class="col-md-6 key">date fin: </div>
+                        <div class="col-md-6 value">{{reduction.dateFin | dateFormatPipe}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mini-info">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 key">Produit: </div>
+                        <div class="col-md-6 value">{{reduction.produit?.description}}</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 key">Type réduction: </div>
+                        <div class="col-md-6 value">{{reduction.typeReduction?.description}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mini-info">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 key">Agences: </div>
+                        <div class="col-md-6 value">
+                            <ng-container *ngFor="let agence of reduction.agences;let i= index">
+                                {{agence?.idAgence?.idPersonneMorale?.raisonSocial}}
+                                <span *ngIf="i < reduction?.agences?.length-1">, </span>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 key">Canal de distributions: </div>
+                        <div class="col-md-6 value">
+                            <ng-container *ngFor="let canal of reduction.canalDistributions;let i= index">
+                                {{canal?.idCanal?.description}}
+                                <span *ngIf="i < reduction?.canalDistributions?.length-1">, </span>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mini-info">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 key">Mouvements police: </div>
+                        <div class="col-md-6 value">
+                            <ng-container *ngFor="let mouvement of reduction.mouvementPolice;let i= index">
+                                {{mouvement?.idMouvement?.description}}
+                                <span *ngIf="i < reduction?.mouvementPolice?.length-1">, </span>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 key">Utilisateur: </div>
+                        <div class="col-md-6 value">
+                            <ng-container *ngFor="let utilisateur of reduction.utilisateur;let i= index">
+                                {{utilisateur.nom}} {{utilisateur.prenom}}
+                                <span *ngIf="i < reduction?.utilisateur?.length-1">, </span>
+                            </ng-container>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mini-info risque" *ngFor="let rs of reductionRisque">
+                <div class="col-md-6">
+                    <div class="row" *ngIf="rs.idParam?.reponseList?.length != 0">
+                        <div class="col-md-6 key">{{rs.idParam?.libelle}}: </div>
+                        <div class="col-md-6 value">
+                            <ng-container *ngFor="let risque of rs.idParam?.reponseList;let i= index">
+                                {{risque?.description}}
+                                <span *ngIf="i < rs?.idParam?.reponseList?.length-1">, </span>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="rs.idParam?.reponseList?.length == 0">
+                        <div class="col-md-6 key">{{rs.idParam?.libelle}}: </div>
+                        <div class="col-md-6 value" *ngIf="rs.valMin==0 && rs.valMax==0 ">{{rs.valeur}}</div>
+                        <div class="col-md-6 value" *ngIf="rs.valMin!=0 || rs.valMax!=0 ">{{rs.valMin}} - {{rs.valMax}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mini-info">
+                <div class="row">
+                    <div class="col-md-6 key">Packs: </div>
+                </div>
+            </div>
+            <mat-accordion multi>
+                <ng-container *ngFor="let pack of reductionPack">
+                    <mat-expansion-panel
+                        [expanded]="true"
+                        class="panel-risque">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="">
+                                {{pack[0].idPackComplet?.idPack0?.description}}
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <table mat-table [dataSource]="pack" class="pack-table">
+                            <!-- Garantie Column -->
+                            <ng-container
+                                matColumnDef="garantie">
+                                <th mat-header-cell
+                                    *matHeaderCellDef>Garantie</th>
+                                <td mat-cell *matCellDef="let element;let i= index">
+                                    {{ element.idPackComplet?.garantie?.description }}
+                                </td>
+                            </ng-container>
+    
+                            <!-- Franchise Column -->
+                            <ng-container
+                                matColumnDef="franchise">
+                                <th mat-header-cell *matHeaderCellDef> Franchise</th>
+                                <td mat-cell *matCellDef="let element;let i=index">
+                                    {{ element.franchise }}
+                                </td>
+                            </ng-container>
+    
+                            <!-- Pourcentage Column -->
+                            <ng-container
+                                matColumnDef="pourcentage">
+                                <th mat-header-cell *matHeaderCellDef> Pourcentage</th>
+                                <td mat-cell *matCellDef="let element;let i=index">
+                                    {{ element.taux }}
+                                </td>
+                            </ng-container>
+                            
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                    </mat-expansion-panel>
+                </ng-container>
+            </mat-accordion>
+        </div>
+
+
+</div>

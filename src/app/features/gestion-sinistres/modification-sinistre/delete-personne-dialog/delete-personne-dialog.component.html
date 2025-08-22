@@ -1,0 +1,86 @@
+<h2 class="heading">Confirmation</h2>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mat-typography">
+    <div *ngIf="data.typeContent=='personne';else otherContent">
+        <p>Etes-vous sur de vouloir supprimer ce tier de ce sinistre.</p>
+        <!-- date debut-->
+
+        <div>
+            <button class="btn btn-cancel" [mat-dialog-close]="false"
+                type="button">Retour</button>
+            <button class="btn btn-delete" (click)="submitSupression()">Confirmer</button>
+        </div>
+
+    </div>
+    <ng-template #otherContent>
+        <p>Etes-vous sur de vouloir {{data.typeContent}} ce sinistre.</p>
+        <form [formGroup]="formMotif" class="form row"
+            *ngIf="formMotif && data.typeContent=='cloturer'"
+            (ngSubmit)="submitMotif()">
+            <mat-form-field class="col-md-12" appearance="outline">
+                <mat-label>Motif </mat-label>
+                <mat-select formControlName="motif" appearance="outline"
+                    (selectionChange)="controlMotif($event.value)">
+                    <ng-container *ngFor="let motif of motifsArray">
+                        <mat-option
+                            [value]="motif">
+                            {{motif.description}}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error
+                    *ngIf="formMotif.controls.motif.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formMotif.controls.motif.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <!--Sous motif -->
+            <mat-form-field class="col-md-12" appearance="outline"
+                *ngIf="motifCloture=='CP526'">
+                <mat-label>Sans suite </mat-label>
+                <mat-select formControlName="sousMotif" appearance="outline">
+                    <ng-container *ngFor="let sousMotif of sousMotifsArray">
+                        <mat-option
+                            [value]="sousMotif">
+                            {{sousMotif.description}}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error
+                    *ngIf="formMotif.controls.sousMotif.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formMotif.controls.sousMotif.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-12"
+                appearance="outline" *ngIf="motifCloture=='CP526'">
+                <mat-label>Description</mat-label>
+                <input type="text" matInput placeholder
+                    formControlName="description">
+                <mat-error
+                    *ngIf="formMotif.controls.description.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formMotif.controls.description.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <div>
+                <button class="btn btn-cancel" [mat-dialog-close]="false"
+                    type="button">Retour</button>
+                <button class="btn btn-delete" type="submit">Confirmer</button>
+            </div>
+        </form>
+        <div       *ngIf="data.typeContent!='cloturer'">
+            <button class="btn btn-cancel" [mat-dialog-close]="false"
+                type="button">Retour</button>
+            <button class="btn btn-delete" (click)="submitConfirmation()">Confirmer</button>
+        </div>
+    </ng-template>
+
+</mat-dialog-content>

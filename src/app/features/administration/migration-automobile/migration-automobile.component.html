@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="header">
+
+        <h2 class="title-table">Migration Police Automobile</h2>
+    </div>
+    <mat-divider></mat-divider>
+
+    <form #formDirective="ngForm" [formGroup]="formMigration" class="form row"
+        (ngSubmit)="submitMigration()">
+        <!--codeConvention -->
+        <mat-form-field class="col-md-5"
+            appearance="outline">
+            <mat-label>N° Police</mat-label>
+            <input type="text" matInput placeholder=""
+                formControlName="police">
+        </mat-form-field>
+    
+        <div class="col-md-5 button-row">
+            <button class="btn btn-action">Migrer</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,28 @@
+.mat-dialog-content{
+    padding-top: 15px;
+}
+.btn.btn-cancel{
+    float: left;
+}
+.btn.btn-delete{
+    float: right;
+}
+p{
+    margin-bottom: 2rem;
+    font-size: 19px;
+    text-align: center;
+    line-height: 3rem;
+}
+
+.mat-radio-group .mat-radio-button {
+    margin-left: 4rem;
+}
+
+.mat-radio-group {
+
+    display: flex;
+    align-items: center;
+}
+table td{
+    padding: 1rem;
+}

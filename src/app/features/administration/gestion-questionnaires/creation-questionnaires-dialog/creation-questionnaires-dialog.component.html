@@ -1,0 +1,155 @@
+<div class="container">
+    <h2 class="heading" style="padding-left: 3%;">Création Questionnaire</h2>
+       
+    <mat-divider></mat-divider>
+    <div *ngIf="questionnaireCreationSuccess" class="alert alert-success">Le questionnaire N°{{idQuestionnaire}} a été créer avec succés</div>
+    <div *ngIf="questionnaireCreationError" class="alert alert-danger"> {{messageError}} </div>
+    <mat-dialog-content class="mat-typography">
+        <mat-stepper #stepper>
+            <mat-step [stepControl]="formCreationQuestionnaire" errorMessage="Veuillez saisir les informations du questionnaire">
+              <form #formDirective="ngForm" [formGroup]="formCreationQuestionnaire" class="login-form">
+                <ng-template matStepLabel>Questionnaire</ng-template>
+        
+                <mat-form-field class="col-md-4" style="padding-right: 1%;" appearance="outline">
+                    <mat-label>Nom du questionnaire</mat-label>
+                    <input type="text" matInput placeholder="" formControlName="description">
+                    <mat-error
+                    *ngIf="formCreationQuestionnaire.controls.description.errors"
+                    class="invalid-feedback">
+                        <div
+                            *ngIf="formCreationQuestionnaire.controls.description.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+            
+                <mat-form-field class="col-md-4" style="padding-left: 1%; padding-right: 1%;" appearance="outline">
+                    <mat-label>Date debut</mat-label>
+                    <input matInput [matDatepicker]="pickerDateDebut" formControlName="dateDebut" (dateChange)="debutDateChange($event.value)">
+                    <mat-datepicker-toggle matSuffix [for]="pickerDateDebut"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerDateDebut></mat-datepicker>
+                    <mat-error
+                    *ngIf="formCreationQuestionnaire.controls.dateDebut.errors"
+                    class="invalid-feedback">
+                        <div
+                            *ngIf="formCreationQuestionnaire.controls.dateDebut.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+            
+                <mat-form-field class="col-md-4" style="padding-left: 1%;" appearance="outline">
+                    <mat-label>Date fin</mat-label>
+                    <input matInput [min]="minDate" [matDatepicker]="pickerDateFin" formControlName="dateFin">
+                    <mat-datepicker-toggle matSuffix [for]="pickerDateFin"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerDateFin></mat-datepicker>
+                    <mat-error *ngIf="formCreationQuestionnaire.controls.dateFin.hasError('matDatepickerMin')"
+        
+                    class="invalid-feedback">
+                    <div>  Date fin est inférieur à la date début</div>
+                      
+        
+                </mat-error>
+                </mat-form-field>
+    
+                <div class="row-button">
+                    <button class="btn btn-cancel" (mouseup)="back()">Retour</button>
+                    <button *ngIf="!formDirective.valid" class="btn btn-action">Suivant</button>
+                    <button *ngIf="formDirective.valid" matStepperNext class="btn btn-action">Suivant</button>
+                  </div>
+              </form>
+            </mat-step>
+            <mat-step>    
+                <ng-template matStepLabel>Questions</ng-template>
+                <div class="">
+                    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 question-table">
+                        <ng-container matColumnDef="header-question">
+                            <th mat-header-cell *matHeaderCellDef attr.colspan={{lengthColumns}}>
+                            <div class="header-tab">
+                                <span>Liste des Questions </span>
+                                <mat-icon aria-hidden="false" aria-label="Dashboard" class="material-symbols-outlined"
+                                matTooltip="Ajouter une question" matTooltipPosition="right" (click)="addQuestion()">add</mat-icon>
+                            </div>
+                    
+                            </th>
+                        </ng-container>
+        
+                        <!-- Description Column -->
+                        <ng-container matColumnDef="description">
+                            <th mat-header-cell *matHeaderCellDef> Description </th>
+                            <td mat-cell *matCellDef="let element" style="padding-top: 24px; padding-bottom: 24px;"> {{element.description}}
+                            </td>
+                        </ng-container>
+        
+                        <!-- numeroOrdre Column -->
+                        <ng-container matColumnDef="numeroOrdre">
+                            <th mat-header-cell *matHeaderCellDef style="padding-right: 60px;"> Numéro d'ordre </th>
+                            <td mat-cell *matCellDef="let element" style="padding-top: 24px; padding-bottom: 24px; padding-right: 60px;">
+                            {{element.numeroOrdre}} </td>
+                        </ng-container>
+        
+                        <!-- Date debut Column -->
+                        <ng-container matColumnDef="dateDebut">
+                            <th mat-header-cell *matHeaderCellDef> Date debut </th>
+                            <td mat-cell *matCellDef="let element" style="padding-top: 24px; padding-bottom: 24px;"> {{element.dateDebut |
+                            date:"dd/MM/yyyy"}} </td>
+                        </ng-container>
+                    
+                        <!-- Date fin Column -->
+                        <ng-container matColumnDef="dateFin">
+                            <th mat-header-cell *matHeaderCellDef> Date fin </th>
+                            <td mat-cell *matCellDef="let element" style="padding-top: 24px; padding-bottom: 24px;"> {{element.dateFin |
+                            date:"dd/MM/yyyy"}} </td>
+                        </ng-container>
+    
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> Action </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="">
+                                    <mat-icon style="padding-top: 5px;">more_vert</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                  <button mat-menu-item (click)="openDialogEdit(element)">
+                                    <mat-icon aria-hidden="false" aria-label="Dashboard" class="material-symbols-outlined"
+                                        matTooltip="Modifier question" matTooltipPosition="right">edit</mat-icon>
+                                    <span>Modifier la question</span>
+                                  </button>
+                                  <button mat-menu-item (click)="viewReponse(element)" matStepperNext>
+                                    <mat-icon aria-hidden="false" aria-label="view reponse" class="material-symbols-outlined" style="margin-left: 4px;"
+                                    matTooltip="Ajouter reponse" matTooltipPosition="right">
+                                    visibility</mat-icon>
+                                    <span>Voir les réponse</span>
+                                  </button>
+                                </mat-menu>
+                            
+                            
+                            </td>
+                        </ng-container>
+          
+                        <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+                        <tr mat-header-row *matHeaderRowDef="['header-question']" class="example-first-header-row">
+                        </tr>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="example-second-header-row">
+                        </tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10]" aria-label="Select page  of users"></mat-paginator>
+                </div>
+
+                <div class="row-button" *ngIf="step">
+                    <button class="btn btn-cancel" matStepperPrevious>Retour</button>
+                    <button class="btn btn-action" (click)="submitCreationQuestionnaire()" >Enregistrer</button>
+                  </div>
+            </mat-step>
+            <mat-step>    
+                <ng-template matStepLabel>Réponses</ng-template>
+                <div class="">
+                    <app-consultation-questionnaire-reponses [Question]="question" (newItemEvent)="stepChange(stepper)" *ngIf="!step"></app-consultation-questionnaire-reponses>
+
+                    <div class="row-button" style="justify-content: flex-end;">
+                        <button class="btn btn-action" (click)="submitCreationQuestionnaire()" >Enregistrer</button>
+                    </div>
+                </div>
+            </mat-step>
+        </mat-stepper>
+    </mat-dialog-content>
+</div>

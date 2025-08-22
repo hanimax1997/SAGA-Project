@@ -1,0 +1,33 @@
+@import ".../../../../../shared/styles/tables-gestions.scss";
+.value{
+    color: #00008F;
+    font-weight: 600;
+    
+}
+.risque-table{
+    border-collapse: separate;
+    border-spacing: 15px;
+    width: 100%;
+     td{
+        border-bottom: 1px solid rgba(221, 221, 221, 0.541);
+    }
+}
+
+
+.display-title{
+    text-decoration: underline;
+    font-weight: 600!important;
+    color: #00008f;
+    letter-spacing: 1px;
+}
+.pack-table{
+    width: 100%;
+    .mat-header-cell{
+        font-size: 15px;
+    }
+    .mat-row:nth-child(even),
+    .mat-header-row {
+        background-color: rgb(247, 247, 249);
+    }
+}
+

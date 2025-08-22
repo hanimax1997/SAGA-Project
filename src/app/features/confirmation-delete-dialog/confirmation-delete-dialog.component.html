@@ -1,0 +1,11 @@
+<h2 class="heading">Confirmation de la suppression</h2>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mat-typography">
+    <p>Êtes-vous certain(e) de vouloir continuer avec la suppression ? Votre
+        confirmation est requise pour assurer la sécurité de cette action.</p>
+    <div>
+        <button class="btn btn-cancel" [mat-dialog-close]="false" type="button">Retour</button>
+        <button class="btn btn-delete" [mat-dialog-close]="true">Supprimer</button>
+    </div>
+</mat-dialog-content>

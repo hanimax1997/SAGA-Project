@@ -1,0 +1,793 @@
+
+<div class="container ">
+    <div class="header-container">
+        <h2 class="header-title">
+            <mat-icon class="mat-icon material-symbols-outlined"
+                aria-label [routerLink]="['../..']">arrow_circle_left</mat-icon>
+
+            <span>Tableau des réserves de recours </span>
+        </h2>
+    </div>
+    <app-entete-gestion></app-entete-gestion>
+
+    <mat-stepper #stepperH linear>
+        <mat-step>
+            <ng-template matStepLabel>tableau des réserves de Recours
+            </ng-template>
+            <mat-accordion class="example-headers-align" multi>
+                <!--Recouvrement-->
+                <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            Recouvrement
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <div class="container-recouvrement">
+                        <mat-radio-group class="col-md-5"
+                        [disabled]="statutSinistre === 'CP415'|| statutSinistre === 'CP524' || statutSinistre === 'CP525' || statutSinistre === 'CP526'"
+                            (change)="typeRecouvrement($event.value)">
+                            <mat-radio-button value="CP429">Recours company</mat-radio-button>
+                            <mat-radio-button value="CP430">Restitution</mat-radio-button>
+                        </mat-radio-group>
+
+                        <mat-form-field *ngIf="typeRecouvrementParent=='CP430'"
+                            class="col-md-5">
+                            <mat-label>Type restitution</mat-label>
+                            <mat-select [(ngModel)]="typeSelected">
+                                <mat-option value="CP431"
+                                    [disabled]="codeFraude!='CP438'">Restitution
+                                    suite à un
+                                    état
+                                    fraude</mat-option>
+                                <mat-option value="CP432">Restitution suite à un
+                                    paiement erroné</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <button class="btn btn-action"
+                    [disabled]="statutSinistre === 'CP524'"
+                        (click)="submitRecouvrement()" *ngIf="!loaderRecoursTab" >Suivant</button>
+                    <mat-progress-bar mode="indeterminate"
+                        *ngIf="loaderRecoursTab"></mat-progress-bar>
+
+                </mat-expansion-panel>
+
+                <!--tab-->
+                <mat-expansion-panel [expanded]="true" *ngIf="returnedData">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            tableau des réserves de Recours
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <table class="gestion-table">
+                        <!--  numSinistre -->
+                        <ng-container>
+                            <th>Garantie </th>
+                            <th> Réserve </th>
+                            <th> Réserve Actuelle </th>
+                            <th> OR </th>
+                            <th> Réserve totale </th>
+                            <th> Action</th>
+                        </ng-container>
+                        <ng-container *ngFor="let data of dataSource">
+                            <tr class="garantie-line">
+                                <td [attr.rowspan]="data.reserves.length +1">{{data.nomGarantie}}</td>
+                                <td></td>
+                                <td>{{data.reserveActuelle}}</td>
+                                <td>{{data.op}}</td>
+                                <td>{{data.reserveTotal}}</td>
+                                <td></td>
+
+                            </tr>
+                            <ng-container
+                                *ngFor="let reserve of data.reserves; let i= index;">
+                                <tr>
+                                    <td>{{reserve.nomReserve}}</td>
+                                    <td>{{reserve.reserveActuelle}}</td>
+                                    <td>{{reserve.op}}</td>
+                                    <td>{{reserve.reserveTotal}}</td>
+                                    <td>
+
+                                        <button mat-icon-button
+                                            type="button"
+                                            [matMenuTriggerFor]="menu"
+                                            aria-label="menu">
+                                            <mat-icon>more_vert</mat-icon>
+                                        </button>
+                                        <mat-menu #menu="matMenu"
+                                            xPosition="after"
+                                            class="menu-formule">
+                                            <button mat-menu-item
+                                                type="button"
+                                                [disabled]="statutSinistre=='CP355' || statutSinistre=='CP524' || statutSinistre =='CP525'|| statutSinistre =='CP526'"
+                                                (click)="selectReserve(reserve.codeReserve,data.codeGarantie,typeRecouvrementParent)">
+                                                <mat-icon>done_outline</mat-icon>
+                                                <span>Sélectionner la réserve
+                                                </span>
+                                            </button>
+                                            <button mat-menu-item
+                                                type="button"
+                                                (click)="cancelReserve(reserve.idreserve)"
+                                                [disabled]="statutSinistre=='CP355'  ||statutSinistre=='CP524' || statutSinistre =='CP525' || statutSinistre =='CP526'  || reserve.idreserve==null">
+                                                <mat-icon>cancel</mat-icon>
+                                                <span>Annuler une réserve
+                                                </span>
+                                            </button>
+                                        </mat-menu>
+                                    </td>
+                                </tr>
+                            </ng-container>
+
+                        </ng-container>
+                        <!-- Action Column -->
+
+                    </table>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </mat-step>
+        <mat-step *ngIf="typeRecouvrementParent=='CP429'">
+            <ng-template matStepLabel>Recours company</ng-template>
+            <mat-vertical-stepper #stepperCompany linear>
+                <!-- partie 1 Montant prevu-->
+                <mat-step [stepControl]="formMontantPrevu">
+                    <ng-template matStepLabel>Montant prevu</ng-template>
+                    <form [formGroup]="formMontantPrevu"
+                        (ngSubmit)="submitMontantPrevu()"
+                        *ngIf="formMontantPrevu" class="container-recouvrement">
+                        <!--Adversaires  -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label> Adversaires </mat-label>
+
+                            <mat-select formControlName="adversaireList"
+                                (selectionChange)="selectAdversaire($event.value)">
+                                <ng-container
+                                    *ngFor="let adversaire of adversaireTab">
+                                    <mat-option
+                                        [value]="adversaire.idSinistrePersonne">{{adversaire.nom}}
+                                        {{adversaire.prenom}}</mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formMontantPrevu.controls.adversaireList.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formMontantPrevu.controls.adversaireList.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--companyAdverse -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Assurance adverse </mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="companyAdverse">
+                            <mat-error
+                                *ngIf="formMontantPrevu.controls.companyAdverse.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formMontantPrevu.controls.companyAdverse.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--montantPrevu -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Montant prévu </mat-label>
+                            <input type="number" matInput placeholder
+                                formControlName="montantPrevu">
+                            <mat-error
+                                *ngIf="formMontantPrevu.controls.montantPrevu.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formMontantPrevu.controls.montantPrevu.errors.required">
+                                    ce champs est obligatoire</div>
+                                <div
+                                    *ngIf="formMontantPrevu.controls.montantPrevu.errors.invalidDecimal">
+                                    le montant n'est pas conforme.</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <div class="row-button">
+                            <button class="btn btn-action" type="submit"
+                                [disabled]="blocOneValid">Enregistrer</button>
+                        </div>
+                    </form>
+                </mat-step>
+                <!-- partie 2 OR-->
+                <mat-step>
+                    <ng-template matStepLabel>OR</ng-template>
+
+                    <form [formGroup]="formOR"
+                        #formDirective="ngForm"
+                        (ngSubmit)="submitFormOr(formDirective)"
+                        *ngIf="formOR" class="container-recouvrement">
+                        <!--montantRecu -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Montant Reçu</mat-label>
+                            <input type="number" matInput
+                                placeholder
+                                formControlName="montantRecu">
+                            <mat-error
+                                *ngIf="formOR.controls.montantRecu.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formOR.controls.montantRecu.errors.required">
+                                    ce champs est obligatoire</div>
+                                <div
+                                    *ngIf="formOR.controls.montantRecu.hasError('max')">
+                                    Le montant Reçu ne peut pas etre supérieur
+                                    au montant prévu.</div>
+                                <div
+                                    *ngIf="formOR.controls.montantRecu.errors.invalidDecimal">
+                                    le montant n'est pas conforme.</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--partAssureur -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Part assureur</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="partAssureur">
+                            <mat-error
+                                *ngIf="formOR.controls.partAssureur.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formOR.controls.partAssureur.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--modeRecouvrement-->
+                        <mat-form-field class="col-md-5" appearance="outline">
+                            <mat-label>Mode de recouvrement</mat-label>
+
+                            <mat-select formControlName="modePaiement"
+                                (selectionChange)="selectModeRecouv($event.value)">
+                                <ng-container
+                                    *ngFor="let mode of modeRecouvrementNew">
+                                    <mat-option [value]="mode">{{mode.description}}</mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formOR.controls.modePaiement.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formOR.controls.modePaiement.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--referenceDeRecouvrement-->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Reference de recouvrement </mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="referenceDeRecouvrement">
+                            <mat-error
+                                *ngIf="formOR.controls.referenceDeRecouvrement.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formOR.controls.referenceDeRecouvrement.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <div class="row-button">
+                            <button class="btn btn-action" type="submit">Ajouter</button>
+                        </div>
+                    </form>
+
+                    <table mat-table [dataSource]="dataSourceOR"
+                        class="gestion-table"
+                        *ngIf="dataSourceOR.data.length!=0">
+                        <!--numero -->
+                        <ng-container matColumnDef="numOR">
+                            <th mat-header-cell *matHeaderCellDef> N°</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.idReglement}} </td>
+                        </ng-container>
+                        <!--montantRecu -->
+                        <ng-container matColumnDef="montantRecu">
+                            <th mat-header-cell *matHeaderCellDef> Montant Reçu</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.montantRecu}} </td>
+                        </ng-container>
+                        <!-- partAssureur Column -->
+                        <ng-container matColumnDef="partAssureur">
+                            <th mat-header-cell *matHeaderCellDef> Part assureur
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.partAssureur}}</td>
+                        </ng-container>
+                        <!-- partAssure Column -->
+                        <ng-container matColumnDef="partAssure">
+                            <th mat-header-cell *matHeaderCellDef> Part assuré
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.partAssure}}</td>
+                        </ng-container>
+                        <!-- modePaiement Column -->
+                        <ng-container matColumnDef="modePaiement">
+                            <th mat-header-cell *matHeaderCellDef> Mode de
+                                recouvrement
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.modePaiement}}</td>
+                        </ng-container>
+                        <!-- modeDePaiement Column -->
+                        <ng-container matColumnDef="modeDePaiement">
+                            <th mat-header-cell *matHeaderCellDef> Mode
+                                recouvrement
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.modeRecouvrement.description}}</td>
+                        </ng-container>
+                        <!-- referenceDeRecouvrement Column -->
+                        <ng-container matColumnDef="referenceRecouvrement">
+                            <th mat-header-cell *matHeaderCellDef> Reference de
+                                recouvrement
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.referenceRecouvrement}}</td>
+                        </ng-container>
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> Action </th>
+                            <td mat-cell *matCellDef="let element">
+
+                                <button mat-icon-button
+                                    type="button"
+                                    [matMenuTriggerFor]="menu"
+                                    aria-label="menu risque list">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu"
+                                    xPosition="after">
+                                    <button mat-menu-item
+                                        type="button"
+                                        (click)="addROR(element.idReglement,element.partAssure)">
+                                        <mat-icon>add</mat-icon>
+                                        <span>Ajouter OP</span>
+                                    </button>
+                                </mat-menu>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row
+                            *matHeaderRowDef="displayedColumnsOR"
+                            class="example-second-header-row">
+                        </tr>
+
+                        <tr mat-row *matRowDef="let row; columns:
+                        displayedColumnsOR;"></tr>
+
+                    </table>
+                    <mat-paginator *ngIf="dataSourceOR.data.length!=0"
+                        [pageSize]="10"
+                        [pageSizeOptions]="[5, 10]"
+                        aria-label="Select
+                                            page of users"></mat-paginator>
+
+                </mat-step>
+                <!-- partie 3 Generation des OPs (ROR)-->
+                <mat-step>
+                    <ng-template matStepLabel>Generation des OPs pour l'OR
+                        N°{{idReglement}}</ng-template>
+                    <form [formGroup]="formROR"
+                        #formDirective="ngForm"
+                        (ngSubmit)="submitFormROR(formDirective)"
+                        *ngIf="formROR" class="container-recouvrement">
+                        <!--Type bénéficiaire -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Type bénéficiaire</mat-label>
+                            <mat-select formControlName="typeBenef"
+                                (selectionChange)="selectTypeBenef($event.value)">
+                                <ng-container
+                                    *ngFor="let type of typeBenefs">
+                                    <mat-option [value]="type">{{type.description}}</mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formROR.controls.typeBenef.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formROR.controls.typeBenef.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+
+                        <!--nomBenef -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline" *ngIf="this.typePersonne=='PH' || typeBenef != 'CP522'">
+                            <mat-label>Nom bénéficiaire </mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="nomBenef">
+                            <mat-error
+                                *ngIf="formROR.controls.nomBenef.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formROR.controls.nomBenef.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--prenomBenef -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline" *ngIf="this.typePersonne=='PH' || typeBenef != 'CP522'">
+                            <mat-label>Prénom bénéficiaire </mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="prenomBenef">
+                            <mat-error
+                                *ngIf="formROR.controls.prenomBenef.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formROR.controls.prenomBenef.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--prenomBenef -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline" *ngIf="this.typePersonne=='PM' && typeBenef == 'CP522'">
+                            <mat-label>Raison sociale </mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="raisonSociale">
+                            <mat-error
+                                *ngIf="formROR.controls.raisonSociale.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formROR.controls.raisonSociale.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--pieceJustificatif -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline" *ngIf="typeBenef=='CP523'">
+                            <mat-label>Piece Justificatif</mat-label>
+                            <mat-select formControlName="pieceJustificatif">
+                                <ng-container
+                                    *ngFor="let type of typePieceJustif">
+                                    <mat-option [value]="type">{{type.description}}</mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formROR.controls.pieceJustificatif.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formROR.controls.pieceJustificatif.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--montant  -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Montant</mat-label>
+                            <input type="number" matInput placeholder
+                                formControlName="montant">
+                            <mat-error
+                                *ngIf="formROR.controls.montant.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formROR.controls.montant.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+
+                        <!--modeDePaiementBenf  -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label> Mode de paiement bénéficiaires
+                            </mat-label>
+
+                            <mat-select formControlName="modeDePaiementBenf"
+                                (selectionChange)="selectModePaiement($event.value)">
+                                <ng-container
+                                    *ngFor="let mode of modeRecouvrement">
+                                    <mat-option [value]="mode">{{mode.description}}</mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formROR.controls.modeDePaiementBenf.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formROR.controls.modeDePaiementBenf.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--RIB -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline"  *ngIf="isVirementSelected()">
+                            <mat-label>RIB </mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="rib">
+                            <mat-error
+                                *ngIf="formROR.controls.rib.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formROR.controls.rib.errors.required">
+                                    ce champs est obligatoire</div>
+
+                                    <div *ngIf="formROR.get('rib').hasError('minlength') || formROR.get('rib').hasError('maxlength')">
+                                        Vous devez saisir exactement 20 caractères
+                                      </div>
+                            </mat-error>
+                        </mat-form-field>
+                        <div class="row-button">
+                            <button class="btn btn-action" type="submit">Ajouter</button>
+                        </div>
+                    </form>
+                    <!-- TAB -->
+
+                    <table mat-table [dataSource]="dataSourceBenef"
+                        class="gestion-table"
+                        *ngIf="dataSourceBenef.data.length!=0">
+
+                        <!--typeBenef -->
+                        <ng-container matColumnDef="typeBenef">
+                            <th mat-header-cell *matHeaderCellDef> Type
+                                bénéficiaire </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.typeBeneficiaire.description}} </td>
+                        </ng-container>
+                        <!-- nameBenef Column -->
+                        <ng-container matColumnDef="nom">
+                            <th mat-header-cell *matHeaderCellDef> Nom </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.nom}}</td>
+                        </ng-container>
+                        <!-- prenom Column -->
+                        <ng-container matColumnDef="prenom">
+                            <th mat-header-cell *matHeaderCellDef> Prénom </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.prenom}}</td>
+                        </ng-container>
+
+                        <!-- montant Column -->
+                        <ng-container matColumnDef="montant">
+                            <th mat-header-cell *matHeaderCellDef> Montant
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.montant}}</td>
+                        </ng-container>
+                        <!-- modeDePaiementBenf Column -->
+                        <ng-container matColumnDef="modeDePaiementBenf">
+                            <th mat-header-cell *matHeaderCellDef> Mode de
+                                paiement bénéficiaires
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.modePaiement.description}}</td>
+                        </ng-container>
+                        <!-- rib Column -->
+                        <ng-container matColumnDef="rib">
+                            <th mat-header-cell *matHeaderCellDef> Reference
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.reference}}</td>
+                        </ng-container>
+                        <!-- piece just Column -->
+                        <ng-container matColumnDef="pieceJustificatif">
+                            <th mat-header-cell *matHeaderCellDef> Piece
+                                Justificatif
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.pieceJustificatif?.description}}</td>
+                        </ng-container>
+                        <!-- Action Column
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> Action </th>
+                            <td mat-cell *matCellDef="let element">
+
+                                <button mat-icon-button
+                                    type="button"
+                                    [matMenuTriggerFor]="menu"
+                                    aria-label="menu risque list">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu"
+                                    xPosition="after">
+                                    <button mat-menu-item
+                                        (click)="deleteBenef(element.idBenef,element.typeBenef)"
+                                        type="button">
+                                        <mat-icon>delete</mat-icon>
+                                        <span>Supprimer tier</span>
+                                    </button>
+                                </mat-menu>
+                            </td>
+                        </ng-container>
+ -->
+                        <tr mat-header-row
+                            *matHeaderRowDef="displayedColumnsBenef"
+                            class="example-second-header-row">
+                        </tr>
+
+                        <tr mat-row *matRowDef="let row; columns:
+                                        displayedColumnsBenef;"></tr>
+
+                    </table>
+                    <mat-paginator
+                        *ngIf="dataSourceBenef.data.length!=0 "
+                        [pageSize]="10"
+                        [pageSizeOptions]="[5, 10]"
+                        aria-label="Select
+                                        page of users"></mat-paginator>
+                </mat-step>
+
+            </mat-vertical-stepper>
+            <button class="btn btn-cancel" (click)="stepperH.previous()">Retour</button>
+        </mat-step>
+        <mat-step *ngIf="typeRecouvrementParent=='CP430'">
+            <ng-template matStepLabel>Restitution</ng-template>
+            <mat-vertical-stepper [linear]="false" #stepperRestitution linear>
+                <mat-step [stepControl]="formRestitutionPrevu">
+                    <ng-template matStepLabel>Montant prévu</ng-template>
+                    <form [formGroup]="formRestitutionPrevu"
+                        (ngSubmit)="submitMontantPrevuRest()"
+                        *ngIf="formRestitutionPrevu"
+                        class="container-recouvrement">
+                        <!--nomDebiteur -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Nom débiteur</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="nomDebiteur">
+                            <mat-error
+                                *ngIf="formRestitutionPrevu.controls.nomDebiteur.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formRestitutionPrevu.controls.nomDebiteur.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--prénomDebiteur -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Prénom débiteur</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="prenomDebiteur">
+                            <mat-error
+                                *ngIf="formRestitutionPrevu.controls.prenomDebiteur.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formRestitutionPrevu.controls.prenomDebiteur.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--Montant prévu -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Montant prévu</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="montantPrevu">
+                            <mat-error
+                                *ngIf="formRestitutionPrevu.controls.montantPrevu.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formRestitutionPrevu.controls.montantPrevu.errors.required">
+                                    ce champs est obligatoire</div>
+                                <div
+                                    *ngIf="formRestitutionPrevu.controls.montantPrevu.errors.invalidDecimal">
+                                    le montant n'est pas conforme.</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <div class="row-button">
+                            <button class="btn btn-action" type="submit">Suivant</button>
+                        </div>
+                    </form>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Montant Reçu</ng-template>
+                    <form [formGroup]="formRestitutionRecu"
+                        (ngSubmit)="addOrRestitution()"
+                        *ngIf="formRestitutionRecu"
+                        class="container-recouvrement">
+                        <!--montantRecu -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Montant Reçu</mat-label>
+                            <input type="text" matInput
+                                placeholder formControlName="montantRecu">
+                            <mat-error
+                                *ngIf="formRestitutionRecu.controls.montantRecu.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formRestitutionRecu.controls.montantRecu.errors.required">
+                                    ce champs est obligatoire</div>
+                                <div
+                                    *ngIf="formRestitutionRecu.controls.montantRecu.hasError('max')">
+                                    Le montant Reçu ne peut pas etre supérieur
+                                    au montant prévu.</div>
+                                <div
+                                    *ngIf="formRestitutionRecu.controls.montantRecu.errors.invalidDecimal">
+                                    le montant n'est pas conforme.</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--modeDePaiement  -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label> Mode de paiement
+                            </mat-label>
+
+                            <mat-select formControlName="modeDePaiement">
+                                <ng-container
+                                    *ngFor="let mode of modeRecouvrement">
+                                    <mat-option [value]="mode.idParam">{{mode.description}}</mat-option>
+                                </ng-container>
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formRestitutionRecu.controls.modeDePaiement.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formRestitutionRecu.controls.modeDePaiement.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--referenceDePaiement -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Reference de paiement </mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="referenceDePaiement">
+                            <mat-error
+                                *ngIf="formRestitutionRecu.controls.referenceDePaiement.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formRestitutionRecu.controls.referenceDePaiement.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <div class="row-button">
+                            <button class="btn btn-action" type="submit">Ajouter</button>
+                        </div>
+                    </form>
+                    <table mat-table [dataSource]="dataSourceOR"
+                        class="gestion-table"
+                        *ngIf="dataSourceOR.data.length!=0">
+                        <!--montantRecu -->
+                        <ng-container matColumnDef="montantRecu">
+                            <th mat-header-cell *matHeaderCellDef> Montant Reçu</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.montantRecu}} </td>
+                        </ng-container>
+                        <!-- montantRestant Column -->
+                        <ng-container matColumnDef="montantRestant">
+                            <th mat-header-cell *matHeaderCellDef>Montant
+                                restant
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.montantRestant}}</td>
+                        </ng-container>
+                        <!-- modePaiement Column -->
+                        <ng-container matColumnDef="modePaiement">
+                            <th mat-header-cell *matHeaderCellDef> Mode de
+                                paiement
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.modeRecouvrement.description}}</td>
+                        </ng-container>
+                        <!-- referenceDeRecouvrement Column -->
+                        <ng-container matColumnDef="referenceRecouvrement">
+                            <th mat-header-cell *matHeaderCellDef> Reference de
+                                recouvrement
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.referenceRecouvrement}}</td>
+                        </ng-container>
+
+                        <tr mat-header-row
+                            *matHeaderRowDef="displayedColumnsORRest"
+                            class="example-second-header-row">
+                        </tr>
+
+                        <tr mat-row *matRowDef="let row; columns:
+                    displayedColumnsORRest;"></tr>
+
+                    </table>
+                    <mat-paginator *ngIf="dataSourceOR.data.length!=0"
+                        [pageSize]="10"
+                        [pageSizeOptions]="[5, 10]"
+                        aria-label="Select
+                                        page of users"></mat-paginator>
+                </mat-step>
+            </mat-vertical-stepper>
+
+        </mat-step>
+    </mat-stepper>
+
+</div>

@@ -1,0 +1,182 @@
+
+@import "../../../../shared/styles/tables-gestions.scss";
+//button action 
+.buttons.row{
+    justify-content: space-between;
+    padding: 0px 21px;
+  }
+  //heading 
+  h2.heading{
+    color: #00008f;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+  }
+  .mat-dialog-content{
+    padding-top: 15px;
+  }
+  .mat-radio-button {
+    margin: 0 12px;
+  }
+  .mat-form-field{
+    padding-top: 15px;
+  }
+  .mat-error{
+    font-size: 11px;
+  }
+
+  .container{
+    background-color: #ffff;
+    padding: 40px 0px;
+    height: 100%;
+    overflow: auto;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)
+  }
+
+  // .container::-webkit-scrollbar {
+  //   display: none;
+  // }
+  
+  // .mat-icon{
+  //   height: 100%;
+  //   font-size: 36px;
+  //   width: fit-content;
+  // }
+
+  ::ng-deep .mat-horizontal-stepper-header{
+    pointer-events: none !important;
+  }
+
+  .addSecteurIcon {
+
+    font-size: 40px;
+    margin-left: 59px;
+    padding-top: 15px;
+    color: #00008f;
+  }
+
+  .no-hover-effect ::ng-deep .mat-button-focus-overlay {
+    background-color: transparent;
+  }
+
+  table.profession-table{
+    width: 100%;
+    margin: auto;
+}
+
+  table.document-table{
+    width: 100%;
+    margin: auto;
+}
+
+  table.adresse-table{
+    width: 100%;
+    margin: auto;
+}
+
+  table.contact-table{
+    width: 100%;
+    margin: auto;
+}
+
+  table.modalite-table{
+    width: 100%;
+    margin: auto;
+}
+
+  table.rib-table{
+    width: 100%;
+    margin: auto;
+}
+.mat-header-cell {
+    color: #333333;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 15px;
+    width: 165px;
+
+}
+.header-tab{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.mat-paginator{
+    background-color: transparent;
+    margin: auto;
+    width: 100%;
+    margin-top: 20px;
+}
+.example-first-header-row{
+    background-color: #00008f;
+}
+.example-first-header-row th.mat-header-cell{
+    border: none;
+    color: #ffff;
+    font-size: 18px;
+}
+.mat-column-valeurGarantie.mat-cell,
+.mat-column-valeurEnvloppe.mat-cell{
+    text-align: center;
+}
+.mat-cell .mat-icon{
+    color: #00008f;
+}
+.mat-header-cell.mat-icon{
+    color: #ffffff;
+}
+.mat-cell .mat-icon:hover,
+.mat-header-cell .mat-icon:hover{
+    color: #d14723;
+    cursor: pointer;
+}
+::ng-deep .mat-tooltip {
+    font-size: 14px;
+}
+
+.resume {
+  font-size: 18px;
+  padding: 2rem 1rem;
+  border-top: 1px solid #3333;
+}
+
+.resume.even {
+  background: rgb(247, 247, 249);
+}
+
+.resume .title-resume {
+  font-weight: 700;
+  color: #00008E;
+}
+
+.add-col {
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 2rem;
+}
+
+.add-col button {
+  display: flex;
+  align-items: center;
+}
+
+.mat-expansion-panel-header {
+  background: #3333330d;
+}
+
+.mat-expansion-panel-header-title,
+.mat-expansion-panel-header[aria-disabled=true] {
+  color: #00008F;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.row-fields {
+  padding: 2rem 2rem;
+}
+
+.row-button {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 3rem;
+  margin-top: 2rem;
+}

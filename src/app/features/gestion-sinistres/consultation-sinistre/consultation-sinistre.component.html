@@ -1,0 +1,285 @@
+
+<div class="container ">
+    <h2 class="header-title">
+        <mat-icon aria-hidden="false"
+            class="material-symbols-outlined"
+            matTooltip="Retour"
+            matTooltipPosition="left"
+            [routerLink]="['/gestion-sinistre/'+codeProduit+'/'+nomProduit]">arrow_circle_left</mat-icon>
+        Consultation sinistre</h2>
+    <div class="tables-panel">
+        <mat-accordion class="example-headers-align" multi>
+            <!--information sur le sinistre-->
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Informations sur le sinistre
+                    </mat-panel-title>
+
+                </mat-expansion-panel-header>
+                <table class="tab">
+                    <tr>
+                        <td class="key">Code sinistre</td>
+                        <td class="value">{{infoSinistre.codeSinistre}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">code risque</td>
+                        <td class="value">{{infoSinistre.codeRisque}}</td>
+                    </tr>
+
+                    <tr *ngIf="codeProduit == '96'">
+                        <td class="key">Adresse</td>
+                        <td class="value">{{infoSinistre.adresse}}</td>
+                    </tr>
+                    <tr *ngIf="codeProduit != '96'">
+                        <td class="key">Immatriculation</td>
+                        <td class="value">{{ this.infoSinistre.immatriculation}}</td>
+                    </tr>
+
+
+                    <tr>
+                        <td class="key">date déclaration</td>
+                        <td class="value">{{infoSinistre.dateDeclaration |
+                            dateFormatPipe }}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">date survenance</td>
+                        <td class="value">{{infoSinistre.dateSurvenance |date:'dd-MM-yyyy HH:mm:ss' : 'utc' }}</td>
+                    </tr>
+                    <ng-template *ngIf="codeProduit == '45A' || codeProduit == '45F'">
+                        <tr>
+                            <td class="key">pays survenance</td>
+                            <td class="value">{{infoSinistre.paysSurvenance}}</td>
+                        </tr>
+                        <tr>
+                            <td class="key">wilaya survenance</td>
+                            <td class="value">{{infoSinistre.wilayaSurvenance}}</td>
+                        </tr>
+                        <tr>
+                            <td class="key">commune survenance</td>
+                            <td class="value">{{infoSinistre.communeSurvenance}}</td>
+                        </tr>
+                    </ng-template>
+                    <tr>
+                        <td class="key">cause sinistre</td>
+                        <td class="value">{{infoSinistre.causeSinistre}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">origine Sinistre</td>
+                        <td class="value">{{infoSinistre.origineSinistre}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">zone affecte</td>
+                        <td class="value">{{infoSinistre.zoneAffecte}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">statut</td>
+                        <td class="value">{{infoSinistre.statut}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">autorite</td>
+                        <td class="value">{{infoSinistre.autorite}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">taux responsabilite</td>
+                        <td class="value">{{infoSinistre.tauxResponsabilite}}</td>
+                    </tr>
+                    <tr *ngIf="codeProduit == '45A' || codeProduit == '45F'">
+                        <td class="key">peut circuler</td>
+                        <td class="value">{{infoSinistre.canCirculate}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">Assisteur </td>
+                        <td class="value">{{infoSinistre.assisteur}}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="key">nature dommage</td>
+                        <td class="value">{{infoSinistre.natureDommage}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">Agence</td>
+                        <td class="value">{{infoSinistre.agence}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">Decription sinistre</td>
+                        <td class="value">{{infoSinistre.description}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">Utilisateur de création</td>
+                        <td class="value">{{auditUser}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">Dernier utilisateur</td>
+                        <td class="value">{{createUser}}</td>
+                    </tr>
+                </table>
+
+            </mat-expansion-panel>
+            <!--information sur le conducteur-->
+            <mat-expansion-panel [expanded]="true" *ngIf="codeProduit == '45A' || codeProduit == '45F'">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Informations sur le conducteur
+                    </mat-panel-title>
+
+                </mat-expansion-panel-header>
+                <table class="tab">
+                    <tr>
+                        <td class="key">nom</td>
+                        <td class="value">{{conducteurSinistre.nomConducteur}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">Prénom</td>
+                        <td class="value">{{conducteurSinistre.prenomConducteur}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">adresse</td>
+                        <td class="value">{{conducteurSinistre.adresse}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">Contact</td>
+                        <td class="value">{{conducteurSinistre.contact}}</td>
+                    </tr>
+                    <tr>
+                        <td class="key">N°permis</td>
+                        <td class="value">{{conducteurSinistre.numeroPermis}}</td>
+                    </tr>
+
+                    
+                    <tr>
+                        <td class="key">Date délivrance Permis</td>
+                        <td class="value">{{conducteurSinistre.dateDelivrance | dateFormatPipe}}<td>
+                            </tr>
+                            <tr
+                                *ngFor="let param of conducteurSinistre.sinsitreparams">
+                                <td class="key">{{param.descriptionChamp}}</td>
+                                <td class="value"
+                                    *ngIf="param?.typeChamp?.code!='L06'">{{param.valeur}}</td>
+                                <td class="value"
+                                    *ngIf="param?.typeChamp?.code=='L06'">{{param.valeur
+                                    | dateFormatPipe}}</td>
+                            </tr>
+                        </table>
+
+                    </mat-expansion-panel>
+                    <!--adversaires-->
+                    <mat-expansion-panel [expanded]="true"
+                        *ngFor="let adversaire of
+                adversaireTab; let i=index">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Adversaire N°{{i +1}}
+                            </mat-panel-title>
+
+                            <!-- <mat-panel-description>
+                                    Type your name and age
+                                    <mat-icon>account_circle</mat-icon>
+                                </mat-panel-description> -->
+                        </mat-expansion-panel-header>
+                        <table class="tab">
+                            <tr *ngIf="codeProduit != '95' && codeProduit != '96'">
+                                <td class="key">Tiers de la même famille ?</td>
+                                <td class="value">{{adversaire.isFamilly ? "Oui" : "Non"}}</td>
+                            </tr>
+                            <tr>
+                                <td class="key">nom</td>
+                                <td class="value">{{adversaire.nom}}</td>
+                            </tr>
+                            <tr>
+                                <td class="key">Prénom</td>
+                                <td class="value">{{adversaire.prenom}}</td>
+                            </tr>
+                            <tr>
+                                <td class="key">Assurance adverse</td>
+                                <td class="value">{{adversaire.compagnyAdverse?.description}}</td>
+                            </tr>
+                            <tr>
+                                <td class="key">Agence adverse</td>
+                                <td class="value">{{adversaire.agenceAdvese?.description}}</td>
+                            </tr>
+                            <tr>
+                                <td class="key">Police adverse</td>
+                                <td class="value">{{adversaire.policeAdversaire}}</td>
+                            </tr>
+                            <tr>
+                                <td class="key">contact adverse</td>
+                                <td class="value">{{adversaire.contact}}</td>
+                            </tr>
+                            <tr *ngIf="codeProduit != '95' && codeProduit != '96'">
+                                <td class="key">Nom conducteur</td>
+                                <td class="value">{{adversaire.nomConducteur}}</td>
+                            </tr>
+                            <tr *ngIf="codeProduit != '95' && codeProduit != '96'">
+                                <td class="key">prénom conducteur</td>
+                                <td class="value">{{adversaire.prenomConducteur}}</td>
+                            </tr>
+                            <tr *ngIf="codeProduit != '95' && codeProduit != '96'">
+                                <td class="key">Date délivrance</td>
+                                <td class="value">{{adversaire.dateDelivrance | dateFormatPipe}}</td>
+                            </tr>
+
+                            <ng-container
+                                *ngIf="adversaire.sinsitreparams.length!=0">
+                                <tr>
+                                    <td class="key" colspan="2">Informations sur
+                                        véhicule
+                                        adverse</td>
+                                </tr>
+                                <tr
+                                    *ngFor="let param of adversaire.sinsitreparams">
+                                    <td class="key">{{param.descriptionChamp}}</td>
+                                    <td class="value"
+                                        *ngIf="param?.typeChamp?.code!='L06'">{{param.valeur}}</td>
+                                    <td class="value"
+                                        *ngIf="param?.typeChamp?.code=='L06'">{{param.valeur | dateFormatPipe}}</td>
+                                </tr>
+                            </ng-container>
+                        </table>
+
+                    </mat-expansion-panel>
+                    <!--blesses / deces-->
+                    <mat-expansion-panel [expanded]="true"
+                        *ngFor="let blesse of
+                blessesTab; let i=index">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Blessé/Déces N°{{i +1}}
+                            </mat-panel-title>
+
+                            <!-- <mat-panel-description>
+                                            Type your name and age
+                                            <mat-icon>account_circle</mat-icon>
+                                        </mat-panel-description> -->
+                        </mat-expansion-panel-header>
+                        <table class="tab">
+                            <tr>
+                                <td class="key">état Sinistrée</td>
+                                <td class="value">{{blesse.etatSinistre.description}}</td>
+                            </tr>
+                            <tr>
+                                <td class="key">Type </td>
+                                <td class="value">{{blesse.typePersonne.description}}</td>
+                            </tr>
+                            <tr>
+                                <td class="key">nom</td>
+                                <td class="value">{{blesse.nom}}</td>
+                            </tr>
+                            <tr>
+                                <td class="key">Prénom</td>
+                                <td class="value">{{blesse.prenom}}</td>
+                            </tr>
+                            <tr>
+                                <td class="key">Date de naissance </td>
+                                <td class="value">{{blesse.dateNaissance}}</td>
+                            </tr>
+                            <tr>
+                                <td class="key">contact </td>
+                                <td class="value">{{blesse.contact}}</td>
+                            </tr>
+                        </table>
+
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+        </div>

@@ -1,0 +1,49 @@
+<h2 class="heading">Supression Pack-Garantie</h2>
+<mat-divider></mat-divider>
+
+<!-- <mat-dialog-content class="mat-typography">
+    <p *ngIf="categoryOf=='garantie'">Etes-vous sur de vouloir supprimer la garantie "{{description}}" de ce pack </p>
+    <p *ngIf="categoryOf=='sousGarantie'">Etes-vous sur de vouloir supprimer la sous garantie "{{description}}" de ce pack </p>
+    <div>
+        <button class="btn btn-cancel" [mat-dialog-close]="false" type="button">Retour</button>
+        <button class="btn btn-delete" [mat-dialog-close]="true" type="submit">Supprimer</button>
+    </div>
+</mat-dialog-content> -->
+<mat-dialog-content class="mat-typography">
+    <p *ngIf="categoryOf=='categoryGarantie'">Etes-vous sur de vouloir supprimer
+        cette categorie de cette garantie.</p>
+        <p *ngIf="categoryOf=='garantie'">Etes-vous sur de vouloir supprimer la
+            garantie "{{description}}" de ce pack </p>
+    <p *ngIf="categoryOf=='sousGarantie'">Etes-vous sur de vouloir supprimer la
+        sous garantie "{{description}}" de ce pack </p>
+    <p *ngIf="categoryOf=='categoryPack'">Etes-vous sur de vouloir supprimer
+        cette categorie de ce pack. </p>
+    <!-- date debut-->
+
+    <form #formDirective="ngForm" [formGroup]="formSupression"
+        (ngSubmit)="submitSupression()" *ngIf="typeSupression=='put';else post_content">
+        <mat-form-field class="col-md-12" appearance="outline">
+            <mat-label>Date Fin</mat-label>
+            <input matInput [matDatepicker]="dateFin"
+                formControlName="dateFin" [min]="minDate">
+            <mat-datepicker-toggle matSuffix [for]="dateFin"></mat-datepicker-toggle>
+            <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+            <mat-datepicker #dateFin></mat-datepicker>
+            <mat-error
+                *ngIf="formSupression.controls.dateFin.hasError('matDatepickerMin')"
+                class="invalid-feedback">
+                <div> Date fin est inférieur à la date début</div>
+
+
+            </mat-error>
+        </mat-form-field>
+        <div>
+            <button class="btn btn-cancel"  [mat-dialog-close]="false" type="button">Retour</button>
+            <button class="btn btn-delete" type="submit">Supprimer</button>
+        </div>
+    </form>
+    <ng-template #post_content>
+        <button class="btn btn-cancel"  [mat-dialog-close]="false" type="button">Retour</button>
+        <button class="btn btn-delete" [mat-dialog-close]="true">Supprimer</button>
+    </ng-template>
+</mat-dialog-content>

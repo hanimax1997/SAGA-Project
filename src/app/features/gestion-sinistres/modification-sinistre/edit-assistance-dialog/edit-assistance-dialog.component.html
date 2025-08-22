@@ -1,0 +1,69 @@
+<h2 class="heading">Assistance </h2>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mat-typography">
+    <!-- <p>Etes-vous sur de vouloir supprimer ce tier de ce sinistre.</p> -->
+    <!-- <mat-progress-bar mode="indeterminate" *ngIf="!loadListFraudes"></mat-progress-bar> -->
+    <div class="content">
+        <form #formDirective="ngForm" [formGroup]="formAssistance" (ngSubmit)="submitAssistance()">
+            <table>
+                <tr>
+                    <td>Avez-vous fait appel à un assisteur ?</td>
+                    <td>
+                        <!--assisteur -->
+                        <mat-radio-group class="col-md-5"
+                            (change)="withAssisteur($event.value,1)"
+                            formControlName="assisteur">
+                            <mat-radio-button value="true">Oui</mat-radio-button>
+                            <mat-radio-button value="false">Non</mat-radio-button>
+                        </mat-radio-group>
+                    </td>
+                </tr>
+                <tr
+                    *ngIf="futurAssisteurExist">
+                    <td>Comptez-vous faire appel à un assisteur ?</td>
+                    <td>
+                        <!-- futur assisteur -->
+                        <mat-radio-group class="col-md-12"
+                            formControlName="futurAssisteur"
+                            (change)="withAssisteur($event.value,2)">
+
+                            <mat-radio-button value="true">Oui</mat-radio-button>
+                            <mat-radio-button value="false">Non</mat-radio-button>
+                        </mat-radio-group>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+
+                        <!--ASSISTEUR    -->
+                        <mat-form-field class="col-md-12"
+                            appearance="outline" *ngIf="listAssisteurExist">
+                            <mat-label>Assisteur </mat-label>
+                            <mat-select formControlName="idAssistance">
+                                <ng-container
+                                    *ngFor="let assisteur of  assisteurs">
+                                    <mat-option [value]="assisteur.idParam">{{assisteur.description}}</mat-option>
+                                </ng-container>
+
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formAssistance.controls.idAssistance.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formAssistance.controls.idAssistance.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="button-row">
+                <button class="btn btn-cancel" [mat-dialog-close]="false"
+                    type="button">Retour</button>
+                <button class="btn btn-delete" type="submit" *ngIf="data.statutSinistre!='CP355' && data.statutSinistre!='CP415'  && data.statutSinistre!='CP524'">Enregistrer</button>
+            </div>
+        </form>
+    </div>
+</mat-dialog-content>

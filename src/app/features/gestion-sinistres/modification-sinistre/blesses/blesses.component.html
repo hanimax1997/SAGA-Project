@@ -1,0 +1,324 @@
+
+<div class="container ">
+    <div class="header-container">
+        <h2 class="header-title">
+            <mat-icon class="mat-icon material-symbols-outlined"
+                aria-label="directions_car" (click)="goBack()">arrow_circle_left</mat-icon>
+            <div *ngIf="!editBlesseVar " class="toEdit">
+                <mat-icon class="mat-icon material-symbols-outlined"
+                    matTooltip="Modifier Bléssé"
+                    matTooltipPosition="left" (click)="editBlesse()"
+                    *ngIf="consultBlesseShow">edit</mat-icon>
+                Consulter Bléssé</div>
+            <span *ngIf="editBlesseVar">Modifier Bléssé</span>
+        </h2>
+    </div>
+    <app-entete-gestion></app-entete-gestion>
+    <div class="alert alert-success" *ngIf="editBlesseSuccess !consultBlesseShow">Bléssé modifié avec succés</div>
+
+    <mat-accordion class="example-headers-align" multi
+        *ngIf="!consultBlesseShow">
+        <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Ajouter Bléssé/décés
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <form #formDirective="ngForm"
+                [formGroup]="formInfoBlesses" class="formTier"
+                (ngSubmit)="submitBlesse(formDirective)">
+                <div class="row" *ngIf="codeProduit == '45A' || codeProduit == '45F' || codeProduit == '45L'">
+                    <!--blessé -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Type blessé/Décès </mat-label>
+                        <mat-select formControlName="typeBlesses">
+                            <ng-container *ngFor="let type of
+                                typeBlessesArray">
+                                <mat-option
+                                    [value]="type.idParam">{{type.description}}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formInfoBlesses.controls.typeBlesses.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formInfoBlesses.controls.typeBlesses.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <!--nom  -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Nom </mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="nomBlesse">
+                        <mat-error
+                            *ngIf="formInfoBlesses.controls.nomBlesse.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formInfoBlesses.controls.nomBlesse.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!--prenom  -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Prénom </mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="prenomBlesse">
+                        <mat-error
+                            *ngIf="formInfoBlesses.controls.prenomBlesse.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formInfoBlesses.controls.prenomBlesse.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <!--Date naissanceconducteru adverse-->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Date naissance </mat-label>
+                        <input matInput
+                            [matDatepicker]="pickerdateNaissanceBlesse"
+                            formControlName="dateNaissanceBlesse" [max]="today">
+                        <mat-datepicker-toggle matSuffix
+                            [for]="pickerdateNaissanceBlesse"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerdateNaissanceBlesse></mat-datepicker>
+                        <mat-error
+                            *ngIf="formInfoBlesses.controls.dateNaissanceBlesse.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formInfoBlesses.controls.dateNaissanceBlesse.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!--etat sinsité-->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Etat sinistré </mat-label>
+                        <mat-select formControlName="etatBlesse">
+                            <ng-container *ngFor="let type of
+                                typesinistree">
+                                <mat-option
+                                    [value]="type.idParam">{{type.description}}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formInfoBlesses.controls.etatBlesse.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formInfoBlesses.controls.etatBlesse.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <!--contact  -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Contact </mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="contact">
+                        <mat-error
+                            *ngIf="formInfoBlesses.controls.contact.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formInfoBlesses.controls.contact.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="button-row" *ngIf="statutSinistre != 'CP355' ||statutSinistre != 'CP415'||statutSinistre != 'CP524' || statutSinistre != 'CP525'|| statutSinistre != 'CP526'">
+                    <button mat-button class="btn
+                        btn-action " type="submit">Ajouter</button>
+                </div>
+            </form>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <table mat-table [dataSource]="dataSourceBlesse"
+        class="gestion-table" *ngIf="!consultBlesseShow">
+        <!--typeBlesses-->
+        <ng-container matColumnDef="typeBlesses">
+            <th mat-header-cell *matHeaderCellDef> Type blessé </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.typePersonne.description}} </td>
+        </ng-container>
+        <!-- nom Column -->
+        <ng-container matColumnDef="nomBlesse">
+            <th mat-header-cell *matHeaderCellDef> Nom </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.nom}}
+            </ng-container>
+            <!-- prenomBlesse Column -->
+            <ng-container matColumnDef="prenomBlesse">
+                <th mat-header-cell *matHeaderCellDef> Prénom </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.prenom}}</td>
+            </ng-container>
+            <!-- etatBlesse Column -->
+            <ng-container matColumnDef="etatBlesse">
+                <th mat-header-cell *matHeaderCellDef> Etat blessé </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.etatSinistre.description}}</td>
+            </ng-container>
+            <!-- Action Column -->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let element">
+
+                    <button mat-icon-button
+                        type="button"
+                        [matMenuTriggerFor]="menu"
+                        aria-label="menu risque list">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu"
+                        xPosition="after">
+                        <button mat-menu-item
+                            type="button"
+                            (click)="consultBlesse(element.typePersonne,element)" [disabled]="statutSinistre == 'CP355' ||statutSinistre != 'CP415' || statutSinistre == 'CP524'  || statutSinistre == 'CP525'|| statutSinistre == 'CP526'">
+                            <mat-icon>zoom_in</mat-icon>
+                            <span>Consulter Bléssé</span>
+                        </button>
+
+                        <button mat-menu-item
+                            type="button"  (click)="deleteTier(element)" [disabled]="statutSinistre == 'CP355' ||statutSinistre == 'CP415' || statutSinistre == 'CP524'  || statutSinistre == 'CP525' || statutSinistre == 'CP526'">
+                            <mat-icon>delete</mat-icon>
+                            <span>Supprimer Bléssé</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"
+                class="example-second-header-row">
+            </tr>
+
+            <tr mat-row *matRowDef="let row; columns:
+            displayedColumns;"></tr>
+
+        </table>
+        <div *ngIf="consultBlesseShow">
+            <div class="alert alert-danger" *ngIf="errorHandler.error">{{errorHandler.msg}}</div>
+            <form #formDirective="ngForm"
+            [formGroup]="formInfoBlesses" class="formTier"
+            (ngSubmit)="submitEditBlesse(formDirective)">
+            <div class="row">
+                <!--blessé -->
+                <mat-form-field class="col-md-5"
+                    appearance="outline">
+                    <mat-label>Type blessé/Décès </mat-label>
+                    <mat-select formControlName="typeBlesses">
+                        <ng-container *ngFor="let type of
+                            typeBlessesArray">
+                            <mat-option
+                                [value]="type.idParam">{{type.description}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="formInfoBlesses.controls.typeBlesses.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formInfoBlesses.controls.typeBlesses.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <!--nom  -->
+                <mat-form-field class="col-md-5"
+                    appearance="outline">
+                    <mat-label>Nom </mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="nomBlesse">
+                    <mat-error
+                        *ngIf="formInfoBlesses.controls.nomBlesse.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formInfoBlesses.controls.nomBlesse.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+                <!--prenom  -->
+                <mat-form-field class="col-md-5"
+                    appearance="outline">
+                    <mat-label>Prénom </mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="prenomBlesse">
+                    <mat-error
+                        *ngIf="formInfoBlesses.controls.prenomBlesse.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formInfoBlesses.controls.prenomBlesse.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <!--Date naissanceconducteru adverse-->
+                <mat-form-field class="col-md-5"
+                    appearance="outline">
+                    <mat-label>Date naissance </mat-label>
+                    <input matInput
+                        [matDatepicker]="pickerdateNaissanceBlesse"
+                        formControlName="dateNaissanceBlesse" [max]="today">
+                    <mat-datepicker-toggle matSuffix
+                        [for]="pickerdateNaissanceBlesse"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerdateNaissanceBlesse></mat-datepicker>
+                    <mat-error
+                        *ngIf="formInfoBlesses.controls.dateNaissanceBlesse.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formInfoBlesses.controls.dateNaissanceBlesse.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+                <!--etat sinsité-->
+                <mat-form-field class="col-md-5"
+                    appearance="outline">
+                    <mat-label>Etat sinistré </mat-label>
+                    <mat-select formControlName="etatBlesse">
+                        <ng-container *ngFor="let type of
+                            typesinistree">
+                            <mat-option
+                                [value]="type.idParam">{{type.description}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="formInfoBlesses.controls.etatBlesse.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formInfoBlesses.controls.etatBlesse.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <!--contact  -->
+                <mat-form-field class="col-md-5"
+                    appearance="outline">
+                    <mat-label>Contact </mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="contact">
+                    <mat-error
+                        *ngIf="formInfoBlesses.controls.contact.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formInfoBlesses.controls.contact.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="button-row">
+                <button mat-button class="btn
+                    btn-action " type="submit">Ajouter</button>
+            </div>
+        </form>
+        </div>
+    </div>

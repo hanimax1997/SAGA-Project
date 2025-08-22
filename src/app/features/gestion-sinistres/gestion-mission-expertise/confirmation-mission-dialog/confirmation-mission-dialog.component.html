@@ -1,0 +1,54 @@
+<h2 class="heading">Confirmation
+    <span style="float: right; font-size: 24px;">
+        <mat-icon aria-hidden="false" aria-label
+            class="material-symbols-outlined"
+            matTooltip matTooltipPosition="right" mat-dialog-close> close
+        </mat-icon>
+    </span>
+</h2>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mat-typography">
+    <div class="row form" *ngIf="typeConfirmation=='S13'">
+        <p >Voulez-vous vraiment annuler la mission ?</p>
+            <div class="row-button">
+                <button class="btn btn-cancel" mat-dialog-close type="button">Retour</button>
+                <button class="btn btn-delete" type="button" (click)="submitResponse()">Enregistrer</button>
+            </div>
+    </div>
+
+    <form *ngIf="typeConfirmation=='S11'" [formGroup]="formMotif"
+        (ngSubmit)="submitResponse()" class="row form">
+        <p>Voulez-vous vraiment rejeter la
+            mission
+            ?</p>
+        <!--numPolice -->
+        <mat-form-field class="col-md-5"
+            appearance="outline">
+            <mat-label>Motif </mat-label>
+            <input type="text" matInput placeholder
+                formControlName="motif">
+            <mat-error
+                *ngIf="formMotif.controls.motif.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formMotif.controls.motif.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <!-- <div class="row">
+            <button class="btn btn-cancel" [mat-dialog-close]="false"
+                type="button">Retour</button>
+            <button class="btn btn-delete" type="Submit">Confirmer</button>
+        </div> -->
+        <div class="row-button">
+            <button class="btn btn-cancel" mat-dialog-close type="button">Retour</button>
+            <button class="btn btn-delete" type="submit">Enregistrer</button>
+        </div>
+    </form>
+
+</mat-dialog-content>
+<!-- <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions> -->

@@ -1,0 +1,292 @@
+<div class="container-fluid">
+    <h1>Dashboard</h1>
+    <div class="row general-numbers">
+        <div class="col-md-2 card">
+            <div class="row">
+                <div class="col-md-8">
+                    <h2>Clients</h2>
+                    <span class="number">1 000 </span>
+                </div>
+                <div class="col-md-4 col-img">
+                    <img src="../../../assets/img/icons/clients.png"
+                        width="100%">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 card">
+            <div class="row">
+                <div class="col-md-8">
+                    <h2>Devis</h2>
+                    <span class="number">1 500 </span>
+                </div>
+                <div class="col-md-4 col-img">
+                    <img src="../../../assets/img/icons/budget.png"
+                        width="100%">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 card">
+
+            <div class="row">
+                <div class="col-md-8">
+                    <h2>Contrat</h2>
+                    <span class="number">950 </span>
+                </div>
+                <div class="col-md-4 col-img">
+                    <img src="../../../assets/img/icons/contract.png"
+                        width="100%">
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-2 card">
+
+            <div class="row">
+                <div class="col-md-8">
+                    <h2>Contrats arrivés à écheances</h2>
+                    <span class="number">50 </span>
+                </div>
+                <div class="col-md-4 col-img">
+                    <img src="../../../assets/img/icons/deadline.png"
+                        width="100%">
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="row products-numbers">
+        <div class="col-md-5 card">
+            <canvas baseChart
+                height="350"
+                width="350"
+                [type]="'pie'"
+                [datasets]="pieChartDatasets"
+                [labels]="pieChartLabels"
+                [options]="pieChartOptions"
+                [plugins]="pieChartPlugins"
+                [legend]="pieChartLegend">
+            </canvas>
+        </div>
+        <div class="col-md-5 card">
+            <h2>Sinistres</h2>
+            <div class="row progress">
+                <span>Sinistres ouverts</span>
+                <div class="value-bar">
+                    <mat-progress-bar mode="determinate" [value]="valueOuvert"></mat-progress-bar>
+                    <span>{{valueOuvert}}%</span>
+                </div>
+            </div>
+            <div class="row progress">
+                <span>Sinistres en cours </span>
+                <div class="value-bar">
+                    <mat-progress-bar mode="determinate" [value]="valueEnCours"></mat-progress-bar>
+                    <span>{{valueEnCours}}%</span>
+                </div>
+            </div>
+            <div class="row progress">
+                <span>Sinistres réglés</span>
+                <div class="value-bar">
+                    <mat-progress-bar mode="determinate"
+                        [value]="valueRegle"></mat-progress-bar>
+                    <span>{{valueRegle}}%</span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row products-details">
+        <div class="col-md-5 card">
+            <h2>Contrats Accidents individuels</h2>
+            <!-- <div mat-subheader> (%)</div> -->
+            <mat-list class="voyage">
+                <!--voyage-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>travel_explore</mat-icon>
+                        <div matListItemTitle>Voyage</div>
+                    </div>
+                    <div matListItemLine>20%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+                <!--GAV Collectif-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>travel_explore</mat-icon>
+                        <div matListItemTitle>GAV</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+
+
+            </mat-list>
+        </div>
+        <!--sante-->
+        <div class="col-md-5 card">
+            <h2>Contrats Santé</h2>
+            <!-- <div mat-subheader> (%)</div> -->
+            <mat-list class="sante">
+                <!--Santé Individuelle-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>personal_injury</mat-icon>
+                        <div matListItemTitle>Santé individuelle</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+                <!--Santé Collectif-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>personal_injury</mat-icon>
+                        <div matListItemTitle>Santé collective</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+
+
+            </mat-list>
+        </div>
+        <!--Auto-->
+        <div class="col-md-5 card">
+            <h2>Contrats Auto</h2>
+            <!-- <div mat-subheader> (%)</div> -->
+            <mat-list class="auto">
+                <!--Auto Mono-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>directions_car</mat-icon>
+                        <div matListItemTitle>Auto Mono</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+                <!--Auto flotte-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>directions_car</mat-icon>
+                        <div matListItemTitle>Auto flotte</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+                <!--Auto leasing-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>directions_car</mat-icon>
+                        <div matListItemTitle>Auto leasing</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+
+            </mat-list>
+        </div>
+        <!--entreprises et professionnels-->
+        <div class="col-md-5 card">
+            <h2>Contrats entreprises et professionnels </h2>
+            <!-- <div mat-subheader> (%)</div> -->
+            <mat-list class="entreprises">
+                <!--Incendie-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>local_fire_department</mat-icon>
+                        <div matListItemTitle>Incendie</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+                <!--Engineering-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>engineering</mat-icon>
+                        <div matListItemTitle>Engineering</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+                <!--Transport-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>directions_car</mat-icon>
+                        <div matListItemTitle>Transport</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+                <!--MRP-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>store</mat-icon>
+                        <div matListItemTitle>MRP</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+            </mat-list>
+        </div>
+        <!--habitation-->
+        <div class="col-md-5 card">
+            <h2>Contrats habitation</h2>
+            <!-- <div mat-subheader> (%)</div> -->
+            <mat-list class="habitation">
+                <!--Santé Individuelle-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>real_estate_agent</mat-icon>
+                        <div matListItemTitle>MRH</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+                <!--Santé Collectif-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>flood</mat-icon>
+                        <div matListItemTitle>CATNAT</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+
+
+            </mat-list>
+        </div>
+        <!--prevoyance-->
+        <div class="col-md-5 card">
+            <h2>Contrats Prévoyance</h2>
+            <!-- <div mat-subheader> (%)</div> -->
+            <mat-list class="prevoyance">
+                <!--DC entreprise-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>account_balance</mat-icon>
+                        <div matListItemTitle>DC entreprise</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+                <!--Prevoyance Individuelle-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>account_balance</mat-icon>
+                        <div matListItemTitle>Prevoyance Individuelle</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+                <!--Prevoyance Collective-->
+                <mat-list-item>
+                    <div class="icon-title">
+                        <mat-icon matListItemIcon>account_balance</mat-icon>
+                        <div matListItemTitle>Prevoyance Collective</div>
+                    </div>
+                    <div matListItemLine>40%</div>
+                    <mat-divider></mat-divider>
+                </mat-list-item>
+
+            </mat-list>
+        </div>
+    </div>
+</div>

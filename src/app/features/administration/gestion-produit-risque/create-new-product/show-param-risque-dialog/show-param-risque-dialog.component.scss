@@ -1,0 +1,40 @@
+//button action 
+button.btn.btn-action{
+    float: right;
+  }
+  //heading 
+  h2.heading{
+    color: #00008f;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+  }
+  .mat-dialog-content{
+    padding-top: 15px;
+  }
+  .mat-radio-button {
+    margin: 0 12px;
+  }
+  
+  
+  .buttons.row{
+    justify-content: space-between;
+    padding: 0px 21px;
+  }
+  //heading 
+  h2.heading{
+    color: #00008f;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+  }
+  .mat-dialog-content{
+    padding-top: 15px;
+  }
+  .mat-form-field{
+    padding-top: 15px;
+  }
+  .mat-error{
+    font-size: 11px;
+  }
+  .mat-input-element:disabled {
+    color: rgba(0,0,0,.80);
+  }

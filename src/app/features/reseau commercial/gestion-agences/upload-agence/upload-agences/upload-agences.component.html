@@ -1,0 +1,36 @@
+<h2 class="heading">Veuillez selectionner les agences a uploader sur SAP</h2>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mat-typography">
+    <form #formDirective="ngForm" class="row"
+        [formGroup]="formUploadSap"
+        (ngSubmit)="submitForm()">
+        <mat-form-field appearance="outline"
+        class="col-md-5 ">
+        <mat-label>Agences</mat-label>
+        <mat-select formControlName="agences" multiple
+            >
+            <ng-container *ngFor="let agence of
+                listAgence">
+                <mat-option [value]="agence.idAgence">
+                    {{agence.nomAgence}}
+                </mat-option>
+            </ng-container>
+        </mat-select>
+        <mat-error
+            *ngIf="formUploadSap.controls.agences.errors"
+            class="invalid-feedback">
+            <div
+                *ngIf="formUploadSap.controls.agences.errors.required">
+                ce champs est obligatoire</div>
+        </mat-error>
+    </mat-form-field>
+      
+    
+        <div class="button-row">
+            <button class="btn btn-cancel" [mat-dialog-close]="false"
+                type="button">Retour</button>
+            <button class="btn btn-action" type="submit">Ajouter</button>
+        </div>
+    </form>
+</mat-dialog-content>

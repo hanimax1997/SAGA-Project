@@ -1,0 +1,31 @@
+.mat-dialog-content{
+    padding-top: 15px;
+}
+.creation-form{
+    display: flex;
+    flex-direction: column;
+}
+.mat-form-field{
+    padding-top: 15px;
+}
+.mat-error{
+    font-size: 11px;
+}
+.btn.btn-cancel{
+    float: left;
+}
+.btn.btn-action{
+    float: right;
+}
+.col-field{
+    display: flex;
+    flex-direction: column;
+}
+.col-button-add{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.col-button-add .mat-icon{
+    vertical-align: middle;
+}

@@ -1,0 +1,45 @@
+<div mat-dialog-title class="dialog-header">
+    <span class="heading">Modifier documents</span>
+</div>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mat-typography" >
+
+    <form  #formDirective="ngForm"
+            [formGroup]="formEditDoc"
+            class="row form"
+            (ngSubmit)="submitEdit()">
+
+        <mat-form-field class="col-md-4"
+            appearance="outline">
+            <mat-label>type document</mat-label>
+            <input type="text"  matInput [value]="docInfo.document.description" [disabled]="true">
+            
+        </mat-form-field>
+        <mat-form-field class="col-md-4"
+            appearance="outline">
+            <mat-label>Statut document</mat-label>
+            <mat-select formControlName="statutDoc">
+                <ng-container *ngFor="let type of statuDocumentArray">
+                    <mat-option [value]="type.idParam">{{type.description}}</mat-option>
+                </ng-container>
+            </mat-select>
+            
+        </mat-form-field>
+        <!--description -->
+        <mat-form-field class="col-md-4"
+            appearance="outline">
+            <mat-label>description</mat-label>
+            <textarea formControlName="description"
+                matInput
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="10"></textarea>
+          
+        </mat-form-field>
+        <div class="row-button">           
+            <button class="btn btn-action col-button-add" type="submit">Enregistrer</button>
+        </div>
+    </form>
+</mat-dialog-content>

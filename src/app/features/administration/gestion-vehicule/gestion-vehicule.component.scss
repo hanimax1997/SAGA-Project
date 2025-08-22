@@ -1,0 +1,20 @@
+@import "../../../shared/styles/tables-gestions.scss";
+.filtre .row.formFiltre{
+    width: 100%;
+    padding: 0 2rem;
+    margin-top: 2rem;
+}
+.row.buttons{
+    justify-content: flex-end;
+}
+.row.buttons .mat-icon{
+    color:#00008F;
+    cursor: pointer;
+    
+}
+.btn.btn-action{
+    width: fit-content;
+}
+.filtre ::ng-deep .mat-form-field-wrapper{
+    padding-bottom:0.5rem ;
+}

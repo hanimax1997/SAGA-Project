@@ -1,0 +1,157 @@
+
+<!--begin::Page-->
+<div class="aside-container" *ngIf="isExpanded">
+  <div class="flex-column-fluid" id="aside_menu">
+    <!-- brand sidebar -->
+    <div class="navbar-header">
+      <div class="brand-wrapper">
+        <!-- Brand -->
+        <div class="brand-name-wrapper">
+          <img src="../../../assets/img/logo/logo-side.png" width="124px" height="39px">
+
+          <button mat-icon-button class="navbar-brand" (click)="hide()">
+            <mat-icon class="material-symbols-outlined">menu</mat-icon>
+          </button>
+        </div>
+
+      </div>
+
+    </div> 
+
+    <!--begin::Aside Menu-->
+
+    <!--begin::Menu-->
+    <div class="menu menu-column "
+      id="mainAccordion" data-kt-menu="true"  >
+      <mat-accordion class="lvl1">
+        <mat-expansion-panel *ngFor="let menuItem of menuItems"
+          [disabled]="menuItem.children.length==0" hideToggle="{{!isExpanded}}">
+          <mat-expansion-panel-header >
+            <mat-panel-title >
+              <!--no submenu-->
+              <a *ngIf="menuItem.children.length==0" 
+              routerLinkActive="active"
+                class="nav-link " [routerLink]="[menuItem.path]">
+                <div class="nav-link-content">
+                  <mat-icon aria-hidden="false"
+                    [attr.aria-label]="menuItem.icon"
+                    class="material-symbols-outlined">{{menuItem.icon}}</mat-icon>
+                  <span > {{menuItem.title}}</span>
+                </div>
+              </a>
+              <!--with submenu-->
+
+              <a *ngIf="menuItem.children.length!=0" class="nav-link "
+                 routerlinkactive="active"
+                [attr.data-target]="'#' + menuItem.name">
+                <div class="nav-link-content">
+                  <mat-icon aria-hidden="false"
+                    [attr.aria-label]="menuItem.icon"
+                    class="material-symbols-outlined">{{menuItem.icon}}</mat-icon>
+                  <span *ngIf="isExpanded"> {{menuItem.title}}</span>
+                </div>
+              </a>
+            </mat-panel-title>
+
+          </mat-expansion-panel-header>
+
+          <mat-accordion class="lvl2">
+            <mat-expansion-panel *ngFor="let children of menuItem.children"
+              [disabled]="children.children.length==0">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <!--no submenu-->
+                  <a *ngIf="children.children.length==0"
+                    routerLinkActive="active"
+                    class="nav-link ">
+                    <div class="nav-link-content">
+                      <mat-icon aria-hidden="false"
+                        [attr.aria-label]="children.icon"
+                        class="material-symbols-outlined">{{children.icon}}</mat-icon>
+                      <span *ngIf="isExpanded"> {{children.title}}</span>
+                    </div>
+                  </a>
+                  <!--with submenu-->
+
+                  <a *ngIf="children.children.length!=0" class="nav-link "
+                    routerlinkactive="active">
+                    <div class="nav-link-content">
+                      <mat-icon aria-hidden="false"
+                        [attr.aria-label]="children.icon"
+                        class="material-symbols-outlined">{{children.icon}}</mat-icon>
+                      <span *ngIf="isExpanded"> {{children.title}}</span>
+                    </div>
+                  </a>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <mat-accordion class="lvl3">
+                <mat-expansion-panel *ngFor="let subChildren of
+                  children.children"
+                  [disabled]="subChildren.children.length==0">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <!--no submenu-->
+                      <a *ngIf="subChildren.children.length==0 &&
+                      subChildren.name!='devis'"
+                        routerLinkActive="active"
+                        (click)="navigateDevis(subChildren.path,children.code,children.name,children.type)"
+                        class="nav-link ">
+                        <div class="nav-link-content">
+                          <mat-icon aria-hidden="false"
+                            [attr.aria-label]="subChildren.icon"
+                            class="material-symbols-outlined">{{subChildren.icon}}</mat-icon>
+                          <span *ngIf="isExpanded">{{subChildren.title}}</span>
+                        </div>
+                      </a>
+                      <!--no submenu-->
+                      <a *ngIf="subChildren.children.length==0 &&
+                      subChildren.name=='devis'"
+                        routerLinkActive="active"
+                        (click)="navigateDevis(subChildren.path,children.code,children.name,children.type)"
+                      
+                        class="nav-link ">
+                        <!-- [routerLink]="[subChildren.path,children.code, children.name]" -->
+                        <div class="nav-link-content">
+                          <mat-icon aria-hidden="false"
+                            [attr.aria-label]="subChildren.icon"
+                            class="material-symbols-outlined">{{subChildren.icon}}</mat-icon>
+                          <span *ngIf="isExpanded"> {{subChildren.title}}</span>
+                        </div>
+                      </a>
+                      <!--with submenu-->
+
+                      <a *ngIf="subChildren.children.length!=0" class="nav-link
+                        "
+                        drouterlinkactive="active"
+                        [routerLink]="[subChildren.path]">
+                        <div class="nav-link-content">
+                          <mat-icon aria-hidden="false"
+                            [attr.aria-label]="subChildren.icon"
+                            class="material-symbols-outlined">{{subChildren.icon}}</mat-icon>
+                          <span *ngIf="isExpanded"> {{subChildren.title}} </span>
+                        </div>
+                      </a>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </mat-expansion-panel>
+          </mat-accordion>
+
+          <mat-divider></mat-divider>
+        </mat-expansion-panel>
+
+      </mat-accordion>
+
+
+
+      <!--end::Aside Menu-->
+    </div>
+    <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+      <div class="content d-flex flex-column flex-column-fluid"
+        id="kt_content">
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,223 @@
+<div class="container " #containerRef id="containerRef">
+    <h2 class="header-title">
+       modifier véhicule</h2>
+    <form #formDirective="ngForm" [formGroup]="formEditVehicule" *ngIf="formEditVehicule" class
+        (ngSubmit)="submitVehicule()">
+        <div class="row">
+            <!-- Marque-->
+
+            <mat-form-field class="col-md-5" appearance="outline">
+                <mat-label>Marque</mat-label>
+                <mat-select formControlName="marque"
+                    (selectionChange)="changeMarque($event.value)">
+                    <ng-container *ngFor="let marque of marques">
+                        <mat-option
+                            [value]="marque.idParam">
+                            {{marque.marque}}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error
+                    *ngIf="formEditVehicule.controls.marque.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formEditVehicule.controls.marque.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <!-- modeles    -->
+                
+            <mat-form-field class="col-md-5" appearance="outline">
+                <mat-label>Modéle</mat-label>
+                <mat-select formControlName = "modele"
+                    (selectionChange)="changeModele($event.value)">
+                    <mat-option value="new">
+                        Ajouter
+                        un modele</mat-option>
+                    <ng-container *ngFor="let modele of modeles">
+                        <mat-option
+                            [value]="modele.idParam">
+                            {{modele.modele}}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error
+                    *ngIf="formEditVehicule.controls.modele.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formEditVehicule.controls.modele.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+
+
+            <mat-form-field class="col-md-5" appearance="outline">
+                <mat-label>Type Vehicule</mat-label>
+                <mat-select formControlName="typeVehicule">
+                    <ng-container *ngFor="let genre of genres">
+                        <mat-option
+                            [value]="genre.idParam">
+                            {{genre.description}}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error
+                    *ngIf="formEditVehicule.controls.typeVehicule.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formEditVehicule.controls.typeVehicule.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+        <!--
+
+
+        <mat-form-field class="col-md-5" appearance="outline">
+                <mat-label>Marque</mat-label>
+                <mat-select formControlName="marque"
+                    (selectionChange)="changeMarque($event.value)">
+                    <ng-container *ngFor="let marque of marques">
+                        <mat-option
+                            [value]="marque.idParam">
+                            {{marque.marque}}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error
+                    *ngIf="formEditVehicule.controls.marque.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formEditVehicule.controls.marque.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+
+
+        -->    
+
+
+          <!--
+
+
+
+          -->  
+            <!-- Modele-->
+           <!--
+
+<mat-form-field class="col-md-5" appearance="outline">
+                <mat-label>Modéle</mat-label>
+                <mat-select formControlName="modele"
+                    (selectionChange)="changeModele($event.value)">
+                    <mat-option value="new">
+                        Ajouter
+                        un modele</mat-option>
+                    <ng-container *ngFor="let modele of modeles">
+                        <mat-option
+                            [value]="modele.idParam">
+                            {{modele.modele}}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error
+                    *ngIf="formEditVehicule.controls.modele.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formEditVehicule.controls.modele.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+
+           --> 
+        </div>
+        <div class="row">
+            <!-- typeVehicule-->
+       
+<!--       <mat-form-field class="col-md-5" appearance="outline">
+                <mat-label>Puissance Fiscale</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="puissanceFiscale">
+                <mat-error
+                    *ngIf="formEditVehicule.controls.puissanceFiscale.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formEditVehicule.controls.puissanceFiscale.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field class="col-md-5" appearance="outline">
+                <mat-label>Nombre de places</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="nbPlace">
+                <mat-error
+                    *ngIf="formEditVehicule.controls.nbPlace.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formEditVehicule.controls.nbPlace.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-5" appearance="outline">
+                <mat-label>Poids total en charge </mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="poidsTotalEnCharge">
+                <mat-error
+                    *ngIf="formEditVehicule.controls.poidsTotalEnCharge.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formEditVehicule.controls.poidsTotalEnCharge.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field class="col-md-5" appearance="outline">
+                <mat-label>Energie</mat-label>
+                <mat-select formControlName="energie">
+                    <ng-container *ngFor="let energie of energies">
+                        <mat-option
+                            [value]="energie.idParam">
+                            {{energie.description}}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error
+                    *ngIf="formEditVehicule.controls.energie.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formEditVehicule.controls.energie.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field class="col-md-6" appearance="outline">
+                <mat-label>Date Début</mat-label>
+                <input matInput [matDatepicker]="dateDebut" (dateChange)="debutDateChange($event.value)"
+                    formControlName="dateDebut">
+                <mat-datepicker-toggle matSuffix [for]="dateDebut"></mat-datepicker-toggle>
+                <mat-datepicker #dateDebut></mat-datepicker>
+                <mat-error *ngIf="formEditVehicule.controls.dateDebut.errors" class="invalid-feedback">
+                    <div *ngIf="formEditVehicule.controls.dateDebut.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-md-6" appearance="outline">
+                <mat-label>Date Fin</mat-label>
+                <input matInput [matDatepicker]="dateFin" formControlName="dateFin" [min]="minDate">
+                <mat-datepicker-toggle matSuffix [for]="dateFin"></mat-datepicker-toggle>
+                <mat-datepicker #dateFin></mat-datepicker>
+                <mat-error *ngIf="formEditVehicule.controls.dateFin.hasError('matDatepickerMin')" class="invalid-feedback">
+                    <div> Date fin est inférieur à la date début</div>
+                </mat-error>
+            </mat-form-field>-->
+         </div>
+           <div class="col-md-12 row-button">
+            <button class="btn btn-action" type="submit">Ajouter
+            </button>
+        </div>
+
+    </form>
+</div>

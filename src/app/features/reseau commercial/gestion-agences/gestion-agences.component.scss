@@ -1,0 +1,121 @@
+.container{
+    background-color: #ffff;
+    padding: 40px 0px;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+// table 
+table.table{
+    width: 100%;
+    margin-top: 2rem;
+    
+}
+.table th,.table td{
+    font-size: 16px;
+}
+        
+.mat-row:nth-child(even),.mat-header-row {
+    background-color: rgb(247,247,249);
+}
+.mat-header-row th{
+    color: #00008F;
+}
+.row-button{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding: 0rem 2rem;
+}
+.mat-header-cell {
+    color: #333333;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 15px;
+    width: 165px;
+
+}
+.header-tab{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mat-paginator{
+    background-color: transparent;
+    margin: auto;
+    width: 80%;
+    margin-top: 20px;
+}
+.example-first-header-row{
+    background-color: #00008f;
+}
+.example-first-header-row th.mat-header-cell{
+    border: none;
+    color: #ffff;
+    font-size: 18px;
+}
+.mat-column-valeur.mat-cell{
+    text-align: center;
+}
+
+//icon 
+.mat-icon{
+    height: 100%;
+    font-size: 36px;
+    width: fit-content;
+}
+.mat-cell .mat-icon{
+    color: #00008f;
+}
+.mat-header-cell.mat-icon{
+    color: #ffffff;
+}
+.mat-cell .mat-icon:hover,
+.mat-header-cell .mat-icon:hover{
+    color: #d14723;
+    cursor: pointer;
+}
+::ng-deep .mat-tooltip {
+    font-size: 14px;
+}
+
+
+
+.mat-menu-item {
+    font-size: 16px;
+
+}
+.mat-menu-item .mat-icon{
+    font-size: 21px;
+    height: fit-content;
+}
+.mat-menu-item:hover:not([disabled]) {
+    color: #00008f
+}
+
+.mat-menu-item:hover:not([disabled]) .mat-icon {
+    color: #00008f
+}
+
+.title-table{
+
+    margin-bottom: 0rem;
+    font-weight: 800 !important;
+    font-size: 23px !important;
+    color: #00008F !important;
+}
+.header{
+    display: flex;align-items: center;justify-content: space-between;
+    padding: 0px   2rem;
+}
+.header .mat-icon{
+    height: fit-content;
+    font-size: 29px;
+    margin-right: 1rem;
+    width: fit-content;
+}
+.mat-divider{
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}

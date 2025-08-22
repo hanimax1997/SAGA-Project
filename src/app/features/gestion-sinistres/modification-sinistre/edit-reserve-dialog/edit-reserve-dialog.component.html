@@ -1,0 +1,20 @@
+
+<h2 class="heading">Modifier La reserve Actuelle ?</h2>
+<mat-divider></mat-divider>
+
+<mat-dialog-content>
+
+    <form>
+        <mat-form-field>
+          <p>La nouvelle reserve est :</p>
+          <input matInput [(ngModel)]="data.reservation" name="reservation">
+        </mat-form-field>
+      </form>
+
+      <mat-dialog-actions>
+        <button mat-button (click)="onClose()">Annuler</button>
+        <button mat-button (click)="onClick()">Sauvegarder</button>
+      </mat-dialog-actions>
+
+</mat-dialog-content>
+

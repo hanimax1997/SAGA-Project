@@ -1,0 +1,111 @@
+<h2 class="heading">Créer une taxe</h2>
+<mat-divider></mat-divider>
+<div *ngIf="taxeCreationSuccess" class="alert alert-success">La taxe N°{{idTaxe}} a été créer avec succés</div>
+<div *ngIf="taxeCreationError" class="alert alert-danger"> {{messageError}} </div>
+<mat-dialog-content class="mat-typography">
+    <form #formDirective="ngForm" [formGroup]="formCreationTaxe" (ngSubmit)="submitCreationTaxe(formDirective)"
+        class="login-form">
+
+        <!-- id natinal -->
+        <mat-form-field appearance="outline" class="col-md-12 login-field">
+            <mat-label>Id National</mat-label>
+            <input matInput formControlName="idNational">
+            <mat-error *ngIf="formCreationTaxe.controls.idNational.errors" class="invalid-feedback">
+                <div *ngIf="formCreationTaxe.controls.idNational.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <!-- Description -->
+        <mat-form-field appearance="outline" class="col-md-12 login-field">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="description">
+            <mat-error *ngIf="formCreationTaxe.controls.description.errors" class="invalid-feedback">
+                <div *ngIf="formCreationTaxe.controls.description.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <!-- Type taxe -->
+
+        <mat-form-field appearance="outline" class="col-md-6">
+            <mat-label>Type Taxe</mat-label>
+            <mat-select formControlName="valeurType" (selectionChange)="changeTypeTaxe($event.value)">
+                <mat-option *ngFor="let type of typeTaxes" [value]="type.id">
+                    {{type.value}}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formCreationTaxe.controls.valeurType.errors" class="invalid-feedback">
+                <div *ngIf="formCreationTaxe.controls.valeurType.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <!-- valeur taxe -->
+        <mat-form-field appearance="outline" class="col-md-6 login-field">
+            <mat-label>Valeur Taxe</mat-label>
+            <input matInput formControlName="valeur">
+            <span matSuffix>{{iconValue}}</span>
+            <mat-error *ngIf="formCreationTaxe.controls.valeur.errors" class="invalid-feedback">
+                <div *ngIf="formCreationTaxe.controls.valeur.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <!-- valeur min -->
+        <mat-form-field appearance="outline" class="col-md-6 login-field">
+            <mat-label>Valeur min</mat-label>
+            <input matInput formControlName="valeurMin">
+            <span matSuffix>DA</span>
+            <mat-error *ngIf="formCreationTaxe.controls.valeurMin.errors" class="invalid-feedback">
+                <div *ngIf="formCreationTaxe.controls.valeurMin.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <!-- valeur max -->
+        <mat-form-field appearance="outline" class="col-md-6 login-field">
+            <mat-label>Valeur max</mat-label>
+            <input matInput formControlName="valeurMax">
+            <span matSuffix>DA</span>
+            <mat-error *ngIf="formCreationTaxe.controls.valeurMax.errors" class="invalid-feedback">
+                <div *ngIf="formCreationTaxe.controls.valeurMax.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <!-- date debut-->
+        <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Date Début</mat-label>
+            <input matInput [matDatepicker]="dateDebut" (dateChange)="debutDateChange($event.value)"
+                formControlName="dateDebut">
+            <mat-datepicker-toggle matSuffix [for]="dateDebut"></mat-datepicker-toggle>
+            <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+            <mat-datepicker #dateDebut></mat-datepicker>
+            <mat-error *ngIf="formCreationTaxe.controls.dateDebut.errors" class="invalid-feedback">
+                <div *ngIf="formCreationTaxe.controls.dateDebut.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <!-- date Fin -->
+        <!-- date debut-->
+        <mat-form-field class="col-md-6" appearance="outline">
+            <mat-label>Date Fin</mat-label>
+            <input matInput [matDatepicker]="dateFin" formControlName="dateFin" [min]="minDate">
+            <mat-datepicker-toggle matSuffix [for]="dateFin"></mat-datepicker-toggle>
+            <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+            <mat-datepicker #dateFin></mat-datepicker>
+            <mat-error *ngIf="formCreationTaxe.controls.dateFin.hasError('matDatepickerMin')" class="invalid-feedback">
+                <div> Date fin est inférieur à la date début</div>
+
+
+            </mat-error>
+
+        </mat-form-field>
+        <div class="row-button">
+            <button class="btn btn-cancel" mat-dialog-close>Annuler</button>
+            <button class="btn btn-action" type="submit">Envoyer</button>
+
+        </div>
+
+    </form>
+</mat-dialog-content>
+<!-- <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions> -->

@@ -1,0 +1,71 @@
+<h2 class="heading">Modifier une question
+    <span style="float: right; font-size: 24px;" >
+        <mat-icon aria-hidden="false" aria-label="" class="material-symbols-outlined"
+                matTooltip="" matTooltipPosition="right" mat-dialog-close> close
+              </mat-icon>
+    </span>
+</h2>
+<mat-divider></mat-divider>
+<!-- <div *ngIf="questionEditSuccess" class="alert alert-success">La question N°{{idQuestion}} a été modifier avec succés</div> -->
+<div *ngIf="questionEditError" class="alert alert-danger"> {{messageError}} </div>
+<mat-dialog-content class="mat-typography">
+    <form #formDirective="ngForm" [formGroup]="formEditQuestion"
+        (ngSubmit)="submitEditQuestion(formDirective)" class="login-form" *ngIf="formEditQuestion">
+    
+        <mat-form-field class="col-md-12" appearance="outline">
+            <mat-label>Description</mat-label>
+            <input type="text" matInput placeholder="" formControlName="description">
+            <mat-error
+                *ngIf="formEditQuestion.controls.description.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formEditQuestion.controls.description.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+    
+        <mat-form-field class="col-md-4" style="padding-right: 3%;" appearance="outline">
+            <mat-label>Numero d'Ordre</mat-label>
+            <input type="nummber" matInput placeholder="" formControlName="numeroOrdre">
+            <mat-error
+                *ngIf="formEditQuestion.controls.numeroOrdre.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formEditQuestion.controls.numeroOrdre.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+    
+        <mat-form-field class="col-md-4" style="padding-left: 3%; padding-right: 3%;" appearance="outline">
+            <mat-label>Date debut</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dateDebut" >
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker> 
+            <mat-error
+                *ngIf="formEditQuestion.controls.dateDebut.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formEditQuestion.controls.dateDebut.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+    
+        <mat-form-field class="col-md-4" style="padding-left: 3%;" appearance="outline">
+            <mat-label>Date fin</mat-label>
+            <input matInput [min]="minDate" [matDatepicker]="picker2" formControlName="dateFin">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+
+        <div class="row-button">
+            <button class="btn btn-action"
+                type="submit" >Envoyer</button>
+            <button  class="btn btn-cancel"
+                mat-dialog-close >Annuler</button>
+        </div>
+    </form>
+</mat-dialog-content>
+<!-- <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions> -->

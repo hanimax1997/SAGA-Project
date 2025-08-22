@@ -1,0 +1,166 @@
+
+<div class="container " *ngIf="informationsContrat">
+    <h2 class="header-title">
+        <mat-icon aria-hidden="false"
+            class="material-symbols-outlined"
+            matTooltip="Retour"
+            matTooltipPosition="left"
+            (click)="goBack()">arrow_circle_left</mat-icon>
+        Consultation du contrat N°{{informationsContrat.numPolice}}</h2>
+
+    <div class="row infos">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 key">N° police: </div>
+                <div
+                    class="col-md-6 value">{{informationsContrat.numPolice}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="row infos">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 key">produit: </div>
+                <div
+                    class="col-md-6 value">{{informationsContrat.produit.description}}</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 key">sous produit:</div>
+                <div class="col-md-6 value">{{informationsContrat.sousProduit.description}}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row infos">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 key">date operation: </div>
+                <div
+                    class="col-md-6 value">{{informationsContrat.dateOperation|
+                        dateFormatPipe}}</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 key">mouvement: </div>
+                <div
+                    class="col-md-6 value">{{informationsContrat.mouvement}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="row infos">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 key">date début: </div>
+                <div
+                    class="col-md-6 value">{{informationsContrat.dateDebut|
+                        dateFormatPipe}}</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 key">date début: </div>
+                <div
+                    class="col-md-6 value">{{informationsContrat.dateFin|
+                        dateFormatPipe}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="row infos">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 key">date début: </div>
+                <div
+                    class="col-md-6 value">{{informationsContrat.primeNette}}</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 key">date début: </div>
+                <div
+                    class="col-md-6 value">{{informationsContrat.primeTotale}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="row infos">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 key">agence: </div>
+                <div class="col-md-6 value">{{informationsContrat.agence}}</div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-6 key">capital </div>
+                <div
+                    class="col-md-6 value">{{informationsContrat.capital}}</div>
+            </div>
+        </div>
+    </div>
+    <h2 class="seconde-title">
+    Liste des sites relatif au contrat N°{{informationsContrat.numPolice}}</h2>
+  
+    <table mat-table [dataSource]="dataSource" class="gestion-table">
+
+        <!-- num Plice Column -->
+        <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef> N° </th>
+            <td mat-cell *matCellDef="let element">{{element.id}} </td>
+        </ng-container>
+         <!--	Valeur Assurée Column -->
+         <ng-container matColumnDef="valeurAssure">
+            <th mat-header-cell *matHeaderCellDef> Valeur Assurée </th>
+            <td mat-cell *matCellDef="let element"> {{element.valAssure}} </td>
+        </ng-container>
+         <!--	Valeur contenu Column -->
+         <ng-container matColumnDef="contenu">
+            <th mat-header-cell *matHeaderCellDef> Valeur Contenu </th>
+            <td mat-cell *matCellDef="let element"> {{element.contenu}} </td>
+        </ng-container>
+         <!--	Valeur contenant Column -->
+         <ng-container matColumnDef="contenant">
+            <th mat-header-cell *matHeaderCellDef> Valeur Contenant </th>
+            <td mat-cell *matCellDef="let element"> {{element.contenant}} </td>
+        </ng-container>
+         <!--	Valeur risque locatif Column -->
+         <ng-container matColumnDef="risqueLocatif">
+            <th mat-header-cell *matHeaderCellDef> Valeur Risque locatif </th>
+            <td mat-cell *matCellDef="let element"> {{element.risqueLocatif}} </td>
+        </ng-container>
+         <!--	Valeur BI Column -->
+         <ng-container matColumnDef="bi">
+            <th mat-header-cell *matHeaderCellDef> Valeur BI </th>
+            <td mat-cell *matCellDef="let element"> {{element.bi}} </td>
+        </ng-container>
+        <!-- SMP -->
+        <ng-container matColumnDef="smp">
+            <th mat-header-cell *matHeaderCellDef> SMP </th>
+            <td mat-cell *matCellDef="let element"> {{element.smp}} </td>
+        </ng-container>   
+        <!-- Adress -->
+        <ng-container matColumnDef="adresse">
+            <th mat-header-cell *matHeaderCellDef> Adresse </th>
+            <td mat-cell *matCellDef="let element"> {{element.adresse}} </td>
+        </ng-container>
+         <!-- longitude -->
+         <ng-container matColumnDef="longitude">
+            <th mat-header-cell *matHeaderCellDef> Longitude </th>
+            <td mat-cell *matCellDef="let element"> {{element.longitude}} </td>
+        </ng-container>
+         <!-- latitude -->
+         <ng-container matColumnDef="latitude">
+            <th mat-header-cell *matHeaderCellDef> Latitude </th>
+            <td mat-cell *matCellDef="let element"> {{element.latitude}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"
+            class="example-second-header-row">
+        </tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+<mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10,50]"
+    aria-label="Select page of users"></mat-paginator>
+
+</div>

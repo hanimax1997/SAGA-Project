@@ -1,0 +1,342 @@
+<div class="container">
+    <h2 class="header-title"><mat-icon class="mat-icon notranslate
+            material-symbols-outlined material-icons mat-icon-no-color"
+            aria-label>directions_boat</mat-icon>
+        Produits Commercial line </h2>
+
+    <form #formDirective="ngForm" [formGroup]="formCreation" class
+        (ngSubmit)="submitProduct(formDirective)" *ngIf="formCreation">
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5 ">
+                <mat-label>Produit</mat-label>
+                <mat-select formControlName="produit"
+                    (selectionChange)='getRelation($event.value)'>
+                    <ng-container *ngFor="let produit of produits">
+                        <mat-option
+                            [value]="produit.idParam">
+                            {{produit.description}}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error
+                    *ngIf="formCreation.controls.produit.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.produit.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+                class="col-md-5 ">
+                <mat-label>Sous produit</mat-label>
+                <mat-select formControlName="SousProduit">
+                    <ng-container *ngFor="let sousProduit of sousProduit">
+                        <mat-option
+                            [value]="sousProduit.idParam">
+                            {{sousProduit.description}}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error
+                    *ngIf="formCreation.controls.SousProduit.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.SousProduit.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>N° police</mat-label>
+                <input type="text" matInput placeholder
+                    formControlName="numPolice">
+                <mat-error
+                    *ngIf="formCreation.controls.numPolice.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.numPolice.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>N° quittance</mat-label>
+                <input type="text" matInput placeholder
+                    formControlName="numQuittance">
+                <mat-error
+                    *ngIf="formCreation.controls.numQuittance.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.numQuittance.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+
+        </div>
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>Nom client </mat-label>
+                <input type="text" matInput placeholder
+                    formControlName="nomClient">
+                <mat-error
+                    *ngIf="formCreation.controls.nomClient.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.nomClient.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+           
+        </div>
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>Prime totale</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="primeTotale">
+                <mat-error
+                    *ngIf="formCreation.controls.primeTotale.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.primeTotale.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>Prime nette</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="primeNette">
+                <mat-error
+                    *ngIf="formCreation.controls.primeNette.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.primeNette.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+
+        </div>
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>Cout de police</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="coutPolice">
+                <mat-error
+                    *ngIf="formCreation.controls.coutPolice.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.coutPolice.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>TVA</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="tva">
+                <mat-error
+                    *ngIf="formCreation.controls.tva.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.tva.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+
+        </div>
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>Timbre dimension</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="timbreDimension">
+                <mat-error
+                    *ngIf="formCreation.controls.timbreDimension.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.timbreDimension.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field class="col-md-5"
+                appearance="outline">
+                <mat-label>Date début</mat-label>
+                <input matInput
+                    [matDatepicker]="pickerdateDebut"
+                    formControlName="dateDebut" (dateChange)="dateDebut=$event.value">
+                <mat-datepicker-toggle matSuffix
+                    [for]="pickerdateDebut"></mat-datepicker-toggle>
+                <mat-datepicker #pickerdateDebut></mat-datepicker>
+                <mat-error
+                    *ngIf="formCreation.controls.dateDebut.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.dateDebut.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-5"
+                appearance="outline">
+                <mat-label>Date fin</mat-label>
+                <input matInput
+                    [matDatepicker]="pickerdateFin"
+                    formControlName="dateFin" [min]="dateDebut">
+                <mat-datepicker-toggle matSuffix
+                    [for]="pickerdateFin"></mat-datepicker-toggle>
+                <mat-datepicker #pickerdateFin></mat-datepicker>
+                <mat-error
+                    *ngIf="formCreation.controls.dateFin.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.dateFin.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+
+        </div>
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>Mouvement</mat-label>
+                <input type="text" matInput placeholder
+                    formControlName="mouvement">
+                <mat-error
+                    *ngIf="formCreation.controls.mouvement.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.mouvement.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="col-md-5"
+                appearance="outline">
+                <mat-label>Date opération</mat-label>
+                <input matInput
+                    [matDatepicker]="pickerDateOperation"
+                    formControlName="dateOperation">
+                <mat-datepicker-toggle matSuffix
+                    [for]="pickerDateOperation"></mat-datepicker-toggle>
+                <mat-datepicker #pickerDateOperation></mat-datepicker>
+                <mat-error
+                    *ngIf="formCreation.controls.dateOperation.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.dateOperation.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5 ">
+                <mat-label>Agence</mat-label>
+                <mat-select formControlName="agence">
+                    <ng-container *ngFor="let agence of agences">
+                        <mat-option
+                            [value]="agence.idAgence">
+                            {{agence.nomAgence}}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error
+                    *ngIf="formCreation.controls.agence.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.agence.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>Capital</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="capital">
+                <mat-error
+                    *ngIf="formCreation.controls.capital.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.capital.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>Limite</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="limite">
+                <mat-error
+                    *ngIf="formCreation.controls.limite.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.limite.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>Limite Rc</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="limiteRc">
+                <mat-error
+                    *ngIf="formCreation.controls.limiteRc.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.limiteRc.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            
+        </div>
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5 ">
+                <mat-label>Canal</mat-label>
+                <mat-select formControlName="canal">
+                    <ng-container *ngFor="let canal of canalList">
+                        <mat-option
+                            [value]="canal.idParam">
+                            {{canal.description}}
+                        </mat-option>
+                    </ng-container>
+                </mat-select>
+                <mat-error
+                    *ngIf="formCreation.controls.canal.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.canal.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+            class="col-md-5 ">
+            <mat-label>Nombre site </mat-label>
+                <input type="number" matInput placeholder
+                formControlName="nbSite">
+                <mat-error
+                    *ngIf="formCreation.controls.nbSite.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.nbSite.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+          
+        </mat-form-field>
+        </div>
+        <div class="col-md-12 row-button">
+            <button class="btn btn-cancel" [routerLink]="['..']">Annuler
+            </button>
+            <button class="btn btn-action">Enregistrer
+            </button>
+        </div>
+    </form>
+</div>

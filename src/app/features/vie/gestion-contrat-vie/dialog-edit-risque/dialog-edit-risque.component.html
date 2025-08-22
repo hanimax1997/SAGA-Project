@@ -1,0 +1,462 @@
+<h2 class="heading">Modification  risque</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="formEditRisque" #formDirective="ngForm">
+            
+        <!-- info risque-->
+                  
+        <div class="row" style="padding: 1rem 2rem;">
+            <ng-container *ngFor="let rs of paraRisqueProduit">       
+                <mat-form-field appearance="outline"
+                    class="col-md-5"
+                    *ngIf="rs.typeChamp?.code=='L01'">
+                    <mat-label>{{rs.libelle}}
+                    </mat-label>
+                    <mat-select
+                        formControlName="{{rs.formName}}"
+                         (selectionChange)="getRelation(rs.typeChamp?.code,rs.isParent,rs.idParamRisque,$event.value,rs.formName)">
+                        <ng-container *ngFor="let response of rs.reponses">
+                            <mat-option
+                                [value]="response.idParam">
+                                {{response.description}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="formEditRisque.get(rs.formName).errors?.['required']">
+                        ce champs est obligatoire
+                    </mat-error>
+                    <mat-error
+                        *ngIf="formEditRisque.get(rs.formName).errors?.bloquant
+                        " class="invalid-feedback">
+                        {{formEditRisque.get(rs.formName).errors?.msg}}
+                    </mat-error>
+                </mat-form-field>
+                <!--from table -->
+                <mat-form-field appearance="outline"
+                    class="col-md-5"
+                    *ngIf=" rs.typeChamp?.code=='L08'">
+                    <mat-label>{{rs.libelle}}
+                    </mat-label>
+                    <mat-select
+                        formControlName="{{rs.formName}}"
+                        (selectionChange)="getRelation(rs.typeChamp?.code,rs.isParent,rs.idParamRisque,$event.value,rs.formName)">
+                        <ng-container *ngFor="let response of rs.reponses">
+                            <mat-option 
+                                [value]="response.id">
+                                {{response.description}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="formEditRisque.get(rs.formName).errors?.['required']">
+                        ce champs est obligatoire
+                    </mat-error>
+                    <mat-error
+                        *ngIf="formEditRisque.get(rs.formName).errors?.bloquant
+                    " class="invalid-feedback">
+                        {{formEditRisque.get(rs.formName).errors?.msg}}
+                    </mat-error>
+                </mat-form-field>                                       
+                <!--input Text-->
+                <mat-form-field appearance="outline"
+                    class="col-md-5"
+                    *ngIf="(rs.typeChamp?.code=='L02' || rs.typeChamp?.code=='L07')&&
+                    rs.codeParam!='P25'
+                    &&
+                    rs.codeParam!='P26'">
+                    <mat-label>{{rs.libelle}}</mat-label>
+                    <input matInput
+                        type="text"
+                        formControlName={{rs.formName}}>
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="formEditRisque.get(rs.formName).errors?.['required']">
+                        ce champs est obligatoire
+                    </mat-error>
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="formEditRisque.get(rs.formName).errors?.['max']">
+                        ce champs est non conforme
+                    </mat-error>
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="formEditRisque.get(rs.formName).errors?.['min']">
+                        ce champs est non conforme
+                    </mat-error>
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="formEditRisque.get(rs.formName).errors?.['pattern']
+                        ||
+                        formEditRisque.get(rs.formName).errors?.['maxlength'] || formEditRisque.get(rs.formName).errors?.['minlength'] 
+                        ">
+                        ce champs n'est pas conforme
+                    </mat-error>
+                    <mat-error
+                        *ngIf="formEditRisque.get(rs.formName).errors?.bloquant
+                        " class="invalid-feedback">
+                        {{formEditRisque.get(rs.formName).errors?.msg}}
+                    </mat-error>
+                   
+                </mat-form-field>
+
+                <!--input Number-->
+                <mat-form-field appearance="outline"
+                    class="col-md-5"
+                    *ngIf="rs.typeChamp?.code=='L03'">
+                    <mat-label>{{rs.libelle}}</mat-label>
+                    <input matInput
+                        type="number"
+                        formControlName={{rs.formName}}>
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="formEditRisque.get(rs.formName).errors?.['required']">
+                        ce champs est obligatoire
+                    </mat-error>
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="formEditRisque.get(rs.formName).errors?.['max']">
+                        ce champs est non conforme
+                    </mat-error>
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="formEditRisque.get(rs.formName).errors?.['min']">
+                        ce champs est non conforme
+                    </mat-error>
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="formEditRisque.get(rs.formName).errors?.['pattern']
+                        ||
+                        formEditRisque.get(rs.formName).errors?.['maxlength'] || formEditRisque.get(rs.formName).errors?.['minlength'] 
+                        ">
+                        ce champs n'est pas conforme
+                    </mat-error>
+                    <mat-error
+                        *ngIf="formEditRisque.get(rs.formName).errors?.bloquant
+                        " class="invalid-feedback">
+                        {{formEditRisque.get(rs.formName).errors?.msg}}
+                    </mat-error>                                            
+                </mat-form-field>
+
+                <!--Date-->
+                <mat-form-field class="col-md-5"
+                    appearance="outline"
+                    *ngIf="rs.typeChamp?.description=='date'">
+                    <mat-label>{{rs.libelle}}</mat-label>
+                    <input matInput
+                        
+                        [matDatepicker]="picker"
+                        formControlName="{{rs.formName}}">
+                    <mat-datepicker-toggle matSuffix
+                        [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker
+                        #picker></mat-datepicker>
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="formEditRisque.get(rs.formName).errors?.['required']">
+                        ce champs est obligatoire
+                    </mat-error>
+                    <mat-error
+                        *ngIf="formEditRisque.get(rs.formName).errors?.bloquant
+                        " class="invalid-feedback">
+                        {{formEditRisque.get(rs.formName).errors?.msg}}
+                    </mat-error>
+                </mat-form-field>
+                <!--Boolean-->
+                <mat-form-field appearance="outline"
+                    class="col-md-5"
+                    *ngIf="rs.typeChamp?.code=='L04'">
+                    <mat-label>{{rs.libelle}}
+                    </mat-label>
+                    <mat-select
+                        formControlName="{{rs.formName}}">
+                        <mat-option
+                            [value]="true">Oui
+                        </mat-option>
+                        <mat-option
+                            [value]="false">Non
+                        </mat-option>
+                    </mat-select>
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="formEditRisque.get(rs.formName).errors?.['required']">
+                        ce champs est obligatoire
+                    </mat-error>
+                    <mat-error
+                        *ngIf="formEditRisque.get(rs.formName).errors?.bloquant
+                        " class="invalid-feedback">
+                        {{formEditRisque.get(rs.formName).errors?.msg}}
+                    </mat-error>
+                </mat-form-field>               
+            </ng-container>
+        </div>  
+         
+            <!-- <div class="row" style="padding: 1rem 2rem;">
+                <div class="row"
+                    style="display: flex;align-items: center;justify-content: space-between;">
+                    <mat-form-field class="col-md-3"
+                        appearance="outline">
+                        <mat-label>Nom</mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="nom">
+
+                        <mat-error
+                            *ngIf="formEditRisque.controls.nom.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formEditRisque.controls.nom.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="col-md-3"
+                        appearance="outline">
+                        <mat-label>Prénom</mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="prenom">
+
+                        <mat-error
+                            *ngIf="formEditRisque.controls.prenom.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formEditRisque.controls.prenom.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field class="col-md-3"
+                        appearance="outline">
+                        <mat-label>Date de naissance</mat-label>
+                        <input matInput [max]="now"
+                            [matDatepicker]="pickerdateNaissance"                           
+                            formControlName="dateNaissance">
+                        <mat-datepicker-toggle matSuffix
+                            [for]="pickerdateNaissance"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerdateNaissance></mat-datepicker>
+                        <mat-error
+                            *ngIf="formEditRisque.controls.dateNaissance.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formEditRisque.controls.dateNaissance.errors.ageInf18">
+                                L'age du souscripteur doit etre
+                                supérieur à 18 ans</div>
+                            <div
+                                *ngIf="formEditRisque.controls.dateNaissance.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <mat-form-field class="col-md-4"
+                    pattern="[0-9]{18}" appearance="outline">
+                    <mat-label>NIN</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="nin">
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="(formEditRisque.controls.nin.errors?.['pattern']
+                            ||
+                            formEditRisque.controls.nin.errors?.['maxlength'] || formEditRisque.controls.nin.errors?.['minlength'] )">
+                        ce champs n'est pas conforme
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field class="col-md-4"
+                appearance="outline">
+                    <mat-label>Numero de passeport </mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="numPassport">
+
+                    <mat-error
+                        *ngIf="formEditRisque.controls.numPassport.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formEditRisque.controls.numPassport.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>              
+                </mat-form-field>
+                <mat-form-field class="col-md-6"
+                appearance="outline">
+                <mat-label>N° RIB</mat-label>
+                <input type="text" matInput placeholder
+                    formControlName="rib">
+                <mat-error
+                    *ngIf="formEditRisque.controls.rib.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formEditRisque.controls.rib.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+                <mat-error
+                    class="invalid-feedback"
+                    *ngIf="formEditRisque.controls.rib.errors?.['pattern']
+                        ||
+                        formEditRisque.controls.rib.errors?.['maxlength'] || formEditRisque.controls.rib.errors?.['minlength'] 
+                        ">
+                    ce champs n'est pas conforme
+                </mat-error>
+            </mat-form-field>
+
+                <mat-form-field class="col-md-4"
+                    appearance="outline">
+                    <mat-label>Mobile</mat-label>
+                    <span matPrefix>+213 &nbsp;</span>
+                    <input type="text" matInput placeholder
+                        formControlName="telephone">
+                    <mat-error
+                        *ngIf="formEditRisque.controls.telephone.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formEditRisque.controls.telephone.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="formEditRisque.controls.telephone.errors?.['pattern']
+                            ||
+                            formEditRisque.controls.telephone.errors?.['maxlength'] || formEditRisque.controls.telephone.errors?.['minlength'] 
+                            ">
+                        ce champs n'est pas conforme
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="col-md-4"
+                    appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="email">
+
+                    <mat-error
+                        *ngIf="formEditRisque.controls.email.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formEditRisque.controls.email.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                    <mat-error
+                        class="invalid-feedback"
+                        *ngIf="formEditRisque.controls.email.errors?.['pattern']
+                            ||
+                            formEditRisque.controls.email.errors?.['maxlength'] || formEditRisque.controls.email.errors?.['minlength'] 
+                            ">
+                        ce champs n'est pas conforme
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="col-md-4"
+                    appearance="outline">
+                    <mat-label>Adresse</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="adresse">
+
+                    <mat-error
+                        *ngIf="formEditRisque.controls.adresse.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formEditRisque.controls.adresse.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline"
+                    class="col-md-4">
+                    <mat-label>Wilaya</mat-label>
+                    <mat-select formControlName="wilaya"
+                        (selectionChange)="getCommune($event.value, 'Souscripteur')">
+                        <ng-container *ngFor="let wilaya of wilayas">
+                            <mat-option
+                                [value]="wilaya.idWilaya">
+                                {{wilaya.description}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+
+                    <mat-error
+                        *ngIf="formEditRisque.controls.wilaya.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formEditRisque.controls.wilaya.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline"
+                    class="col-md-4">
+                    <mat-label>Commune</mat-label>
+                    <mat-select formControlName="commune">
+                        <ng-container
+                            *ngFor="let commune of communes">
+                            <mat-option
+                                [value]="commune.idCommune">
+                                {{commune.description}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+
+                    <mat-error
+                        *ngIf="formEditRisque.controls.commune.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formEditRisque.controls.commune.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="col-md-4"
+                    appearance="outline">
+                    <mat-label> Genre </mat-label>
+                    <mat-select formControlName="genre">
+                        <ng-container *ngFor="let genre of genres">
+                            <mat-option [value]="genre.idParam">{{genre.description}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+
+                    <mat-error
+                        *ngIf="formEditRisque.controls.genre.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formEditRisque.controls.genre.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field class="col-md-4"
+                    appearance="outline">
+                    <mat-label> Situation Familiale </mat-label>
+                    <mat-select formControlName="situation">
+                        <ng-container
+                            *ngFor="let situation of situations">
+                            <mat-option [value]="situation.idParam">{{situation.description}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="col-md-4"
+                    appearance="outline">
+                    <mat-label> Profession </mat-label>
+                    <mat-select formControlName="profession">
+                        <ng-container
+                            *ngFor="let profession of professions">
+                            <mat-option
+                                [value]="profession.idProfession">{{profession.description}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+      -->
+          
+            <div class="row">  
+                <div class="col-md-6">   
+                <button  class="btn btn-cancel"
+                    mat-dialog-close >Annuler</button> 
+                    </div>
+                <div class="col-md-6">
+                    <button class="btn btn-action"
+                    (click)="submitEditRisque()" >Enregistrer</button>                
+                </div>               
+            </div>
+
+
+    </form>
+</mat-dialog-content>

@@ -1,0 +1,942 @@
+<div class="container" *ngIf="renderGlobal">
+    <h2 class="header-title">
+        <mat-icon class="mat-icon notranslate
+            material-symbols-outlined material-icons mat-icon-no-color"
+            aria-label="directions_car">{{produitInfo.icon}}</mat-icon>
+        Contrat {{produitInfo.description}} </h2>
+    <mat-stepper #stepper [linear]="true">
+      
+        <mat-step [stepControl]="formCreationContrat" *ngIf="devisReady" [editable]="true">
+            <ng-template matStepLabel>
+                Informations contrat, souscripteur, assuré
+            </ng-template>
+            <mat-accordion class="example-headers-align" multi>
+                <!-- Contrat -->
+                <form [formGroup]="formCreationContrat"
+                    *ngIf="formCreationContrat">
+                    <!--INFORMATION Contrat -->
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Informations contrat
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <!-- body bloc -->
+                        <div class="row" style="padding: 1rem 2rem;">
+                            <mat-form-field appearance="outline"
+                                class="col-md-6">
+                                <mat-label>Agence</mat-label>
+                                <mat-select formControlName="agence">
+                                    <ng-container *ngFor="let agence of agences">
+                                        <mat-option
+                                            [value]="agence.idAgence">
+                                            {{agence.nomAgence}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline"
+                                class="col-md-6">
+                                <mat-label>Produit</mat-label>
+                                <mat-select formControlName="produit">
+                                    <ng-container
+                                        *ngFor="let produit of produits">
+                                        <mat-option
+                                            [value]="produit.idCodeProduit">
+                                            {{produit.description}}
+                                        </mat-option>
+                                    </ng-container>
+                                </mat-select>
+                            </mat-form-field>
+                        
+                            <mat-form-field class="col-md-6"
+                                appearance="outline">
+                                <mat-label>Date d'Effet</mat-label>
+                                <input matInput
+                                    [matDatepicker]="dateEffet"
+                                    formControlName="dateEffet">
+                                <mat-datepicker-toggle matSuffix
+                                    [for]="dateEffet"></mat-datepicker-toggle>
+                                <mat-datepicker #dateEffet></mat-datepicker>                         
+
+                            </mat-form-field>
+
+                            <mat-form-field class="col-md-6"
+                                appearance="outline">
+                                <mat-label>Date d'Echéance</mat-label>
+                                <input matInput
+                                [matDatepicker]="dateExpiration"
+                                formControlName="dateExpiration">
+                            <mat-datepicker-toggle matSuffix
+                                [for]="dateExpiration"></mat-datepicker-toggle>
+                            <mat-datepicker #dateExpiration></mat-datepicker>
+                              
+                            </mat-form-field>
+                        </div>
+                    </mat-expansion-panel>
+                </form>
+                 <!-- Souscripteur -->
+                 <form
+                 [formGroup]="formCreationSouscripteur"
+                 *ngIf="formCreationSouscripteur">
+                 <mat-expansion-panel [expanded]="true">
+                     <mat-expansion-panel-header>
+                         <mat-panel-title>
+                            {{ 'Informations souscripteur' }}
+                         </mat-panel-title>
+                     </mat-expansion-panel-header>
+                     <!-- body bloc -->
+                     <div class="row" style="padding: 1rem 2rem;"
+                         *ngIf="devis?.typeClient?.description == 'personne morale'">
+                         <div class="row"
+                             style="display: flex;align-items: center;justify-content: space-between;">
+                             <mat-form-field class="col-md-6"
+                                 appearance="outline">
+                                 <mat-label>Raison social</mat-label>
+                                 <input type="text" matInput placeholder
+                                     formControlName="raisonSocial"
+                                     [readonly]="true">
+                                 <mat-error
+                                     *ngIf="formCreationSouscripteur.controls.raisonSocial.errors"
+                                     class="invalid-feedback">
+                                     <div
+                                         *ngIf="formCreationSouscripteur.controls.raisonSocial.errors.required">
+                                         ce champs est obligatoire</div>
+                                 </mat-error>
+                             </mat-form-field>
+                             <button
+                                 *ngIf="formCreationSouscripteur.value.raisonSocial != ''"
+                                 class="btn btn-secondary"
+                                 (mouseup)="recherchePersonne('Souscripteur')"
+                                 style="display: flex; width: auto;">
+                                 Rechercher
+                             </button>
+                             <button
+                                 *ngIf="formCreationSouscripteur.value.raisonSocial == ''"
+                                 class="btn btn-disable" disabled
+                                 (mouseup)="recherchePersonne('Souscripteur')"
+                                 style="display: flex; width: auto;">
+                                 Rechercher
+                             </button>
+                         </div>
+
+                         <mat-form-field class="col-md-6"
+                             appearance="outline">
+                             <mat-label>N° RIB</mat-label>
+                             <input type="text" matInput placeholder
+                                 formControlName="rib">
+                             <mat-error
+                                 *ngIf="formCreationSouscripteur.controls.rib.errors"
+                                 class="invalid-feedback">
+                                 <div
+                                     *ngIf="formCreationSouscripteur.controls.rib.errors.required">
+                                     ce champs est obligatoire</div>
+                             </mat-error>
+                             <mat-error
+                                 class="invalid-feedback"
+                                 *ngIf="formCreationSouscripteur.controls.rib.errors?.['pattern']
+                                     ||
+                                     formCreationSouscripteur.controls.rib.errors?.['maxlength'] || formCreationSouscripteur.controls.rib.errors?.['minlength'] 
+                                     ">
+                                 ce champs n'est pas conforme
+                             </mat-error>
+                         </mat-form-field>
+
+                         <mat-form-field class="col-md-6"
+                             pattern="[0-9]{15}" appearance="outline">
+                             <mat-label>NIF</mat-label>
+                             <input type="text" matInput placeholder
+                                 formControlName="nif">
+                             <mat-error
+                                 *ngIf="formCreationSouscripteur.controls.nif.errors"
+                                 class="invalid-feedback">
+                                 <div
+                                     *ngIf="formCreationSouscripteur.controls.nif.errors.required">
+                                     ce champs est obligatoire</div>
+                             </mat-error>
+                              <mat-error
+                             class="invalid-feedback"
+                             *ngIf="formCreationSouscripteur.controls.nif.errors?.['maxlength'] || formCreationSouscripteur.controls.nif.errors?.['minlength'] 
+                                 ">
+                             ce champs n'est pas conforme
+                             </mat-error> 
+                              <!-- <mat-error
+                                 class="invalid-feedback"
+                                 *ngIf="formCreationSouscripteur.controls.nif.errors?.['pattern']
+                                     ||
+                                     formCreationSouscripteur.controls.nif.errors?.['maxlength'] || formCreationSouscripteur.controls.nif.errors?.['minlength'] 
+                                     ">
+                                 ce champs n'est pas conforme
+                             </mat-error>  -->
+                         </mat-form-field>
+
+                         <mat-form-field class="col-md-6"
+                             appearance="outline">
+                             <mat-label>Mobile</mat-label>
+                             <span matPrefix>+213 &nbsp;</span>
+                             <input type="text" matInput placeholder
+                                 formControlName="telephone">
+                             <mat-error
+                                 *ngIf="formCreationSouscripteur.controls.telephone.errors"
+                                 class="invalid-feedback">
+                                 <div
+                                     *ngIf="formCreationSouscripteur.controls.telephone.errors.required">
+                                     ce champs est obligatoire</div>
+                             </mat-error>
+                             <mat-error
+                                 class="invalid-feedback"
+                                 *ngIf="formCreationSouscripteur.controls.telephone.errors?.['pattern']
+                                     ||
+                                     formCreationSouscripteur.controls.telephone.errors?.['maxlength'] || formCreationSouscripteur.controls.telephone.errors?.['minlength'] 
+                                     ">
+                                 ce champs n'est pas conforme
+                             </mat-error>
+                         </mat-form-field>
+
+                         <mat-form-field class="col-md-6"
+                             appearance="outline">
+                             <mat-label>Email</mat-label>
+                             <input type="text" matInput placeholder
+                                 formControlName="email">
+                             <mat-error
+                                 *ngIf="formCreationSouscripteur.controls.email.errors"
+                                 class="invalid-feedback">
+                                 <div
+                                     *ngIf="formCreationSouscripteur.controls.email.errors.required">
+                                     ce champs est obligatoire</div>
+                             </mat-error>
+                             <mat-error
+                                 class="invalid-feedback"
+                                 *ngIf="formCreationSouscripteur.controls.email.errors?.['pattern']
+                                     ||
+                                     formCreationSouscripteur.controls.email.errors?.['maxlength'] || formCreationSouscripteur.controls.email.errors?.['minlength'] 
+                                     ">
+                                 ce champs n'est pas conforme
+                             </mat-error>
+                         </mat-form-field>
+
+                         <mat-form-field class="col-md-4"
+                             appearance="outline">
+                             <mat-label>Adresse</mat-label>
+                             <input type="text" matInput placeholder
+                                 formControlName="adresse">
+                             <mat-error
+                                 *ngIf="formCreationSouscripteur.controls.adresse.errors"
+                                 class="invalid-feedback">
+                                 <div
+                                     *ngIf="formCreationSouscripteur.controls.adresse.errors.required">
+                                     ce champs est obligatoire</div>
+                             </mat-error>
+                         </mat-form-field>
+
+                         <mat-form-field appearance="outline"
+                             class="col-md-4">
+                             <mat-label>Wilaya</mat-label>
+                             <mat-select formControlName="wilaya"
+                                 (selectionChange)="getCommune($event.value, 'Souscripteur')">
+                                 <ng-container *ngFor="let wilaya of wilayas">
+                                     <mat-option
+                                         [value]="wilaya.idWilaya">
+                                         {{wilaya.description}}
+                                     </mat-option>
+                                 </ng-container>
+                             </mat-select>
+                             <mat-error
+                                 *ngIf="formCreationSouscripteur.controls.wilaya.errors"
+                                 class="invalid-feedback">
+                                 <div
+                                     *ngIf="formCreationSouscripteur.controls.wilaya.errors.required">
+                                     ce champs est obligatoire</div>
+                             </mat-error>
+                         </mat-form-field>
+
+                         <mat-form-field appearance="outline"
+                             class="col-md-4">
+                             <mat-label>Commune</mat-label>
+                             <mat-select formControlName="commune">
+                                 <ng-container
+                                     *ngFor="let commune of communes">
+                                     <mat-option
+                                         [value]="commune.idCommune">
+                                         {{commune.description}}
+                                     </mat-option>
+                                 </ng-container>
+                             </mat-select>
+                             <mat-error
+                                 *ngIf="formCreationSouscripteur.controls.commune.errors"
+                                 class="invalid-feedback">
+                                 <div
+                                     *ngIf="formCreationSouscripteur.controls.commune.errors.required">
+                                     ce champs est obligatoire</div>
+                             </mat-error>
+                         </mat-form-field>
+                     </div>
+
+                     <div class="row" style="padding: 1rem 2rem;"
+                         *ngIf="devis?.typeClient?.description == 'personne physique'">
+                         <div class="row"
+                             style="display: flex;align-items: center;justify-content: space-between;">
+                             <mat-form-field class="col-md-3"
+                                 appearance="outline">
+                                 <mat-label>Nom</mat-label>
+                                 <input type="text" matInput placeholder
+                                     formControlName="nom" [readonly]="true">
+                                 <mat-error
+                                     *ngIf="formCreationSouscripteur.controls.nom.errors"
+                                     class="invalid-feedback">
+                                     <div
+                                         *ngIf="formCreationSouscripteur.controls.nom.errors.required">
+                                         ce champs est obligatoire</div>
+                                 </mat-error>
+                             </mat-form-field>
+
+                             <mat-form-field class="col-md-3"
+                                 appearance="outline">
+                                 <mat-label>Prénom</mat-label>
+                                 <input type="text" matInput placeholder
+                                     formControlName="prenom"
+                                     [readonly]="true">
+                                 <mat-error
+                                     *ngIf="formCreationSouscripteur.controls.prenom.errors"
+                                     class="invalid-feedback">
+                                     <div
+                                         *ngIf="formCreationSouscripteur.controls.prenom.errors.required">
+                                         ce champs est obligatoire</div>
+                                 </mat-error>
+                             </mat-form-field>
+
+                             <mat-form-field class="col-md-3"
+                                 appearance="outline">
+                                 <mat-label>Date de naissance</mat-label>
+                                 <input matInput [max]="now"
+                                     [matDatepicker]="pickerdateNaissance"
+                                     formControlName="dateNaissance">
+                                 <mat-datepicker-toggle matSuffix
+                                     [for]="pickerdateNaissance"></mat-datepicker-toggle>
+                                 <mat-datepicker #pickerdateNaissance></mat-datepicker>
+                                 <mat-error
+                                     *ngIf="formCreationSouscripteur.controls.dateNaissance.errors"
+                                     class="invalid-feedback">
+                                     <div
+                                         *ngIf="formCreationSouscripteur.controls.dateNaissance.errors.ageInf18">
+                                         L'age du souscripteur doit etre
+                                         supérieur à 18 ans</div>
+                                         <div
+                                         *ngIf="formCreationSouscripteur.controls.dateNaissance.errors.ageSup107">
+                                         L'age du souscripteur doit etre
+                                         inférieur à 107 ans</div>
+                                     <div
+                                         *ngIf="formCreationSouscripteur.controls.dateNaissance.errors.required">
+                                         ce champs est obligatoire</div>
+                                 </mat-error>
+                             </mat-form-field>
+
+                             <button
+                                 *ngIf="formCreationSouscripteur.value.nom != '' && formCreationSouscripteur.value.prenom != '' && formCreationSouscripteur.value.dateNaissance != null"
+                                 class="btn btn-secondary"
+                                 (mouseup)="recherchePersonne('Souscripteur')"
+                                 style="display: flex; width: auto;">
+                                 Rechercher
+                             </button>
+                             <button
+                                 *ngIf="formCreationSouscripteur.value.nom == '' || formCreationSouscripteur.value.prenom == '' || formCreationSouscripteur.value.dateNaissance == null"
+                                 disabled class="btn btn-disable"
+                                 (mouseup)="recherchePersonne('Souscripteur')"
+                                 style="display: flex; width: auto;">
+                                 Rechercher
+                             </button>
+                         </div>
+
+                         <mat-form-field class="col-md-4"
+                             pattern="[0-9]{18}" appearance="outline">
+                             <mat-label>NIN</mat-label>
+                             <input type="text" matInput placeholder
+                                 formControlName="nin">
+                             <mat-error
+                                 *ngIf="formCreationSouscripteur.controls.nin.errors"
+                                 class="invalid-feedback">
+                                 <div
+                                     *ngIf="formCreationSouscripteur.controls.nin.errors.required">
+                                     ce champs est obligatoire</div>
+                             </mat-error>
+
+                             <mat-error
+                                 class="invalid-feedback"
+                                 *ngIf="formCreationSouscripteur.controls.nin.errors?.['pattern']
+                                     ||
+                                     formCreationSouscripteur.controls.nin.errors?.['maxlength'] || formCreationSouscripteur.controls.nin.errors?.['minlength'] 
+                                     ">
+                                 ce champs n'est pas conforme
+                             </mat-error>
+                         </mat-form-field>
+
+                         <mat-form-field class="col-md-4"
+                             appearance="outline">
+                             <mat-label>Mobile</mat-label>
+                             <span matPrefix>+213 &nbsp;</span>
+                             <input type="text" matInput placeholder
+                                 formControlName="telephone">
+                             <mat-error
+                                 *ngIf="formCreationSouscripteur.controls.telephone.errors"
+                                 class="invalid-feedback">
+                                 <div
+                                     *ngIf="formCreationSouscripteur.controls.telephone.errors.required">
+                                     ce champs est obligatoire</div>
+                             </mat-error>
+                             <mat-error
+                                 class="invalid-feedback"
+                                 *ngIf="formCreationSouscripteur.controls.telephone.errors?.['pattern']
+                                     ||
+                                     formCreationSouscripteur.controls.telephone.errors?.['maxlength'] || formCreationSouscripteur.controls.telephone.errors?.['minlength'] 
+                                     ">
+                                 ce champs n'est pas conforme
+                             </mat-error>
+                         </mat-form-field>
+
+                         <mat-form-field class="col-md-4"
+                             appearance="outline">
+                             <mat-label>Email</mat-label>
+                             <input type="text" matInput placeholder
+                                 formControlName="email">
+                             <mat-error
+                                 *ngIf="formCreationSouscripteur.controls.email.errors"
+                                 class="invalid-feedback">
+                                 <div
+                                     *ngIf="formCreationSouscripteur.controls.email.errors.required">
+                                     ce champs est obligatoire</div>
+                             </mat-error>
+                             <mat-error
+                                 class="invalid-feedback"
+                                 *ngIf="formCreationSouscripteur.controls.email.errors?.['pattern']
+                                     ||
+                                     formCreationSouscripteur.controls.email.errors?.['maxlength'] || formCreationSouscripteur.controls.email.errors?.['minlength'] 
+                                     ">
+                                 ce champs n'est pas conforme
+                             </mat-error>
+                         </mat-form-field>
+
+                         <mat-form-field class="col-md-4"
+                             appearance="outline">
+                             <mat-label>Adresse</mat-label>
+                             <input type="text" matInput placeholder
+                                 formControlName="adresse">
+                             <mat-error
+                                 *ngIf="formCreationSouscripteur.controls.adresse.errors"
+                                 class="invalid-feedback">
+                                 <div
+                                     *ngIf="formCreationSouscripteur.controls.adresse.errors.required">
+                                     ce champs est obligatoire</div>
+                             </mat-error>
+                         </mat-form-field>
+
+                         <mat-form-field appearance="outline"
+                             class="col-md-4">
+                             <mat-label>Wilaya</mat-label>
+                             <mat-select formControlName="wilaya"
+                                 (selectionChange)="getCommune($event.value, 'souscripteur')">
+                                 <ng-container *ngFor="let wilaya of wilayas">
+                                     <mat-option
+                                         [value]="wilaya.idWilaya">
+                                         {{wilaya.description}}
+                                     </mat-option>
+                                 </ng-container>
+                             </mat-select>
+                             <mat-error
+                                 *ngIf="formCreationSouscripteur.controls.wilaya.errors"
+                                 class="invalid-feedback">
+                                 <div
+                                     *ngIf="formCreationSouscripteur.controls.wilaya.errors.required">
+                                     ce champs est obligatoire</div>
+                             </mat-error>
+                         </mat-form-field>
+
+                         <mat-form-field appearance="outline"
+                             class="col-md-4">
+                             <mat-label>Commune</mat-label>
+                             <mat-select formControlName="commune">
+                                 <ng-container
+                                     *ngFor="let commune of communes">
+                                     <mat-option
+                                         [value]="commune.idCommune">
+                                         {{commune.description}}
+                                     </mat-option>
+                                 </ng-container>
+                             </mat-select>
+                             <mat-error
+                                 *ngIf="formCreationSouscripteur.controls.commune.errors"
+                                 class="invalid-feedback">
+                                 <div
+                                     *ngIf="formCreationSouscripteur.controls.commune.errors.required">
+                                     ce champs est obligatoire</div>
+                             </mat-error>
+                         </mat-form-field>
+
+                         <mat-form-field class="col-md-4"
+                             appearance="outline">
+                             <mat-label> Genre </mat-label>
+                             <mat-select formControlName="genre">
+                                 <ng-container *ngFor="let genre of genres">
+                                     <mat-option [value]="genre.idParam">{{genre.description}}</mat-option>
+                                 </ng-container>
+                             </mat-select>
+                             <mat-error
+                                 *ngIf="formCreationSouscripteur.controls.genre.errors"
+                                 class="invalid-feedback">
+                                 <div
+                                     *ngIf="formCreationSouscripteur.controls.genre.errors.required">
+                                     ce champs est obligatoire</div>
+                             </mat-error>
+                         </mat-form-field>
+
+                         <mat-form-field class="col-md-4"
+                             appearance="outline">
+                             <mat-label> Situation Familiale </mat-label>
+                             <mat-select formControlName="situation">
+                                 <ng-container
+                                     *ngFor="let situation of situations">
+                                     <mat-option [value]="situation.idParam">{{situation.description}}</mat-option>
+                                 </ng-container>
+                             </mat-select>
+                         </mat-form-field>
+
+                         <mat-form-field class="col-md-4"
+                             appearance="outline">
+                             <mat-label> Profession </mat-label>
+                             <mat-select formControlName="profession">
+                                 <ng-container
+                                     *ngFor="let profession of professions">
+                                     <mat-option
+                                         [value]="profession.idProfession">{{profession.description}}</mat-option>
+                                 </ng-container>
+                             </mat-select>
+                         </mat-form-field>
+                     </div>
+                 </mat-expansion-panel>
+             </form>
+
+            
+  
+               
+            </mat-accordion>
+            <div class="row-button">
+                <button class="btn btn-cancel"
+                    (mouseup)="redirectConsultation()">Annuler</button>
+                <button (click)="nextStep()" class="btn btn-action">Suivant</button>
+            </div>
+        </mat-step>
+
+        <!-- <mat-step [stepControl]="formCreationConducteur && formCreationRisque"
+            [editable]="true" *ngIf="devisReady"> -->
+        <mat-step [editable]="true" *ngIf="devisReady" >
+            <ng-template matStepLabel>Informations du risque</ng-template>          
+           
+                <mat-accordion class="main-multirisque">
+                    
+                    <mat-expansion-panel [expanded]="true"
+                        *ngFor="let groupe of groupes; index as i ">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>Groupe</mat-panel-title>
+                            <mat-panel-description>
+                                {{groupe.description}}
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <!-- recherche personne -->
+                        <div class="row" style="padding: 1rem 2rem;">
+                            <span  class="col-md-6 value">Recherche Risque : </span>
+                            <form [formGroup]="formSearchAssure"  *ngIf="formSearchAssure">
+                                <div class="row"
+                                style="display: flex;align-items: center;justify-content: space-between;">    
+                                <mat-form-field class="col-md-3"
+                                    appearance="outline">
+                                    <mat-label>Nom</mat-label>
+                                    <input type="text" matInput placeholder
+                                        formControlName="nom" [readonly]="true" [disabled]="true">
+                                    <mat-error
+                                        *ngIf="formSearchAssure.controls.nom.errors"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf="formSearchAssure.controls.nom.errors.required">
+                                            ce champs est obligatoire</div>
+                                    </mat-error>
+                                </mat-form-field>
+    
+                                <mat-form-field class="col-md-3"
+                                    appearance="outline">
+                                    <mat-label>Prénom</mat-label>
+                                    <input type="text" matInput placeholder
+                                        formControlName="prenom"
+                                        [readonly]="true"[disabled]="true">
+                                    <mat-error
+                                        *ngIf="formSearchAssure.controls.prenom.errors"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf="formSearchAssure.controls.prenom.errors.required">
+                                            ce champs est obligatoire</div>
+                                    </mat-error>
+                                </mat-form-field>
+    
+                                <mat-form-field class="col-md-3"
+                                    appearance="outline">
+                                    <mat-label>Date de naissance</mat-label>
+                                    <input matInput 
+                                        [max]="now"
+                                        [disabled]="true"
+                                        [matDatepicker]="pickerdateNaissance"
+                                        formControlName="dateNaissance">
+                                    <mat-datepicker-toggle matSuffix
+                                        [for]="pickerdateNaissance"></mat-datepicker-toggle>
+                                    <mat-datepicker #pickerdateNaissance></mat-datepicker>
+                                    <mat-error
+                                        *ngIf="formSearchAssure.controls.dateNaissance.errors"
+                                        class="invalid-feedback">
+                                        <div
+                                            *ngIf="formSearchAssure.controls.dateNaissance.errors.ageInf18">
+                                            L'age du souscripteur doit etre
+                                            supérieur à 18 ans</div>
+                                        <div
+                                            *ngIf="formSearchAssure.controls.dateNaissance.errors.ageSup107">
+                                            L'age du souscripteur doit etre
+                                            inférieur à 107 ans</div>
+
+                                        <div
+                                            *ngIf="formSearchAssure.controls.dateNaissance.errors.required">
+                                            ce champs est obligatoire</div>
+                                    </mat-error>
+                                </mat-form-field>
+    
+                                <button
+                                    *ngIf="formSearchAssure.value.nom != '' && formSearchAssure.value.prenom != '' && formSearchAssure.value.dateNaissance != null"
+                                    class="btn btn-secondary"
+                                    (mouseup)="recherchePersonne('Assure')"
+                                    style="display: flex; width: auto;">
+                                    Rechercher
+                                </button> 
+                                <button
+                                    *ngIf="formSearchAssure.value.nom == '' && formSearchAssure.value.prenom == '' && formSearchAssure.value.dateNaissance != null"
+                                    disabled class="btn btn-disable"
+                                    (mouseup)="recherchePersonne('Assure')"
+                                    style="display: flex; width: auto;">
+                                    Rechercher
+                                </button>    
+                                </div>
+                            </form>                  
+                        </div>   
+
+               
+                    <div class="row" style="padding: 1rem 2rem;">
+                        <span  class="col-md-6 value">Infos Risque :</span>
+                        <form  [formGroup]="formEditRisque" #formDirective="ngForm" *ngIf="formEditRisque"
+                        (ngSubmit)="submitEditRisque()">                     
+                            <!-- info risque-->
+                           <div class="row"
+                                style="display: flex;align-items: center;justify-content: space-between;">  
+                                <ng-container *ngFor="let rs of paraRisqueProduitAssure">  
+                                     <!--List -->     
+                                    <mat-form-field appearance="outline"
+                                        class="col-md-5"
+                                        *ngIf="rs.typeChamp?.code=='L01'">
+                                        <mat-label>{{rs.libelle}}
+                                        </mat-label>
+                                        <mat-select
+                                            formControlName="{{rs.formName}}"
+                                             (selectionChange)="getRelation(rs.typeChamp?.code,rs.isParent,rs.idParamRisque,$event.value,rs.formName)">
+                                            <ng-container *ngFor="let response of rs.reponses">
+                                                <mat-option
+                                                    [value]="response.idParam">
+                                                    {{response.description}}
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                        <mat-error
+                                            class="invalid-feedback"
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.['required']">
+                                            ce champs est obligatoire
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.bloquant
+                                            " class="invalid-feedback">
+                                            {{formEditRisque.get(rs.formName).errors?.msg}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!--from table -->
+                                    <mat-form-field appearance="outline"
+                                        class="col-md-5"
+                                        *ngIf=" rs.typeChamp?.code=='L08'">
+                                        <mat-label>{{rs.libelle}}
+                                        </mat-label>
+                                        <mat-select
+                                            formControlName="{{rs.formName}}"
+                                            (selectionChange)="getRelation(rs.typeChamp?.code,rs.isParent,rs.idParamRisque,$event.value,rs.formName)">
+                                            <ng-container *ngFor="let response of rs.reponses">
+                                                <mat-option 
+                                                    [value]="response.id">
+                                                    {{rs.codeParam != "P215" ? response.description : response.nationalite}}
+                                                </mat-option>
+                                            </ng-container>
+                                        </mat-select>
+                                        <mat-error
+                                            class="invalid-feedback"
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.['required']">
+                                            ce champs est obligatoire
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.bloquant
+                                        " class="invalid-feedback">
+                                            {{formEditRisque.get(rs.formName).errors?.msg}}
+                                        </mat-error>
+                                    </mat-form-field>                                       
+                                    <!--input Text-->
+                                    <mat-form-field appearance="outline"
+                                        class="col-md-5"
+                                        *ngIf="(rs.typeChamp?.code=='L02' || rs.typeChamp?.code=='L07')&&
+                                        rs.codeParam!='P25'
+                                        &&
+                                        rs.codeParam!='P26'">
+                                        <mat-label>{{rs.libelle}}</mat-label>
+                                        <input matInput
+                                            type="text"
+                                            formControlName={{rs.formName}}>
+                                        <mat-error
+                                            class="invalid-feedback"
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.['required']">
+                                            ce champs est obligatoire
+                                        </mat-error>
+                                        <mat-error
+                                            class="invalid-feedback"
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.['max']">
+                                            ce champs est non conforme
+                                        </mat-error>
+                                        <mat-error
+                                            class="invalid-feedback"
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.['min']">
+                                            ce champs est non conforme
+                                        </mat-error>
+                                        <mat-error
+                                            class="invalid-feedback"
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.['pattern']
+                                            ||
+                                            formEditRisque.get(rs.formName).errors?.['maxlength'] || formEditRisque.get(rs.formName).errors?.['minlength'] 
+                                            ">
+                                            ce champs n'est pas conforme
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.bloquant
+                                            " class="invalid-feedback">
+                                            {{formEditRisque.get(rs.formName).errors?.msg}}
+                                        </mat-error>
+                                       
+                                    </mat-form-field>
+                    
+                                    <!--input Number-->
+                                    <mat-form-field appearance="outline"
+                                        class="col-md-5"
+                                        *ngIf="rs.typeChamp?.code=='L03'">
+                                        <mat-label>{{rs.libelle}}</mat-label>
+                                        <input matInput
+                                            type="number"
+                                            formControlName={{rs.formName}}>
+                                        <mat-error
+                                            class="invalid-feedback"
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.['required']">
+                                            ce champs est obligatoire
+                                        </mat-error>
+                                        <mat-error
+                                            class="invalid-feedback"
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.['max']">
+                                            ce champs est non conforme
+                                        </mat-error>
+                                        <mat-error
+                                            class="invalid-feedback"
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.['min']">
+                                            ce champs est non conforme
+                                        </mat-error>
+                                        <mat-error
+                                            class="invalid-feedback"
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.['pattern']
+                                            ||
+                                            formEditRisque.get(rs.formName).errors?.['maxlength'] || formEditRisque.get(rs.formName).errors?.['minlength'] 
+                                            ">
+                                            ce champs n'est pas conforme
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.bloquant" class="invalid-feedback">
+                                            {{formEditRisque.get(rs.formName).errors?.msg}}
+                                        </mat-error>                                            
+                                    </mat-form-field>
+                    
+                                    <!--Date-->
+                                    <mat-form-field class="col-md-5"
+                                        appearance="outline"
+                                        *ngIf="rs.typeChamp?.description=='date'">
+                                        <mat-label>{{rs.libelle}}</mat-label>
+                                        <input matInput
+                                            
+                                            [matDatepicker]="picker"
+                                            formControlName="{{rs.formName}}">
+                                        <mat-datepicker-toggle matSuffix
+                                            [for]="picker"></mat-datepicker-toggle>
+                                        <mat-datepicker
+                                            #picker></mat-datepicker>
+                                        <mat-error
+                                            class="invalid-feedback"
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.['required']">
+                                            ce champs est obligatoire
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.bloquant
+                                            " class="invalid-feedback">
+                                            {{formEditRisque.get(rs.formName).errors?.msg}}
+                                        </mat-error>
+                                    </mat-form-field>
+                                    <!--Boolean-->
+                                    <mat-form-field appearance="outline"
+                                        class="col-md-5"
+                                        *ngIf="rs.typeChamp?.code=='L04'">
+                                        <mat-label>{{rs.libelle}}
+                                        </mat-label>
+                                        <mat-select
+                                            formControlName="{{rs.formName}}">
+                                            <mat-option
+                                                [value]="true">Oui
+                                            </mat-option>
+                                            <mat-option
+                                                [value]="false">Non
+                                            </mat-option>
+                                        </mat-select>
+                                        <mat-error
+                                            class="invalid-feedback"
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.['required']">
+                                            ce champs est obligatoire
+                                        </mat-error>
+                                        <mat-error
+                                            *ngIf="formEditRisque.get(rs.formName).errors?.bloquant
+                                            " class="invalid-feedback">
+                                            {{formEditRisque.get(rs.formName).errors?.msg}}
+                                        </mat-error>
+                                    </mat-form-field>               
+                                </ng-container>
+                           
+                                <div class="row-button">
+                                    <div class="col-md-6">                                       
+                                        <button class="btn btn-action"
+                                        type="submit">Enregistrer</button>                                                     
+                                    </div>                                     
+                                </div>
+                            </div>               
+                        </form>
+                       
+                    </div> 
+                       
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+                <div class="row-button">
+                    <button matStepperPrevious class="btn btn-cancel">Retour</button>
+                    <button class="btn btn-action" *ngIf="varEditRisque" matStepperNext>Suivant</button>
+                </div>               
+           
+        </mat-step>
+
+         <mat-step [editable]="true" >       
+            <ng-template matStepLabel>Pack et Garanties</ng-template>            
+            <!-- multirisque pack -->
+                <mat-accordion class="main-multirisque">
+                    
+                    <mat-expansion-panel [expanded]="true"
+                        *ngFor="let groupe of groupes; index as i ">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                Groupe {{i +1}}
+                            </mat-panel-title>
+                            <mat-panel-description>
+                                {{groupe.description}}
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <table class="gestion-risques">
+                            <thead>
+                                <tr>
+
+                                    <th>Garantie </th>
+                                    <th> Prime </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr *ngFor="let garantie of groupe.garantieList">
+
+                                    <td>
+                                        {{garantie.description}}
+                                    </td>
+                                    <td>
+                                        {{garantie.prime}}
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </mat-expansion-panel>
+
+                </mat-accordion>
+          
+            <div class="row-button">
+                <button matStepperPrevious class="btn btn-cancel">Retour</button>
+                <button matStepperNext class="btn btn-action">Suivant</button>
+            </div>
+        </mat-step>
+
+        <!-- ********** reduction   **********-->
+        <mat-step [editable]="true">
+            <ng-template matStepLabel>Réduction</ng-template>
+            <form [formGroup]="formReduction"
+                class="row" *ngIf="formReduction">
+                <mat-form-field class="col-md-5" appearance="outline">
+                    <mat-label> Convention</mat-label>
+                    <input matInput formControlName="convention" >                   
+                </mat-form-field>
+                <mat-form-field class="col-md-5" appearance="outline">
+                    <mat-label> Réduction</mat-label>              
+                    <input matInput formControlName="reduction" >  
+                </mat-form-field>
+                <div class>
+                    <button class="btn btn-action" matStepperNext>
+                        <span>Suivant</span></button>
+                    <button class="btn btn-cancel" matStepperPrevious
+                        type="button">Retour</button>
+                </div>
+            </form>
+        </mat-step>
+
+        <mat-step [editable]="true">
+            <ng-template matStepLabel>Résumé</ng-template>
+            <mat-accordion class="example-headers-align" multi>
+                <table class="resume">
+                    <tr *ngFor="let element of devis?.primeList">
+                        <ng-container *ngIf="element.typePrime.idParam==101">
+                            <td class="primeTotale">{{element.typePrime.description}}</td>
+                            <td class="primeTotale">{{element.prime | number :
+                                '1.0-0' | money}} <sup>DZD</sup></td>
+                        </ng-container>
+                    </tr>
+
+                    <tr *ngFor="let element of devis?.taxeList">
+                        <td>{{element.taxe?.description}}</td>
+                        <td>{{element.prime| number :
+                            '1.0-0' | money}} <sup>DZD</sup></td>
+                    </tr>
+
+                    <td>Prime Totale</td>
+                    <td>{{PrimeTotale| number :
+                        '1.0-0' | money}}<sup>DZD</sup></td>
+                </table>
+            </mat-accordion>
+            <div class="row-button">
+                <button matStepperPrevious class="btn btn-cancel">Retour</button>
+                <button class="btn btn-action" (click)="submitContrat()">
+                    <mat-spinner color="white" diameter=30 *ngIf="valider"></mat-spinner>
+                    <span *ngIf="!valider"> Valider </span>
+                </button>
+            </div>
+        </mat-step>
+    </mat-stepper>
+</div>

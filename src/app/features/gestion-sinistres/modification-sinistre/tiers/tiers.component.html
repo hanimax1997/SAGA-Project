@@ -1,0 +1,712 @@
+
+<div class="container ">
+    <div class="header-container">
+        <h2 class="header-title">
+            <mat-icon class="mat-icon material-symbols-outlined"
+                aria-label="directions_car" (click)="goBack()">arrow_circle_left</mat-icon>
+            <div *ngIf="!editTierVar " class="toEdit">
+                <mat-icon class="mat-icon material-symbols-outlined"
+                    matTooltip="Modifier tier"
+                    matTooltipPosition="left" (click)="editTier()"
+                    *ngIf="consultTierShow">edit</mat-icon>
+                Consulter Tier</div>
+            <span *ngIf="editTierVar">Modifier Tier</span>
+        </h2>
+        <!-- // <button class="btn btn-action" (click)="editTier()" *ngIf="consultTierShow" >Modifier tier</button> -->
+    </div>
+    <app-entete-gestion></app-entete-gestion>
+    <div class="alert alert-success" *ngIf="editTierSuccess && !consultTierShow">Tier
+        modifié avec succés</div>
+    <mat-accordion class="example-headers-align" multi *ngIf="!consultTierShow">
+        <!--information sur le sinistre-->
+        <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    Ajouter tier
+                </mat-panel-title>
+
+            </mat-expansion-panel-header>
+            <form #formDirective="ngForm"
+                [formGroup]="formAddTier" class="formTier"
+                (ngSubmit)="submitTier(formDirective)">
+                <div class="row" *ngIf="codeProduit == '45A' || codeProduit == '45F' || codeProduit == '45L'">
+                    <!--typeadversaire -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Type adversaire </mat-label>
+                        <mat-select formControlName="typeAdversaire"
+                            (selectionChange)="changeTypeAdversaire($event.value)">
+                            <ng-container *ngFor="let typeA of
+                                typeAdversaireArray">
+                                <mat-option
+                                    [value]="typeA">{{typeA.description}}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formAddTier.controls.typeAdversaire.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formAddTier.controls.typeAdversaire.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-radio-group class="col-md-12"
+                        *ngIf="typeTierSelectedCode=='CP309'"
+                        formControlName="isFamily">
+                        <mat-label>Tiers de la même famille ?
+                        </mat-label>
+                        <mat-radio-button
+                            value="true">Oui</mat-radio-button>
+                        <mat-radio-button
+                            value="false">Non</mat-radio-button>
+                        <mat-error class="invalid-feedback"
+                            style="margin-left: 1rem;"
+                            *ngIf="formAddTier.get('isFamily').invalid">Ce
+                            champs est obligatoire</mat-error>
+                    </mat-radio-group>
+                </div>
+                <div class="row">
+                    <!--nom  -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Nom </mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="nomAdversaire">
+                        <mat-error
+                            *ngIf="formAddTier.controls.nomAdversaire.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formAddTier.controls.nomAdversaire.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!--prenom  -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Prénom </mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="prenomAdversaire">
+                        <mat-error
+                            *ngIf="formAddTier.controls.prenomAdversaire.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formAddTier.controls.prenomAdversaire.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!--Tiers assuré -->
+                    <mat-radio-group class="col-md-12" formControlName="assure"  [(ngModel)]="selectedValue" (change)="tiersAssure($event.value)" *ngIf=" codeProduit == '96' || codeProduit == '95'">
+                        <mat-label> Tiers assuré
+                        </mat-label>
+                       
+                        <mat-radio-button [value]="true">Oui</mat-radio-button>
+                        <mat-radio-button [value]="false"  > Non</mat-radio-button>
+                    </mat-radio-group>
+
+                    <mat-radio-group class="col-md-12" formControlName="assure"  [(ngModel)]="selectedValue" (change)="tiersAssure($event.value)" *ngIf="codeProduit == '45A' || codeProduit == '45F' || codeProduit == '45L'">
+                        <mat-label> Tiers assuré
+                        </mat-label>
+                       
+                        <mat-radio-button [value]="true"  [ngClass]="{ 'disabled-radio-button': selectedValue === true }">Oui</mat-radio-button>
+                        <mat-radio-button [value]="false"  class="disabled-radio-button"> Non</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="row" *ngIf="formAddTier.get('assure').value">
+                    <!--companyAdverse -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Assurance adverse </mat-label>
+                        <mat-select formControlName="companyAdverse" (selectionChange)="getAgenceAdverse($event.value)">
+                            <ng-container *ngFor="let company of
+                                companiesAdverse">
+                                <mat-option
+                                    [value]="company">{{company.description}}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formAddTier.controls.companyAdverse.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formAddTier.controls.companyAdverse.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!--Agence adverse -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Agence adverse </mat-label>
+                        <mat-select formControlName="agenceAdverse">
+                            <mat-select-filter
+                                [displayMember]="'description'"
+                                [array]="agenceAdversesArray"
+                                (filteredReturn)="filteredAgenceAdversesArray=$event"></mat-select-filter>
+                            <mat-option *ngFor="let agence of
+                            filteredAgenceAdversesArray"
+                                [value]="agence.idParam">
+                                {{agence.description}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formAddTier.controls.agenceAdverse.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formAddTier.controls.agenceAdverse.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="row" *ngIf="formAddTier.get('assure').value">
+                    <!--Num police  -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>N° police </mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="numPolice">
+                        <mat-error
+                            *ngIf="formAddTier.controls.numPolice.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formAddTier.controls.numPolice.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!--contact  -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Contact </mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="contact">
+                        <!-- <mat-error
+                        *ngIf="formAddTier.controls.prenom.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formAddTier.controls.prenom.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error> -->
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <!--tauxResponsabilite  -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Taux Responsabilité </mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="tauxResponsabilite">
+                    </mat-form-field>
+                </div>
+                <!-- si vehicule afficher ce bloc -->
+                <div class="vehiculeAdverse"
+                    *ngIf="typeTierSelectedCode=='CP309'">
+                    <!--info vehicule-->
+                    <h3 class="display-h3">Informations sur véhicule adverse </h3>
+                    <div class="row">
+                        <!--Marque   -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Marque </mat-label>
+                            <mat-select
+                                (selectionChange)="getModel($event.value)"
+                                formControlName="marqueVehiculeAdverse">
+                                <ng-container *ngFor="let marque of
+                                    marques">
+                                    <mat-option
+                                        [value]="marque.idParam">
+                                        {{marque.marque}}
+                                    </mat-option>
+                                </ng-container>
+
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formAddTier.controls.marqueVehiculeAdverse.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formAddTier.controls.marqueVehiculeAdverse.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--Modele   -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Modele </mat-label>
+                            <mat-select
+                                formControlName="modeleVehiculeAdverse">
+                                <ng-container *ngFor="let model of
+                                    models">
+                                    <mat-option
+                                        [value]="model.idParam">{{model.modele}}</mat-option>
+                                </ng-container>
+
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formAddTier.controls.modeleVehiculeAdverse.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formAddTier.controls.modeleVehiculeAdverse.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="row">
+                        <!--Immatriculation-->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Immatriculation </mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="immatriculationVehiculeAdverse">
+                            <mat-error
+                                *ngIf="formAddTier.controls.immatriculationVehiculeAdverse.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formAddTier.controls.immatriculationVehiculeAdverse.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="row">
+                        <h3 class="display-h3">Informations sur conducteurs adverse </h3>
+                        <!--nom  -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Nom conducteur adverse</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="nomConducteurAdverse">
+                            <mat-error
+                                *ngIf="formAddTier.controls.nomConducteurAdverse.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formAddTier.controls.nomConducteurAdverse.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--prenom  -->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Prénom conducteur adverse
+                            </mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="prenomConducteurAdverse">
+                            <mat-error
+                                *ngIf="formAddTier.controls.prenomConducteurAdverse.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formAddTier.controls.prenomConducteurAdverse.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="row">
+                        <!--numPermis conducteur adverse-->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>N° permis conducteur adverse</mat-label>
+                            <input type="text" matInput placeholder
+                                formControlName="numPermisConducteurAdverse">
+                            <mat-error
+                                *ngIf="formAddTier.controls.numPermisConducteurAdverse.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formAddTier.controls.numPermisConducteurAdverse.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="row">
+                        <!--date delivrance conducteru adverse-->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Date Délivrance</mat-label>
+                            <input matInput
+                                [matDatepicker]="pickerdateDelivranceAdvere"
+                                formControlName="dateDelivranceAdverse">
+                            <mat-datepicker-toggle matSuffix
+                                [for]="pickerdateDelivranceAdvere"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerdateDelivranceAdvere></mat-datepicker>
+                            <mat-error
+                                *ngIf="formAddTier.controls.dateDelivranceAdverse.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formAddTier.controls.dateDelivranceAdverse.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                        <!--lieuDelivrance conducteur adverse-->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Lieu de délivrance </mat-label>
+                            <mat-select
+                                formControlName="lieuDelivranceAdverse">
+                                <ng-container *ngFor="let oneWilayas of
+                                    wilayas">
+                                    <mat-option
+                                        [value]="oneWilayas.idWilaya">{{oneWilayas.description}}</mat-option>
+                                </ng-container>
+
+                            </mat-select>
+                            <mat-error
+                                *ngIf="formAddTier.controls.lieuDelivranceAdverse.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="formAddTier.controls.lieuDelivranceAdverse.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+                <div class="button-row" *ngIf="statutSinistre != 'CP355' || statutSinistre != 'CP524' || statutSinistre != 'CP525' || statutSinistre != 'CP526'">
+                    <button mat-button class="btn
+                        btn-action " type="submit">Ajouter tier</button>
+                </div>
+            </form>
+
+        </mat-expansion-panel>
+    </mat-accordion>
+    <table mat-table [dataSource]="dataSourceTier"
+        class="gestion-table" *ngIf="!consultTierShow">
+        <!--type adversaire -->
+        <ng-container matColumnDef="typeAdversaire" *ngIf="codeProduit == '45A' || codeProduit == '45F' || codeProduit == '45L'">
+            <th mat-header-cell *matHeaderCellDef> Type
+                adversaire </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.typePersonne.description}} </td>
+        </ng-container>
+        <!-- nom Column -->
+        <ng-container matColumnDef="nom">
+            <th mat-header-cell *matHeaderCellDef> Nom </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.nom}}
+            </ng-container>
+            <!-- prenom Column -->
+            <ng-container matColumnDef="prenom">
+                <th mat-header-cell *matHeaderCellDef> Prénom </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.prenom}}</td>
+            </ng-container>
+            <!-- Action Column -->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let element">
+
+                    <button mat-icon-button
+                        type="button"
+                        [matMenuTriggerFor]="menu"
+                        aria-label="menu risque list">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu"
+                        xPosition="after">
+                        <button mat-menu-item
+                            type="button"
+                            (click)="consultTier(element.typePersonne,element)"
+                            [disabled]="statutSinistre == 'CP355' || statutSinistre == 'CP415'|| statutSinistre == 'CP524' || statutSinistre == 'CP525' || statutSinistre == 'CP526'">
+                            <mat-icon>zoom_in</mat-icon>
+                            <span>Consulter tier</span>
+                        </button>
+
+                        <button mat-menu-item
+                            type="button" (click)="deleteTier(element)"
+                            [disabled]=" statutSinistre == 'CP355'  || statutSinistre == 'CP415'|| statutSinistre == 'CP524' || statutSinistre == 'CP525' || statutSinistre == 'CP526'">
+                            <mat-icon>delete</mat-icon>
+                            <span>Supprimer tier</span>
+                        </button>
+                    </mat-menu>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"
+                class="example-second-header-row">
+            </tr>
+
+            <tr mat-row *matRowDef="let row; columns:
+                displayedColumns;"></tr>
+
+        </table>
+        <mat-paginator [pageSize]="10"
+            [pageSizeOptions]="[5, 10]"
+            aria-label="Select
+            page of users" *ngIf="!consultTierShow"></mat-paginator>
+
+        <div *ngIf="consultTierShow">
+            <div class="alert alert-danger" *ngIf="errorHandler.error">{{errorHandler.msg}}</div>
+
+            <form #formDirective="ngForm"
+                [formGroup]="formAddTier" class="formTier"
+                (ngSubmit)="submitEditTier(formDirective)">
+                <div class="row">
+                    <!--nom  -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Nom </mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="nomAdversaire">
+                        <mat-error
+                            *ngIf="formAddTier.controls.nomAdversaire.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formAddTier.controls.nomAdversaire.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!--prenom  -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Prénom </mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="prenomAdversaire">
+                        <mat-error
+                            *ngIf="formAddTier.controls.prenomAdversaire.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formAddTier.controls.prenomAdversaire.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <!--companyAdverse -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Assurance adverse </mat-label>
+                        <mat-select formControlName="companyAdverse" (selectionChange)="getAgenceAdverseEdit($event.value)">
+                            <mat-option
+                                [value]="false">-- Aucune</mat-option>
+                            <ng-container *ngFor="let company of
+                                companiesAdverse">
+                                <mat-option
+                                    [value]="company.idParam">{{company.description}}</mat-option>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formAddTier.controls.companyAdverse.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formAddTier.controls.companyAdverse.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!--Agence adverse -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Agence adverse </mat-label>
+                        <mat-select formControlName="agenceAdverse">
+                            <mat-select-filter
+                                [displayMember]="'description'"
+                                [array]="agenceAdversesArray"
+                                (filteredReturn)="filteredAgenceAdversesArray=$event"></mat-select-filter>
+                            <mat-option *ngFor="let agence of
+                            filteredAgenceAdversesArray"
+                                [value]="agence.idParam">
+                                {{agence.description}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error
+                            *ngIf="formAddTier.controls.agenceAdverse.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formAddTier.controls.agenceAdverse.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="row">
+                    <!--Num police  -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>N° police </mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="numPolice">
+                        <mat-error
+                            *ngIf="formAddTier.controls.numPolice.errors"
+                            class="invalid-feedback">
+                            <div
+                                *ngIf="formAddTier.controls.numPolice.errors.required">
+                                ce champs est obligatoire</div>
+                        </mat-error>
+                    </mat-form-field>
+                    <!--contact  -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Contact </mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="contact">
+                        <!-- <mat-error
+                        *ngIf="formAddTier.controls.prenom.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formAddTier.controls.prenom.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error> -->
+                    </mat-form-field>
+                    <!--tauxResponsabilite  -->
+                    <mat-form-field class="col-md-5"
+                        appearance="outline">
+                        <mat-label>Taux Responsabilité </mat-label>
+                        <input type="text" matInput placeholder
+                            formControlName="tauxResponsabilite">
+                    </mat-form-field>
+                    <!-- si vehicule afficher ce bloc -->
+                    <div class="vehiculeAdverse"
+                        *ngIf="typeTierConsult=='CP309' && codeProduit == '45A' || codeProduit == '45F' || codeProduit == '45L'">
+                        <!--info vehicule-->
+                        <h3>Informations sur véhicule adverse </h3>
+                        <div class="row">
+                            <!--Marque   -->
+                            <mat-form-field class="col-md-5"
+                                appearance="outline">
+                                <mat-label>Marque </mat-label>
+
+                                <mat-select
+                                    (selectionChange)="getModel($event.value)"
+                                    formControlName="marqueVehiculeAdverse">
+                                    <ng-container *ngFor="let marque of marques">
+                                        <mat-option
+                                            [value]="marque.idParam">{{marque.marque}}</mat-option>
+                                    </ng-container>
+                                </mat-select>
+
+                                <mat-error
+                                    *ngIf="formAddTier.controls.marqueVehiculeAdverse.errors"
+                                    class="invalid-feedback">
+                                    <div
+                                        *ngIf="formAddTier.controls.marqueVehiculeAdverse.errors.required">
+                                        ce champs est obligatoire</div>
+                                </mat-error>
+                            </mat-form-field>
+                            <!--Modele   -->
+                            <mat-form-field class="col-md-5"
+                                appearance="outline">
+                                <mat-label>Modele </mat-label>
+                                <mat-select
+                                    formControlName="modeleVehiculeAdverse">
+                                    <ng-container *ngFor="let model of
+                                models">
+                                        <mat-option
+                                            [value]="model.idParam">{{model.modele}}</mat-option>
+                                    </ng-container>
+
+                                </mat-select>
+                                <mat-error
+                                    *ngIf="formAddTier.controls.modeleVehiculeAdverse.errors"
+                                    class="invalid-feedback">
+                                    <div
+                                        *ngIf="formAddTier.controls.modeleVehiculeAdverse.errors.required">
+                                        ce champs est obligatoire</div>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="row">
+                            <!--Immatriculation-->
+                            <mat-form-field class="col-md-5"
+                                appearance="outline">
+                                <mat-label>Immatriculation </mat-label>
+                                <input type="text" matInput placeholder
+                                    formControlName="immatriculationVehiculeAdverse">
+                                <mat-error
+                                    *ngIf="formAddTier.controls.immatriculationVehiculeAdverse.errors"
+                                    class="invalid-feedback">
+                                    <div
+                                        *ngIf="formAddTier.controls.immatriculationVehiculeAdverse.errors.required">
+                                        ce champs est obligatoire</div>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="row">
+                            <h3>Informations sur conducteurs adverse </h3>
+                            <!--nom  -->
+                            <mat-form-field class="col-md-5"
+                                appearance="outline">
+                                <mat-label>Nom conducteur adverse</mat-label>
+                                <input type="text" matInput placeholder
+                                    formControlName="nomConducteurAdverse">
+                                <mat-error
+                                    *ngIf="formAddTier.controls.nomConducteurAdverse.errors"
+                                    class="invalid-feedback">
+                                    <div
+                                        *ngIf="formAddTier.controls.nomConducteurAdverse.errors.required">
+                                        ce champs est obligatoire</div>
+                                </mat-error>
+                            </mat-form-field>
+                            <!--prenom  -->
+                            <mat-form-field class="col-md-5"
+                                appearance="outline">
+                                <mat-label>Prénom conducteur adverse
+                                </mat-label>
+                                <input type="text" matInput placeholder
+                                    formControlName="prenomConducteurAdverse">
+                                <mat-error
+                                    *ngIf="formAddTier.controls.prenomConducteurAdverse.errors"
+                                    class="invalid-feedback">
+                                    <div
+                                        *ngIf="formAddTier.controls.prenomConducteurAdverse.errors.required">
+                                        ce champs est obligatoire</div>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="row">
+                            <!--numPermis conducteur adverse-->
+                            <mat-form-field class="col-md-5"
+                                appearance="outline">
+                                <mat-label>N° permis conducteur adverse</mat-label>
+                                <input type="text" matInput placeholder
+                                    formControlName="numPermisConducteurAdverse">
+                                <mat-error
+                                    *ngIf="formAddTier.controls.numPermisConducteurAdverse.errors"
+                                    class="invalid-feedback">
+                                    <div
+                                        *ngIf="formAddTier.controls.numPermisConducteurAdverse.errors.required">
+                                        ce champs est obligatoire</div>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="row">
+                            <!--date delivrance conducteru adverse-->
+                            <mat-form-field class="col-md-5"
+                                appearance="outline">
+                                <mat-label>Date Délivrance</mat-label>
+                                <input matInput
+                                    [matDatepicker]="pickerdateDelivranceAdvere"
+                                    formControlName="dateDelivranceAdverse">
+                                <mat-datepicker-toggle matSuffix
+                                    [for]="pickerdateDelivranceAdvere"></mat-datepicker-toggle>
+                                <mat-datepicker #pickerdateDelivranceAdvere></mat-datepicker>
+                                <mat-error
+                                    *ngIf="formAddTier.controls.dateDelivranceAdverse.errors"
+                                    class="invalid-feedback">
+                                    <div
+                                        *ngIf="formAddTier.controls.dateDelivranceAdverse.errors.required">
+                                        ce champs est obligatoire</div>
+                                </mat-error>
+                            </mat-form-field>
+                            <!--lieuDelivrance conducteur adverse-->
+                            <mat-form-field class="col-md-5"
+                                appearance="outline">
+                                <mat-label>Lieu de délivrance </mat-label>
+                                <mat-select
+                                    formControlName="lieuDelivranceAdverse">
+                                    <ng-container *ngFor="let oneWilayas of
+                                wilayas">
+                                        <mat-option
+                                            [value]="oneWilayas.idWilaya">{{oneWilayas.description}}</mat-option>
+                                    </ng-container>
+
+                                </mat-select>
+                                <mat-error
+                                    *ngIf="formAddTier.controls.lieuDelivranceAdverse.errors"
+                                    class="invalid-feedback">
+                                    <div
+                                        *ngIf="formAddTier.controls.lieuDelivranceAdverse.errors.required">
+                                        ce champs est obligatoire</div>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="button-row">
+                    <button mat-button class="btn
+                        btn-action " type="submit" *ngIf="editTierVar">Modifier
+                        tier</button>
+                </div>
+            </form>
+        </div>
+    </div>

@@ -1,0 +1,167 @@
+
+<div class="container">
+    <div class="header">
+      <mat-icon
+      aria-hidden="false"
+      class="material-symbols-outlined head-display"
+      matTooltip="Retour"
+      matTooltipPosition="left"
+      (click)="goBack()">arrow_circle_left
+    </mat-icon>
+  
+      <h2 class="title-table">
+          Liste des Op's sinistre N°{{codeSinistre}}
+      </h2>
+    </div>
+    <mat-divider></mat-divider>
+  
+    <mat-accordion class="example-headers-align" multi>
+      <!--Contrat-->
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          <mat-panel-title> 
+              Recherches OP 
+          </mat-panel-title>
+        </mat-expansion-panel-header>    
+          <form 
+            #formDirective="ngForm"
+            [formGroup]="formFilterOp"
+            (ngSubmit)="submitFilter()"
+            class="row formFiltre">       
+            <div class="row">
+              <!--N°OP-->
+              <mat-form-field class="col-md-6" appearance="outline">
+                <mat-label>N°OP</mat-label>
+                <input type="text" matInput placeholder formControlName="numOp" />
+              </mat-form-field>
+              <!--dateOP -->
+              <mat-form-field class="col-md-6" appearance="outline">
+                <mat-label>Date de création </mat-label>
+                <input matInput [matDatepicker]="pickerdateOp" formControlName="dateOp"/>
+                <mat-datepicker-toggle matSuffix [for]="pickerdateOp"></mat-datepicker-toggle>
+                <mat-datepicker #pickerdateOp></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="row-buttons">
+              <button class="btn btn-action" type="submit">Recherche</button>
+              <mat-icon  class="material-symbols-outlined" matTooltip="Rénitialisation" matTooltipPosition="right">
+                  restart_alt
+              </mat-icon>
+            </div>
+          </form>
+      </mat-expansion-panel>
+    </mat-accordion>
+      <table mat-table [dataSource]="dataSource" class="gestion-table">
+              <!--  numOP -->
+              <ng-container matColumnDef="numOp">
+                  <th mat-header-cell *matHeaderCellDef> N° OP/OR</th>   
+                  <td mat-cell *matCellDef="let element">{{element.codeOp }} </td>            
+              </ng-container>
+               <!--  Statut -->
+               <ng-container matColumnDef="statut">
+                  <th mat-header-cell *matHeaderCellDef> Statut </th>  
+                  <td mat-cell *matCellDef="let element">{{element.statut?.description}} </td>    
+                           
+              </ng-container>
+               <!--  Type -->
+               <ng-container matColumnDef="type">
+                  <th mat-header-cell *matHeaderCellDef> Type </th>  
+                  <td mat-cell *matCellDef="let element">{{ element.typeOp.description}} </td>             
+              </ng-container>
+               <!--  Date de création -->
+          
+               <ng-container matColumnDef="dateCreation">
+                  <th mat-header-cell *matHeaderCellDef> Date de création </th>     
+                  <td mat-cell *matCellDef="let element">{{ (element.auditDate).split("T")[0] }}</td>      
+              </ng-container>
+              <!--  Mode de paiement -->
+              <ng-container matColumnDef="modePaiement">
+                  <th mat-header-cell *matHeaderCellDef> Mode de paiement /Recouvrement </th>           
+                  <td mat-cell *matCellDef="let element">{{element.modeRecouvrement.description }}   </td>    
+              </ng-container>
+              <!--  Mode de paiement -->
+              <ng-container matColumnDef="montant">
+                  <th mat-header-cell *matHeaderCellDef>Montant  </th>           
+                  <td mat-cell *matCellDef="let element">{{ element.montant | number: '1.1-2'}} </td>    
+              </ng-container>
+                <!-- Action Column -->
+          <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef > Action </th>
+             
+              <td mat-cell *matCellDef="let element">
+                  <button mat-icon-button
+                  type="button"
+                  [matMenuTriggerFor]="menu"
+                  aria-label="menu">
+                  <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu"
+                      xPosition="after"
+                      class="menu-formule">
+                      <button mat-menu-item
+                          (click)="goTo('consulter', element.idSinistreOp )"
+                          type="button">
+                          <mat-icon>zoom_in</mat-icon>
+                          <span *ngIf="element.typeOp.code =='OPA' ||element.typeOp.code =='OPP' || element.typeOp.code =='OPT' || element.typeOp.code =='ROR'" >
+                            Consulter OP
+                          </span>  
+                          <span *ngIf="element.typeOp.code =='OR' " >
+                            Consulter OR
+                          </span>                     
+                      </button>
+                      <button [disabled]="!roleExist || isConsult ? cdcDaImprim ? false : true : false" *ngIf="element.typeOp.code !='OR' " mat-menu-item
+                          (click)="getOpById(element.idSinistreOp )"
+                          type="button">
+                          <mat-icon>zoom_in</mat-icon>
+                          <span >
+                            Imprimer OP
+                          </span>                     
+                      </button>
+                      <button mat-menu-item
+                              type="button"
+                              [disabled]="!roleExist || isCdcDa || statuN === 'Fermé'|| statuN === 'Annulée'"
+                              (click)="goTo('approuv', element.idSinistreOp)"
+                              *ngIf="element.typeOp.code =='OPA' ||element.typeOp.code =='OPP' || element.typeOp.code =='OPT' || element.typeOp.code =='ROR'">
+                            <mat-icon>zoom_in</mat-icon>
+                            <span *ngIf="element.typeOp.code =='OPA' ||element.typeOp.code =='OPP' || element.typeOp.code =='OPT' || element.typeOp.code =='ROR'">
+                              Approuver OP
+                            </span>
+                           
+                      </button>  
+                    
+                      <button mat-menu-item
+                      [disabled]="!roleExist || isCdcDa || statuN === 'Fermé' || statuN === 'Annulée'"
+                     
+                          type="button"
+                          (click)="goTo('annuler', element.idSinistreOp)"
+                          >
+                          <mat-icon>zoom_in</mat-icon>
+                          <span *ngIf="element.typeOp.code =='OPA' ||element.typeOp.code =='OPP' || element.typeOp.code =='OPT' || element.typeOp.code =='ROR'">
+                            Annuler OP
+                          </span>
+                          <span *ngIf="element.typeOp.code =='OR' " >
+                            Annuler OR
+                          </span>
+                         
+                      </button>             
+                  </mat-menu>
+
+
+
+                 
+              </td>
+            
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"
+          class="example-second-header-row">
+      </tr>
+  
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+       <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10]"
+          aria-label="Select page of users"></mat-paginator>
+
+          <app-gestion-instances></app-gestion-instances>
+  </div>
+  

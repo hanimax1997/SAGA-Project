@@ -1,0 +1,15 @@
+<h2 class="heading">Désistement de client </h2>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mat-typography">
+    <p>Etes-vous sur de vouloir désister ce sinistre.</p>
+
+    <div class="content">
+
+        <div class="button-row">
+            <button class="btn btn-cancel" [mat-dialog-close]="false"
+                type="button">Retour</button>
+            <button class="btn btn-delete" [mat-dialog-close]="true">Confirmer</button>
+        </div>
+    </div>
+</mat-dialog-content>

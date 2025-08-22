@@ -1,0 +1,235 @@
+//button action 
+.buttons.row{
+    justify-content: space-between;
+    padding: 0px 21px;
+  }
+  //heading 
+  h2.heading{
+    color: #00008f;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+  }
+  .mat-dialog-content{
+    padding-top: 15px;
+  }
+  .mat-radio-button {
+    margin: 0 12px;
+  }
+  .mat-form-field{
+    padding-top: 15px;
+  }
+  .mat-error{
+    font-size: 11px;
+  }
+
+  .container{
+    background-color: #ffff;
+    padding: 40px 0px;
+    height: 100%;
+    overflow: auto;
+  }
+
+  .container::-webkit-scrollbar {
+    display: none;
+  }
+
+  table.question-table{
+    width: 100%;
+  }
+  .mat-header-cell {
+    color: #333333;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 15px;
+    width: 165px;
+  
+  }
+  .header-tab{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .mat-paginator{
+    background-color: transparent;
+    margin: auto;
+    width: 80%;
+    margin-top: 20px;
+  }
+  .example-first-header-row{
+    background-color: #00008f;
+  }
+  .example-first-header-row th.mat-header-cell{
+    border: none;
+    color: #ffff;
+    font-size: 18px;
+  }
+  .mat-column-valeurGarantie.mat-cell,
+  .mat-column-valeurEnvloppe.mat-cell{
+      text-align: center;
+  }
+  //icon 
+  .mat-icon{
+    height: 100%;
+    font-size: 36px;
+    width: fit-content;
+  }
+  .mat-cell .mat-icon{
+    color: #00008f;
+  }
+  .mat-header-cell.mat-icon{
+    color: #ffffff;
+  }
+  .mat-cell .mat-icon:hover,
+  .mat-header-cell .mat-icon:hover{
+    color: #d14723;
+    cursor: pointer;
+  }
+  ::ng-deep .mat-tooltip {
+    font-size: 14px;
+  }
+  ::ng-deep .mat-horizontal-stepper-header{
+    pointer-events: none !important;
+  }
+
+  .row-button {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 3rem;
+    margin-top: 2rem;
+  }
+
+  .center-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}
+::ng-deep .mat-progress-spinner circle, .mat-spinner circle{
+  stroke: #00008f
+}
+
+h2.header-title{
+  padding: 0 24px;
+  font-size: 21px!important;
+  color: #00008f;
+  font-weight: 600!important;
+  letter-spacing: 1px;
+  display: flex;
+}
+.container {
+  background-color: #ffff;
+  padding: 40px 0px;
+  height: 100%;
+  // overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)
+}
+
+.mat-expansion-panel-header {
+  background: #c7c7c733 !important;
+  font-weight: 600;
+  font-size: 16px;
+}
+.mat-expansion-panel-header.mat-expanded{
+  height: 48px;
+}
+.mat-expansion-panel-header-title {
+  color: #00008F;
+}
+// .mat-expansion-panel:not([class*=mat-elevation-z]){
+//   box-shadow: none;
+// }
+.row.infos{
+  font-size: 16px;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+.panel-risque .row.infos{
+  margin-left: 10px;
+  margin-top: 10px;
+}
+// .panel-risque{
+//   width: 100%;
+// }
+.panel-risque .mat-form-field {
+  margin-right: 1rem
+}
+.categoryTitle{
+  text-transform: capitalize;
+}
+.value{
+  color: #00008F;
+  font-weight: 600;
+}
+
+h2.header-title{
+  padding: 0 24px;
+  font-size: 21px!important;
+  color: #00008f;
+  font-weight: 600!important;
+  letter-spacing: 1px;
+  display: flex;
+  justify-content: space-between;
+}
+
+//table 
+table.pack-table{
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.mat-header-row th {
+  color: #00008F;
+
+}
+
+table th,
+table td {
+  font-size: 16px;
+  font-weight: 600;
+  border-right: 1px solid #e7e7e7;
+  padding-left: 1rem;
+}
+
+.mat-header-cell {
+  color: #333333;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: 15px;
+  // width: 165px;
+
+}
+table.resume{
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0 19px;
+
+}
+table.resume td{ 
+font-size: 17px;
+padding: 12px 19px;
+border: 1px solid rgba(0,0,0,.12);
+}
+
+.resume-buttons{
+  margin-top: 4rem;
+  width: 50%;
+  /* margin: 4rem auto; */
+  display: flex;
+  justify-content: space-between;
+}
+.resume-buttons .mat-icon{
+  margin-right: 9px;
+  font-size: 24px;
+}
+
+.center-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}

@@ -1,0 +1,35 @@
+.tierExistRadio{
+    margin-top: 3rem;
+    
+}
+.mat-radio-group .mat-radio-button {
+    margin-left: 4rem;
+}
+.mat-radio-label {
+    font-size: 16px;
+}
+.mat-dialog-content{
+    padding-top: 15px;
+}
+.btn.btn-cancel{
+    float: left;
+}
+.btn.btn-delete{
+    float: right;
+}
+p{
+    margin-bottom: 2rem;
+    font-size: 19px;
+    text-align: center;
+    line-height: 3rem;
+}
+.content{
+    display: flex;
+    flex-direction: column;
+}
+.content .existRadio{
+    margin-bottom:2rem;
+}
+.button-row{
+    margin-top: 2rem;
+}

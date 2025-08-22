@@ -1,0 +1,822 @@
+<div class="container ">
+    <div class="card">
+        <h2 class="heading">
+            <mat-icon aria-hidden="false"
+            class="material-symbols-outlined"
+            matTooltip="Retour"
+            (click)="navigateToListPack()"
+            matTooltipPosition="left">arrow_circle_left</mat-icon>
+            Modification du pack N°{{idPack}} </h2>
+        <!-- <mat-divider></mat-divider> -->
+        <mat-stepper labelPosition="bottom" [linear]="true" #stepper *ngIf="!successEdit">
+            <!-- step 1 pack -->
+            <mat-step [stepControl]="creationPackStepOne">
+                <form [formGroup]="creationPackStepOne" *ngIf="creationPackStepOne">
+                    <ng-template matStepLabel>Pack</ng-template>
+                    <div class="row">
+                        <!--description-->
+                        <mat-form-field class="col-md-5"
+                            appearance="outline">
+                            <mat-label>Description</mat-label>
+                            <input type="text" matInput placeholder=""
+                                formControlName="description">
+                            <mat-error
+                                *ngIf="creationPackStepOne.controls.description.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="creationPackStepOne.controls.description.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="row">
+                        <!-- date debut-->
+                        <mat-form-field class="col-md-5 " appearance="outline">
+                            <mat-label>Date Début</mat-label>
+                            <input matInput [matDatepicker]="dateDebut"
+                                formControlName="dateDebut">
+                            <mat-datepicker-toggle matSuffix [for]="dateDebut"></mat-datepicker-toggle>
+                            <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                            <mat-datepicker #dateDebut></mat-datepicker>
+                            <mat-error
+                                *ngIf="creationPackStepOne.controls.dateDebut.errors"
+                                class="invalid-feedback">
+                                <div
+                                    *ngIf="creationPackStepOne.controls.dateDebut.errors.required">
+                                    ce champs est obligatoire</div>
+                            </mat-error>
+                        </mat-form-field>
+
+                        <!-- date Fin -->
+                        <mat-form-field class="col-md-5" appearance="outline">
+                            <mat-label>Date Fin</mat-label>
+                            <input matInput [matDatepicker]="dateFin"
+                                formControlName="dateFin">
+                            <mat-datepicker-toggle matSuffix [for]="dateFin"></mat-datepicker-toggle>
+                            <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                            <mat-datepicker #dateFin></mat-datepicker>
+                            <mat-error
+                                *ngIf="creationPackStepOne.controls.dateFin.hasError('matDatepickerMin')"
+                                class="invalid-feedback">
+                                <div> Date fin est inférieur à la date début</div>
+                            </mat-error>
+
+                        </mat-form-field>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div class="header">
+                        <span class="title-table">Listes des paramétres pack
+                        </span>
+                        <button class="btn btn-secondary"
+                            (click)="addCategorieToPack()" style="display:
+                            flex;
+                            align-items: center;" type="button">
+                            <mat-icon aria-hidden="false" aria-label="ajouter
+                                pack "
+                                class="material-symbols-outlined">add_circle</mat-icon>
+                            Ajouter paramétre(s)
+
+                        </button>
+
+                    </div>
+                    <!-- table pack category -->
+                    <table mat-table [dataSource]="dataSourcePackCategory"
+                        class="table">
+                        <!-- 
+                        <ng-container matColumnDef="header">
+                            <th mat-header-cell *matHeaderCellDef
+                                attr.colspan={{lengthColumnsPackCategory}}>
+                                <div
+                                    class="header-tab">
+
+                                    <mat-icon aria-hidden="false"
+                                        aria-label="Ajouter une caegorie"
+                                        class="material-symbols-outlined"
+                                        matTooltip="Ajouter paramètre(s)"
+                                        matTooltipPosition="right"
+                                        (click)="addCategorieToPack()">add</mat-icon>
+                                </div>
+
+                            </th>
+                        </ng-container> -->
+                        <!-- categorieValeur Column -->
+                        <ng-container matColumnDef="categorieValeur">
+                            <th mat-header-cell *matHeaderCellDef> Categorie de
+                                valeur </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.categorieValeur.description}}
+                            </td>
+                        </ng-container>
+                        <!-- souscategories Column -->
+                        <ng-container matColumnDef="souscategories">
+                            <th mat-header-cell *matHeaderCellDef>Sous Categorie
+                                de
+                                valeur </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.sousCategorieList.description}}
+                            </td>
+                        </ng-container>
+                        <!-- typeValeur Column -->
+                        <ng-container matColumnDef="typeValeur">
+                            <th mat-header-cell *matHeaderCellDef> Type Valeur
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.typeValeur.description}} </td>
+                        </ng-container>
+                        <!-- valeur Column -->
+                        <ng-container matColumnDef="valeur">
+                            <th mat-header-cell *matHeaderCellDef> Valeur </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.valeur}}
+                            </td>
+                        </ng-container>
+                        <!-- action Column -->
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> Action
+                            </th>
+                            <td mat-cell *matCellDef="let element">
+                                <button mat-icon-button type="button"
+                                    [matMenuTriggerFor]="menu"
+                                    aria-label="menu garantie list">
+                                    <mat-icon>more_vert</mat-icon>
+                                </button>
+                                <mat-menu #menu="matMenu" xPosition="after"
+                                    class="menu-garanties">
+                                    <button mat-menu-item type="button"
+                                        (click)="EditPackCategory(element)">
+                                        <mat-icon>edit</mat-icon>
+                                        <span>Modifier paramètre</span>
+                                    </button>
+                                    <button mat-menu-item type="button"
+                                        (click)="deletePackCategory(element.idcaracteristique)">
+                                        <mat-icon>delete</mat-icon>
+                                        <span>Supprimer paramètre</span>
+                                    </button>
+                                </mat-menu>
+                            </td>
+                        </ng-container>
+
+                        <!-- <tr mat-header-row *matHeaderRowDef="['header']"
+                            class="first-header-row">
+                        </tr> -->
+                        <tr mat-header-row
+                            *matHeaderRowDef="displayedColumnsPackCategory"
+                            class="second-header-row">
+                        </tr>
+
+
+                        <tr mat-row *matRowDef="let row; columns:
+                            displayedColumnsPackCategory;"></tr>
+                    </table>
+                    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5,
+                        10,50]"
+                        aria-label=""></mat-paginator>
+                    <div>
+                        <button matStepperNext class="btn btn-action">Suivant</button>
+                    </div>
+                </form>
+            </mat-step>
+            <!-- step 2 configuration garantie  1 -->
+            <mat-step [stepControl]="creationPackStepTwo">
+                <form [formGroup]="creationPackStepTwo" *ngIf="creationPackStepTwo"
+                    (ngSubmit)="submitPack()">
+                    <ng-template matStepLabel>configuration garantie
+                    </ng-template>
+                    <div class="form-group" *ngIf="stepGarantieCategory">
+
+                        <!-- garantie -->
+                        <!-- sous garantie -->
+                        <div class="add-sous-garantie col-md-8">
+                            <span>Veuillez ajouter une garantie</span>
+                            <mat-form-field appearance="outline"
+                                class="col-md-5">
+                                <mat-label>Garantie</mat-label>
+                                <mat-select formControlName="garantie"
+                                    (selectionChange)="addGarantiePack($event.value)">
+                                    <mat-select-filter [placeholder]="'Filter'"
+                                        [displayMember]="'libelle'"
+                                        [array]="garanties"
+                                        (filteredReturn)="filteredGaranties=$event"></mat-select-filter>
+                                    <mat-option *ngFor="let garantie of
+                                        filteredGaranties" [value]="garantie">
+                                        {{garantie.id}}. {{garantie.libelle}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <!-- <mat-icon aria-hidden="false" aria-label="add
+                            garantie"
+                            class="material-symbols-outlined
+                            addGarantieIcon"
+                            matTooltip="Ajouter une garantie"
+                            matTooltipPosition="right"
+                            (click)="openCreateGarantie()">add_circle</mat-icon> -->
+                        <button class="btn btn-secondary"
+                            (click)="openCreateGarantie()" style="display:
+                            flex;
+                            align-items: center;" type="button">
+                            <mat-icon aria-hidden="false" aria-label="ajouter
+                                pack "
+                                class="material-symbols-outlined"
+                                style="margin-right:10px">add_circle</mat-icon>
+                            Ajouter une nouvelle garantie
+
+                        </button>
+                    </div>
+                    <div class="alert alert-danger" *ngIf="garantieExist &&
+                        stepGarantieCategory">Cette
+                        garantie appartient déja à ce pack </div>
+                    <!-- table garantie -->
+                    <div *ngIf="stepGarantieCategory" [@enterAnimation]>
+                        <mat-divider></mat-divider>
+                        <div class="header">
+                            <span class="title-table">Listes des garanties pack
+                            </span>
+                        </div>
+                        <table mat-table
+                            [dataSource]="dataGarantiePack"
+                            class="table">
+
+                            <!-- <ng-container
+                                matColumnDef="header-pack-garantie">
+                                <th mat-header-cell *matHeaderCellDef
+                                    attr.colspan={{lengthColumns}}>
+                                    <div class="header-tab">
+                                        <span>Liste des garanties pack
+                                        </span>
+                                    </div>
+
+                                </th>
+                            </ng-container> -->
+                            <!-- id_garantie Column -->
+                            <ng-container matColumnDef="idGarantie">
+                                <th mat-header-cell *matHeaderCellDef> id
+                                    garantie
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.id}} </td>
+                            </ng-container>
+                            <!-- description Column -->
+                            <ng-container matColumnDef="description">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Description
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.description}}
+                                </td>
+                            </ng-container>
+
+                            <!-- obligatoire Column -->
+                            <ng-container matColumnDef="obligatoire">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    obligatoire
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.obligatoire | obligatoireFormat}}
+                                </td>
+                            </ng-container>
+
+                            <!-- action Column -->
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Action
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <!-- <mat-icon aria-hidden="false"
+                                        aria-label="ajouter parametre"
+                                        class="material-symbols-outlined"
+                                        matTooltip="Ajouter paramètre"
+                                        matTooltipPosition="right"
+                                        (click)="addCategorie(element.idGarantie)">note_add</mat-icon>
+                                    <mat-icon aria-hidden="false"
+                                        aria-label="afficher liste parametre"
+                                        class="material-symbols-outlined"
+                                        matTooltip="Afficher les paramètres"
+                                        matTooltipPosition="right"
+                                        (click)="displayGarantieCategoryTab(element.idGarantie)">note</mat-icon>
+                                        <mat-icon aria-hidden="false"
+                                        aria-label="ajouter sous garantie"
+                                        class="material-symbols-outlined"
+                                        matTooltip="Afficher les paramètres"
+                                        matTooltipPosition="right"
+                                        (click)="displayGarantieCategoryTab(element.idGarantie)">note</mat-icon> -->
+                                    <button mat-icon-button type="button"
+                                        [matMenuTriggerFor]="menu"
+                                        aria-label="menu garantie list">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                    <mat-menu #menu="matMenu"
+                                        xPosition="after"
+                                        class="menu-garanties">
+                                        <!-- <button mat-menu-item type="button"
+                                            (click)="addCategorieToGarantie(element.id)">
+                                            <mat-icon>add_circle</mat-icon>
+                                            <span>Ajouter paramètre(s)</span>
+                                        </button> -->
+                                        <button mat-menu-item type="button"
+                                            (click)="editGarantiePack(element.id,element.description)">
+                                            <mat-icon>edit</mat-icon>
+                                            <span>Modifier la garantie</span>
+                                        </button>
+                                        <button mat-menu-item type="button"
+                                            (click)="deleteGarantie(element.id,element.description,'garantie')">
+                                            <mat-icon>delete</mat-icon>
+                                            <span>Supprimer la garantie</span>
+                                        </button>
+                                        <button mat-menu-item type="button"
+                                            matStepperNext
+                                            (click)="goToSousGarantie(stepper,element.id)">
+                                            <mat-icon>format_list_bulleted</mat-icon>
+                                            <span>Afficher sous garantie</span>
+                                        </button>
+                                        <button type="button" mat-menu-item
+                                            (click)="initGarantieCategoryTab(element.id)">
+                                            <mat-icon>format_list_bulleted</mat-icon>
+                                            <span>Afficher paramètre(s)</span>
+                                        </button>
+
+
+
+                                    </mat-menu>
+                                </td>
+                            </ng-container>
+                            <!-- <tr mat-header-row
+                                *matHeaderRowDef="['header-pack-garantie']"
+                                class="example-first-header-row">
+                            </tr> -->
+                            <tr mat-header-row
+                                *matHeaderRowDef="displayedColumnsGarantiePack"
+                                class="example-second-header-row">
+                            </tr>
+
+
+                            <tr mat-row *matRowDef="let row; columns:
+                                displayedColumnsGarantiePack;"></tr>
+                        </table>
+                        <mat-paginator [pageSize]="10"
+                            [pageSizeOptions]="[5,
+                            10,15]"
+                            #paginatorPackGarantie="matPaginator"
+                            aria-label="Select page of users"></mat-paginator>
+                    </div>
+                    <!-- table category garantie -->
+                    <div *ngIf="!stepGarantieCategory" [@enterAnimation]>
+                        <div class="header">
+
+                            <span class="title-table">
+                                <mat-icon aria-hidden="false"
+                                    class="material-symbols-outlined"
+                                    matTooltip="Retour"
+                                    matTooltipPosition="left" (click)="stepGarantieCategory=true">arrow_circle_left</mat-icon>Listes
+                                des paramétres
+                                garanties
+                            </span>
+                            <button class="btn btn-secondary"
+                                (click)="addCategorieToGarantie()"
+                                style="display:
+                                flex;
+                                align-items: center;"
+                                type="button">
+                                <mat-icon aria-hidden="false"
+                                    aria-label="ajouter
+                                    pack "
+                                    class="material-symbols-outlined">add_circle</mat-icon>
+                                Ajouter paramétre(s)
+
+                            </button>
+
+                        </div>
+                        <table mat-table
+                            [dataSource]="dataSourceGarantieCategory"
+                            class="table">
+
+                            <!-- garantie id Column -->
+                            <ng-container matColumnDef="idGarantie">
+                                <th mat-header-cell *matHeaderCellDef> Id
+                                    Garantie
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.idGarantie}}
+                                </td>
+                            </ng-container>
+                            <!-- categorieValeur Column -->
+                            <ng-container matColumnDef="categorieValeur">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Categorie
+                                    de valeur </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.categorieValeur.value}}
+                                </td>
+                            </ng-container>
+                            <!-- souscategories Column -->
+                            <ng-container matColumnDef="souscategories">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Sous categorie de valeur </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.sousCategorieList.value}}
+                                </td>
+                            </ng-container>
+                            <!-- typeValeur Column -->
+                            <ng-container matColumnDef="typeValeur">
+                                <th mat-header-cell *matHeaderCellDef> Type
+                                    Valeur
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.typeValeur.value}} </td>
+                            </ng-container>
+                            <!-- valeur Column -->
+                            <ng-container matColumnDef="valeur">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Valeur
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.valeur}}
+                                </td>
+                            </ng-container>
+                            <!-- action Column -->
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef> Action
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button mat-icon-button type="button"
+                                        [matMenuTriggerFor]="menu"
+                                        aria-label="menu garantie list">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                    <mat-menu #menu="matMenu" xPosition="after"
+                                        class="menu-garanties">
+                                        <button mat-menu-item type="button"
+                                            (click)="EditGarantieCategory(element)">
+                                            <mat-icon>edit</mat-icon>
+                                            <span>Modifier paramètre</span>
+                                        </button>
+                                        <button mat-menu-item type="button"
+                                            (click)="deleteCategoryGarantie(element.idcaracteristique,element.idGarantie)">
+                                            <mat-icon>delete</mat-icon>
+                                            <span>Supprimer paramètre</span>
+                                        </button>
+                                    </mat-menu>
+                                </td>
+                            </ng-container>
+                            <!-- <tr mat-header-row *matHeaderRowDef="['header']"
+                                class="first-header-row">
+                            </tr> -->
+                            <tr mat-header-row
+                                *matHeaderRowDef="displayedColumnsGarantieCategory"
+                                class="second-header-row">
+                            </tr>
+
+
+                            <tr mat-row *matRowDef="let row; columns:
+                                displayedColumnsGarantieCategory;"></tr>
+                        </table>
+                        <mat-paginator [pageSize]="10"
+                            [pageSizeOptions]="[5,
+                            10]"
+                            aria-label="Select page of users"
+                            #paginatorGarantieCategory="matPaginator"></mat-paginator></div>
+                    <div *ngIf="stepGarantieCategory">
+                        <button matStepperPrevious class="btn
+                            btn-cancel">Retour</button>
+                        <button class="btn btn-action"
+                            type="submit">Modifier</button>
+                    </div>
+                </form>
+            </mat-step>
+            <!-- 3 RD STEP CONFIGURATION SOUS GARANTIE-->
+            <mat-step [stepControl]="creationPackStepTwo" >
+                <form [formGroup]="creationPackStepTwo" *ngIf="creationPackStepTwo">
+                    <ng-template matStepLabel>configuration sous
+                        garantie
+                    </ng-template>
+                    <div class="alert alert-danger"
+                        *ngIf="garantieWithSousGarantie &&
+                        stepSousGarantieCategory">Cette Garantie ne
+                        contient aucune sous garantie, vous pouvez toujours en
+                        ajouter en cliquant sur le bouton ci-dessous </div>
+                    <div class="form-group" *ngIf="stepSousGarantieCategory">
+                        <!-- sous garantie -->
+                        <div class="add-sous-garantie col-md-8">
+                            <span>Veuillez ajouter une sous garantie</span>
+                            <mat-form-field appearance="outline"
+                                class="col-md-5">
+                                <mat-label>Sous garantie</mat-label>
+                                <mat-select formControlName="sousGarantie"
+                                    (selectionChange)="addSousGarantiePack($event.value)">
+                                    <mat-select-filter
+                                        [placeholder]="'Filter'"
+                                        [displayMember]="'libelle'"
+                                        [array]="garanties"
+                                        (filteredReturn)="filteredSousGaranties=$event"></mat-select-filter>
+                                    <mat-option *ngFor="let sousGarantie of
+                                        filteredSousGaranties"
+                                        [value]="sousGarantie">
+                                        {{sousGarantie.libelle}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- <mat-icon aria-hidden="false" aria-label="add
+                            garantie"
+                            class="material-symbols-outlined
+                            addGarantieIcon"
+                            matTooltip="Ajouter une garantie"
+                            matTooltipPosition="right"
+                            (click)="openCreateSousGarantie()">add_circle</mat-icon> -->
+                        <button class="btn btn-secondary"
+                            (click)="openCreateSousGarantie()" style="display:
+                            flex;
+                            align-items: center;" type="button">
+                            <mat-icon aria-hidden="false" aria-label="ajouter
+                                pack "
+                                class="material-symbols-outlined">add_circle</mat-icon>
+                            Ajouter une sous garantie
+
+                        </button>
+                    </div>
+
+
+                    <div class="alert alert-danger"
+                        *ngIf="sousGarantieExist && stepSousGarantieCategory">Cette
+                        sous garantie appartient déja à ce pack </div>
+                    <!-- table -->
+                    <div *ngIf="stepSousGarantieCategory"
+                        [@enterAnimation]>
+                        <mat-divider></mat-divider>
+                        <div class="header">
+                            <span class="title-table">
+                                <mat-icon aria-hidden="false"
+                                class="material-symbols-outlined"
+                                matTooltip="Retour"
+                                matTooltipPosition="left" (click)="goBack()">arrow_circle_left</mat-icon>Listes des sous garanties
+                                pack
+                            </span>
+                        </div>
+                        <table mat-table
+                            [dataSource]="dataSousGarantiePack"
+                            class="table">
+                            <!-- <ng-container
+                                matColumnDef="header-pack-garantie">
+                                <th mat-header-cell *matHeaderCellDef
+                                    attr.colspan={{lengthColumns}}>
+                                    <div class="header-tab">
+                                        <span>Liste des sous garanties
+                                            pack
+                                        </span>
+                                    </div>
+
+                                </th>
+                            </ng-container> -->
+                            <!-- id_garantie Column -->
+                            <ng-container matColumnDef="idGarantie">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    id
+                                    Sous garantie
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.id}} </td>
+                            </ng-container>
+                            <!-- description Column -->
+                            <ng-container matColumnDef="description">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Description
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.description}}
+                                </td>
+                            </ng-container>
+
+                            <!-- obligatoire Column -->
+                            <ng-container matColumnDef="obligatoire">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    obligatoire
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.obligatoire | obligatoireFormat}}
+                                </td>
+                            </ng-container>
+
+                            <!-- action Column -->
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Action
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button mat-icon-button
+                                        type="button"
+                                        [matMenuTriggerFor]="menu"
+                                        aria-label="menu garantie list">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                    <mat-menu #menu="matMenu"
+                                        xPosition="after"
+                                        class="menu-garanties">
+                                        <button mat-menu-item
+                                            type="button"
+                                            (click)="editSousGarantiePack(element.id,element.description,element.idGarantie)">
+                                            <mat-icon>edit</mat-icon>
+                                            <span>Modifier la sous
+                                                garantie</span>
+                                        </button>
+                                        <button mat-menu-item
+                                            type="button"
+                                            (click)="deleteSousGarantie(element.id,element.description,'sousGarantie',element.idGarantie)">
+                                            <mat-icon>delete</mat-icon>
+                                            <span>Supprimer la sous
+                                                garantie</span>
+                                        </button>
+                                        <!-- <button mat-menu-item
+                                            type="button"
+                                            (click)="addSousGarantieCategorie(element.id,element.description)">
+                                            <mat-icon>add_circle</mat-icon>
+                                            <span>Ajouter paramètre(s)</span>
+                                        </button> -->
+                                        <button mat-menu-item
+                                            type="button"
+                                            (click)="initTabSousGarantieCategory(element.id)">
+                                            <mat-icon>format_list_bulleted</mat-icon>
+                                            <span>Afficher paramètre(s)</span>
+                                        </button>
+
+
+                                    </mat-menu>
+                                </td>
+                            </ng-container>
+                            <!-- <tr mat-header-row
+                                *matHeaderRowDef="['header-pack-garantie']"
+                                class="example-first-header-row">
+                            </tr> -->
+                            <tr mat-header-row
+                                *matHeaderRowDef="displayedColumnsGarantiePack"
+                                class="example-second-header-row">
+                            </tr>
+
+
+                            <tr mat-row *matRowDef="let row; columns:
+                                displayedColumnsGarantiePack;"></tr>
+                        </table>
+                        <mat-paginator [pageSize]="10"
+                            [pageSizeOptions]="[5,
+                            10]"
+                            aria-label="Select page of users"
+                            #paginatorSousGarantiePack="matPaginator"></mat-paginator>
+                    </div>
+
+                    <div *ngIf="!stepSousGarantieCategory"
+                        [@enterAnimation]>
+                        <div class="header">
+
+                            <span class="title-table">
+                                <mat-icon aria-hidden="false"
+                                    class="material-symbols-outlined"
+                                    matTooltip="Retour"
+                                    (click)="stepGarantieCategory=true"
+                                    matTooltipPosition="left" (click)="stepSousGarantieCategory=true">arrow_circle_left</mat-icon>Listes
+                                des paramétres sous
+                                garanties
+                            </span>
+                            <button class="btn btn-secondary"
+                                (click)="addSousGarantieCategorie()"
+                                style="display:
+                                flex;
+                                align-items: center;"
+                                type="button">
+                                <mat-icon aria-hidden="false"
+                                    aria-label="ajouter
+                                    pack "
+                                    class="material-symbols-outlined">add_circle</mat-icon>
+                                Ajouter paramétre(s)
+
+                            </button>
+
+                        </div>
+                        <table mat-table
+                            [dataSource]="dataSourceSousGarantieCategory"
+                            class="table">
+                            <!-- <ng-container matColumnDef="header">
+                                <th mat-header-cell *matHeaderCellDef
+                                    attr.colspan={{lengthColumnsGarantieCategory}}>
+                                    <div class="header-tab"
+                                        style="justify-content: space-between;">
+                                        <mat-icon aria-hidden="false"
+                                            aria-label="Ajouter une
+                                            caegorie"
+                                            class="material-symbols-outlined"
+                                            matTooltip="Retourner vers
+                                            la
+                                            liste
+                                            des garanties"
+                                            matTooltipPosition="right"
+                                            (click)="stepSousGarantieCategory=true">arrow_circle_left</mat-icon>
+                                        <span>Liste des catégories</span>
+                                        <mat-icon aria-hidden="false"
+                                            aria-label="Ajouter une categorie"
+                                            class="material-symbols-outlined"
+                                            matTooltip="Ajouter paramètre(s)"
+                                            matTooltipPosition="right"
+                                            (click)="addSousGarantieCategorie()">add</mat-icon>
+                                    </div>
+
+                                </th>
+                            </ng-container> -->
+                            <!-- categorieValeur Column -->
+                            <ng-container
+                                matColumnDef="categorieValeur">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Categorie
+                                    de valeur </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.categorieValeur.value}}
+                                </td>
+                            </ng-container>
+
+                            <!-- sous categorieValeur Column -->
+                            <ng-container
+                                matColumnDef="souscategories">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Sous categorie
+                                    de valeur </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.sousCategorieList.value}}
+                                </td>
+                            </ng-container>
+                            <!-- typeValeur Column -->
+                            <ng-container matColumnDef="typeValeur">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Type
+                                    Valeur
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.typeValeur.value}} </td>
+                            </ng-container>
+                            <!-- valeur Column -->
+                            <ng-container matColumnDef="valeur">
+                                <th mat-header-cell *matHeaderCellDef>
+                                    Valeur
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.valeur}}
+                                </td>
+                            </ng-container>
+                            <!-- action Column -->
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef> Action
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <button mat-icon-button type="button"
+                                        [matMenuTriggerFor]="menu"
+                                        aria-label="menu garantie list">
+                                        <mat-icon>more_vert</mat-icon>
+                                    </button>
+                                    <mat-menu #menu="matMenu" xPosition="after"
+                                        class="menu-garanties">
+                                        <button mat-menu-item type="button"
+                                            (click)="EditSousGarantieCategory(element)">
+                                            <mat-icon>edit</mat-icon>
+                                            <span>Modifier paramètre</span>
+                                        </button>
+                                        <button mat-menu-item type="button"
+                                            (click)="deleteCategorySousGarantie(element.idcaracteristique,element.idSousGarantie)">
+                                            <mat-icon>delete</mat-icon>
+                                            <span>Supprimer paramètre</span>
+                                        </button>
+                                    </mat-menu>
+                                </td>
+                            </ng-container>
+                            <!-- <tr mat-header-row
+                                *matHeaderRowDef="['header']"
+                                class="first-header-row">
+                            </tr> -->
+                            <tr mat-header-row
+                                *matHeaderRowDef="displayedColumnsSousGarantieCategory"
+                                class="second-header-row">
+                            </tr>
+
+
+                            <tr mat-row *matRowDef="let row; columns:
+                                displayedColumnsSousGarantieCategory;"></tr>
+                        </table>
+                        <mat-paginator [pageSize]="10"
+                            [pageSizeOptions]="[5,
+                            10]"
+                            aria-label="Select page of users"
+                            #paginatorSousGarantieCategory="matPaginator"></mat-paginator></div>
+                    <!-- <div>
+                        <button matStepperPrevious class="btn
+                            btn-cancel">Retour</button>
+                    </div> -->
+                </form>
+            </mat-step>
+        </mat-stepper>
+
+        <div *ngIf="successEdit">
+            <div class="alert alert-success">
+                Le Pack {{idPack}} a été Modifié avec succès.
+            </div>
+
+        </div>
+    </div>
+
+</div>

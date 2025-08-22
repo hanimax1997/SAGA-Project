@@ -1,0 +1,83 @@
+<h2 class="heading">Création une réponse
+    <span style="float: right; font-size: 24px;" >
+        <mat-icon aria-hidden="false" aria-label="" class="material-symbols-outlined"
+                matTooltip="" matTooltipPosition="right" mat-dialog-close> close
+              </mat-icon>
+    </span>
+</h2>
+<mat-divider></mat-divider>
+<div *ngIf="reponseCreationSuccess" class="alert alert-success">Réponse ajouté avec succés</div>
+<mat-dialog-content class="mat-typography">
+    <form #formDirective="ngForm" [formGroup]="formCreationReponse"
+        (ngSubmit)="ajouterReponse(formDirective)" class="login-form">
+
+        <mat-form-field class="col-md-4" style="padding-right: 1%;" appearance="outline">
+            <mat-label>Réponse</mat-label>
+            <input type="text" matInput placeholder="" formControlName="description">
+            <mat-error *ngIf="formCreationReponse.controls.description.errors" class="invalid-feedback">
+                <div *ngIf="formCreationReponse.controls.description.errors.required">
+                    Ce champ est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-4" style="padding-left: 1%; padding-right: 1%;" appearance="outline">
+            <mat-label>Numéro d'ordre</mat-label>
+            <input type="nummber" matInput placeholder="" formControlName="numeroOrdre">
+            <mat-error
+                *ngIf="formCreationReponse.controls.numeroOrdre.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formCreationReponse.controls.numeroOrdre.errors.required">
+                    ce champ est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-checkbox class="col-md-4" formControlName="isQuestion">Cette réponse engendre-elle des questions</mat-checkbox>
+
+        <mat-form-field class="col-md-12" appearance="outline" *ngIf="formCreationReponse.value.isQuestion">
+            <mat-label> Questionnaire </mat-label>
+            
+            <mat-select formControlName="idQuestionnaire">
+                <ng-container *ngFor="let questionnaire of questionnaireList">
+                    <mat-option [value]="questionnaire.idQuestionnaire">{{questionnaire.description}}</mat-option>
+                  </ng-container>
+            </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+            <mat-label>Date debut</mat-label>
+            <input matInput [min]="data.Question.dateDebut" [matDatepicker]="pickerDateDebut" formControlName="dateDebut"
+                (dateChange)="debutDateChange($event.value)">
+            <mat-datepicker-toggle matSuffix [for]="pickerDateDebut"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDateDebut></mat-datepicker>
+            <mat-error *ngIf="formCreationReponse.controls.dateDebut.errors" class="invalid-feedback">
+                <div *ngIf="formCreationReponse.controls.dateDebut.errors.required">
+                    ce champ est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+            <mat-label>Date fin</mat-label>
+            <input matInput [max]="data.Question.dateFin" [min]="minDate" [matDatepicker]="pickerDateFin" formControlName="dateFin">
+            <mat-datepicker-toggle matSuffix [for]="pickerDateFin"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDateFin></mat-datepicker>
+            <mat-error *ngIf="formCreationReponse.controls.dateFin.hasError('matDatepickerMin')"
+                class="invalid-feedback">
+                <div> Date fin est inférieur à la date début</div>
+
+
+            </mat-error>
+        </mat-form-field>          
+
+        <div class="row-button">
+            <button class="btn btn-cancel" mat-dialog-close>Annuler</button>
+            <button class="btn btn-action" type="submit">Ajouter Réponse</button>
+
+        </div>
+    </form>
+</mat-dialog-content>
+<!-- <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions> -->

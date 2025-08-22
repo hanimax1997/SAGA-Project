@@ -1,0 +1,93 @@
+<div class="container ">
+    <div class="header-container">
+        <h2 class="header-title">
+            <mat-icon aria-hidden="false"
+            class="material-symbols-outlined"
+            matTooltip="Retour"
+            matTooltipPosition="left"
+            (click)='goBack()'>arrow_circle_left</mat-icon>
+            Completez informations sinistres
+
+            <!-- <div class="title">
+            <mat-icon class="mat-icon notranslate
+                material-symbols-outlined material-icons mat-icon-no-color"
+                aria-label="directions_car">report</mat-icon>
+            Completez informations sinistres
+        </div> -->
+        </h2>
+
+    </div>
+    <app-entete-gestion></app-entete-gestion>
+
+    <!-- <div class="alert alert-success" *ngIf="successUpdate">{{msgApi.msg}}</div> -->
+    <!-- <div class="alert alert-danger" *ngIf="msgApi.error">{{msgApi.msg}}</div> -->
+    <form [formGroup]="formEditInfoSinistre" class="form row" *ngIf="formEditInfoSinistre" (ngSubmit)="submitInfosEdit()">
+
+        <!--numPolice -->
+        <!--cause sinistre  -->
+        <mat-form-field class="col-md-5"
+            appearance="outline">
+            <mat-label> Cause sinistre </mat-label>
+            <mat-select formControlName="causeSinistre"
+                (selectionChange)="(codeProduit == '45A' || codeProduit == '45F' || codeProduit == '45L') ? getZonesByCause($event.value,2) : ''">
+                <mat-select-filter
+                    [displayMember]="'description'"
+                    [array]="causesSinistreArray"
+                    (filteredReturn)="filteredcausesSinistre=$event"></mat-select-filter>
+                <mat-option *ngFor="let cause of filteredcausesSinistre"
+                    [value]="cause.idParam">
+                    {{cause.description}}
+                </mat-option>
+            </mat-select>
+            <mat-error
+                *ngIf="formEditInfoSinistre.controls.causeSinistre.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formEditInfoSinistre.controls.causeSinistre.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <!--zones affectes   -->
+        <mat-form-field class="col-md-5"
+            appearance="outline">
+            <mat-label> Zone Affectée </mat-label>
+            <mat-select formControlName="zoneAffecte"
+                (selectionChange)="controlDoublonsWithZone($event.value)"
+                [disabled]="disabledZone">
+                <mat-select-filter
+                    [displayMember]="'description'"
+                    [array]="zonesAffectees"
+                    (filteredReturn)="filteredZonesAffectees=$event"></mat-select-filter>
+                <mat-option *ngFor="let zone of
+                    filteredZonesAffectees" [value]="zone.idParam">
+                    {{zone.description}}
+                </mat-option>
+            </mat-select>
+            <mat-error
+                *ngIf="formEditInfoSinistre.controls.zoneAffecte.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formEditInfoSinistre.controls.zoneAffecte.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <!-- Taux de responsabilité Gestion -->
+        <mat-form-field class="col-md-5"
+            appearance="outline">
+            <mat-label>Taux de responsabilité Gestion acutellement est : <strong>{{TauxGestion}}</strong> </mat-label>
+            <input type="text" matInput
+                formControlName="tauxResponsabiliteGestion">
+            <mat-icon matSuffix>percent</mat-icon>
+            <mat-error
+                *ngIf="formEditInfoSinistre.controls.tauxResponsabiliteGestion.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formEditInfoSinistre.controls.tauxResponsabiliteGestion.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field> 
+        <div class="button-row">
+            <button mat-button class="btn btn-action" *ngIf="!disabledZone && !sinistreBlocked && statusSinistre!='CP355'" type="submit">Enregistrer</button>
+        </div>
+    </form>
+</div>

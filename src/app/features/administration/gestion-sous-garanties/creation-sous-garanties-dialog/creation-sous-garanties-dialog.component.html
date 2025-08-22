@@ -1,0 +1,69 @@
+<h2 class="heading">Création une sous garantie
+    <span style="float: right; font-size: 24px;" >
+        <mat-icon aria-hidden="false" aria-label="" class="material-symbols-outlined"
+                matTooltip="" matTooltipPosition="right" mat-dialog-close> close
+              </mat-icon>
+    </span>
+</h2>
+<mat-divider></mat-divider>
+<div *ngIf="sousGarantieCreationSuccess" class="alert alert-success">La sous garantie N°{{idSousGarantie}} a été modifier avec succés</div>
+<div *ngIf="sousGarantieCreationError" class="alert alert-danger"> {{messageError}} </div>
+<mat-dialog-content class="mat-typography">
+    <form #formDirective="ngForm" [formGroup]="formCreationSousGarantie"
+        (ngSubmit)="submitCreationSousGarantie(formDirective)" class="login-form">
+
+        <mat-form-field class="col-md-12" appearance="outline">
+            <mat-label>Description</mat-label>
+            <input type="text" matInput placeholder="" formControlName="description">
+            <mat-error *ngIf="formCreationSousGarantie.controls.description.errors" class="invalid-feedback">
+                <div *ngIf="formCreationSousGarantie.controls.description.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-6" style="padding-right: 3%;" appearance="outline">
+            <mat-label>Valeur de l'enveloppe</mat-label>
+            <input type="nummber" matInput placeholder="" formControlName="valeurEnvloppe">
+        </mat-form-field>
+
+        <mat-form-field class="col-md-6" appearance="outline" style="padding-left: 3%;">
+            <mat-label>codification Nationale</mat-label>
+            <input type="text" matInput placeholder="" formControlName="idNationnal">
+        </mat-form-field>
+
+        <mat-form-field class="col-md-6" style="padding-right: 3%;" appearance="outline">
+            <mat-label>Date debut</mat-label>
+            <input matInput [matDatepicker]="pickerDateDebut" formControlName="dateDebut"
+                (dateChange)="debutDateChange($event.value)">
+            <mat-datepicker-toggle matSuffix [for]="pickerDateDebut"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDateDebut></mat-datepicker>
+            <mat-error *ngIf="formCreationSousGarantie.controls.dateDebut.errors" class="invalid-feedback">
+                <div *ngIf="formCreationSousGarantie.controls.dateDebut.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="col-md-6" style="padding-left: 3%;" appearance="outline">
+            <mat-label>Date fin</mat-label>
+            <input matInput [min]="minDate" [matDatepicker]="pickerDateFin" formControlName="dateFin">
+            <mat-datepicker-toggle matSuffix [for]="pickerDateFin"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDateFin></mat-datepicker>
+            <mat-error *ngIf="formCreationSousGarantie.controls.dateFin.hasError('matDatepickerMin')"
+                class="invalid-feedback">
+                <div> Date fin est inférieur à la date début</div>
+
+
+            </mat-error>
+        </mat-form-field>
+
+        <div class="row-button">
+            <button class="btn btn-cancel" mat-dialog-close>Annuler</button>
+            <button class="btn btn-action" type="submit">Envoyer</button>
+
+        </div>
+    </form>
+</mat-dialog-content>
+<!-- <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Install</button>
+</mat-dialog-actions> -->

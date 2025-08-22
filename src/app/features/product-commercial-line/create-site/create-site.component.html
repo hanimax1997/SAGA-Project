@@ -1,0 +1,150 @@
+<div class="container">
+    <h2 class="header-title"><mat-icon class="mat-icon notranslate
+            material-symbols-outlined material-icons mat-icon-no-color"
+            aria-label>directions_boat</mat-icon>
+        Produits Commercial line </h2>
+
+        <form #formDirective="ngForm" [formGroup]="formCreation" class
+        (ngSubmit)="submitProduct(formDirective)" *ngIf="formCreation">
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5 ">
+                <mat-label>Valeur Assurée</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="valAssure">
+                <mat-error
+                    *ngIf="formCreation.controls.valAssure.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.valAssure.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+            class="col-md-5 ">
+            <mat-label>Valeur contenu</mat-label>
+            <input type="number" matInput placeholder
+                formControlName="contenu">
+            <mat-error
+                *ngIf="formCreation.controls.contenu.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formCreation.controls.contenu.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+            
+        </div>
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5 ">
+                <mat-label>Valeur Contenant</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="contenant">
+                <mat-error
+                    *ngIf="formCreation.controls.contenant.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.contenant.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+            class="col-md-5 ">
+            <mat-label>Valeur  Risque locatif</mat-label>
+            <input type="number" matInput placeholder
+                formControlName="risqueLocatif">
+            <mat-error
+                *ngIf="formCreation.controls.risqueLocatif.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formCreation.controls.risqueLocatif.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+            
+        </div>
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5 ">
+                <mat-label>Valeur BI</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="bi">
+                <mat-error
+                    *ngIf="formCreation.controls.bi.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.bi.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            
+        </div>
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>SMP</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="smp">
+                <mat-error
+                    *ngIf="formCreation.controls.smp.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.smp.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>Adresse</mat-label>
+                <input type="text" matInput placeholder
+                    formControlName="adresse">
+                <mat-error
+                    *ngIf="formCreation.controls.adresse.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.adresse.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+        
+        </div>
+        <div class="row">
+            <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>Longiture</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="longitude">
+                <mat-error
+                    *ngIf="formCreation.controls.longitude.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.longitude.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+        <mat-form-field appearance="outline"
+                class="col-md-5">
+                <mat-label>Latitude</mat-label>
+                <input type="number" matInput placeholder
+                    formControlName="latitude">
+                <mat-error
+                    *ngIf="formCreation.controls.latitude.errors"
+                    class="invalid-feedback">
+                    <div
+                        *ngIf="formCreation.controls.latitude.errors.required">
+                        ce champs est obligatoire</div>
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col-md-12 row-button">
+            <button class="btn btn-cancel" [routerLink]="['/gestion-commercial-line']">Annuler
+            </button>
+            <button class="btn btn-action">Enregistrer
+            </button>
+        </div>
+
+    </form>
+                
+</div>
+

@@ -1,0 +1,38 @@
+<div class="infoSinistre">
+    <table class="resumeSinistre">
+        <tr>
+            <th>N° sinistre</th>
+            <th>N° police</th>
+            <th>date de survenance</th>
+            <th *ngIf="infoSinistre.immatriculation else notAuto">immatriculation</th>
+            <ng-template #notAuto>
+                <th>Adresse</th>
+                <th>Wilaya</th>
+                <th>Commune</th>
+            </ng-template>
+            <th>code risque</th>
+            <th *ngIf="infoSinistre.nomAssure">Nom assuré</th>
+            <th *ngIf="infoSinistre.prenomAssure">Prénom assuré</th>
+            <th *ngIf="infoSinistre.raisonSocial">Raison Social</th>
+          </tr>
+          
+        <tr>
+            <td class="value">{{infoSinistre.codeSinistre}}</td>
+            <td class="value">{{infoSinistre.idContrat}}</td>
+            <td class="value">{{infoSinistre.dateSurvenance |dateFormatPipe}}</td>
+            <td class="value" *ngIf="infoSinistre.immatriculation else notAuto2">{{infoSinistre.immatriculation}}</td>
+            <ng-template #notAuto2>
+                <td class="value">{{infoSinistre.adresse}}</td>
+                <td class="value">{{infoSinistre.wilaya}}</td>
+                <td class="value">{{infoSinistre.commune}}</td>
+            </ng-template>
+            <td class="value">{{infoSinistre.codeRisque}}</td>
+            <td class="value" *ngIf="infoSinistre.nomAssure">{{infoSinistre.nomAssure}}</td>
+            <td class="value" *ngIf="infoSinistre.prenomAssure">{{infoSinistre.prenomAssure}}</td>
+            <td class="value" *ngIf="infoSinistre.raisonSocial">{{infoSinistre.raisonSocial}}</td>
+
+        </tr>
+
+    </table>
+
+</div>

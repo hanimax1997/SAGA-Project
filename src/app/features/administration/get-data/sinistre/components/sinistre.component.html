@@ -1,0 +1,418 @@
+<div class="rapport-container">
+    <mat-form-field appearance="outline">
+        <mat-label>Choisir un type de rapport</mat-label>
+        <mat-select [(value)]="selectedForm" (selectionChange)="onFormChange()">
+            <mat-option *ngFor="let form of availableForms" [value]="form.value">
+                {{ form.label }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div *ngIf="selectedForm === 'sinistres'">
+        <h2>Rapport Sinistre</h2>
+        <form [formGroup]="sinistreForm">
+            <div class="form-row date-range-row" [formGroup]="sinistreForm">
+                <div class="form-row date-range-row" [formGroup]="sinistreForm">
+                    <div class="date-fields">
+                        <mat-form-field appearance="outline" class="date-field">
+                            <mat-label>Date émission Du</mat-label>
+                            <input matInput [matDatepicker]="picker1" formControlName="startDate" [min]="minDate"
+                                [max]="today" />
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="date-field">
+                            <mat-label>Date émission Au</mat-label>
+                            <input matInput [matDatepicker]="picker2" formControlName="endDate" [min]="startDateValue"
+                                [max]="maxEndDate" [disabled]="!sinistreForm.get('startDate')?.value" />
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+
+            </div>
+            <!-- Sinistre / Police / OP -->
+            <div class="form-row">
+                <mat-form-field appearance="outline">
+                    <mat-label>N° de Sinistre</mat-label>
+                    <input matInput type="text" formControlName="numeroSinistre"
+                        placeholder="Entrez le numéro de Sinistre">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>N° de Police</mat-label>
+                    <input matInput type="text" formControlName="numeroPolice" placeholder="Entrez le numéro de police">
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>N° de OP</mat-label>
+                    <input matInput type="text" formControlName="numeroOP" placeholder="Entrez le numéro de OP">
+                </mat-form-field>
+            </div>
+            <!-- Statut sinistre / Produit / region -->
+            <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width-field">
+                    <mat-label>Situation Sinistre</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let situation of situations" [value]="situation.idParam">
+                            {{ situation.description }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Produit</mat-label>
+                    <mat-select formControlName="produit">
+                        <mat-option *ngFor="let p of produits" [value]="p.idCodeProduit">
+                            {{ p.description }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- ✅ Cas : une seule agence (affichée automatiquement) -->
+                <div *ngIf="agenceUnique && !afficherListeAgences">
+                    <mat-form-field appearance="outline" style="width: 100%;">
+                        <input matInput [value]="agenceUnique.codeAgence + ' - ' + agenceUnique.nomAgence" disabled />
+                    </mat-form-field>
+                </div>
+
+                <!-- ✅ Cas : plusieurs agences (choix dans liste déroulante) -->
+                <mat-form-field *ngIf="afficherListeAgences" appearance="outline" style="width: 100%;">
+                    <mat-label>Choisissez une agence</mat-label>
+                    <mat-select formControlName="agence">
+                        <mat-option *ngFor="let agence of agencesUtilisateur"
+                            [value]="agence.codeAgence + ' - ' + agence.nomAgence">
+                            {{ agence.codeAgence }} - {{ agence.nomAgence }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error
+                        *ngIf="sinistreForm.get('agence')?.hasError('required') && sinistreForm.get('agence')?.touched">
+                        Le choix d'une agence est <strong>obligatoire</strong>.
+                    </mat-error>
+                </mat-form-field>
+
+                <!-- ❌ Cas : aucune agence trouvée -->
+                <div *ngIf="aucuneAgence" style="color: red;">
+                    Aucune agence trouvée pour cet utilisateur.
+                </div>
+            </div>
+            <div class="form-row">
+                <!-- <mat-form-field appearance="outline">
+                    <mat-label>email</mat-label>
+                    <input matInput formControlName="email" readonly>
+                </mat-form-field> -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Zone</mat-label>
+                    <input matInput [value]="zoneNom" readonly />
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Société</mat-label>
+                    <mat-select formControlName="societe">
+                        <mat-option *ngFor="let type of societes" [value]="type">
+                            {{ type }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-row right">
+
+            </div>
+            <div class="form-row right">
+                <button mat-raised-button class="btn-rap" (click)="exportFormData('sinistres')">
+                    Exporter en Excel
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+
+
+
+    <div *ngIf="selectedForm === 'sinistresdec'">
+        <h2>Rapport Sinistre déclaré</h2>
+        <form [formGroup]="sinistredecForm">
+            <div class="form-row date-range-row" [formGroup]="sinistreForm">
+                <div class="date-fields">
+                    <mat-form-field appearance="outline" class="date-field">
+                        <mat-label>Date émission Du</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="startDate" [min]="minDate"
+                            [max]="today" />
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+
+                    <!-- Date émission Au -->
+                    <mat-form-field appearance="outline" class="date-field">
+                        <mat-label>Date émission Au</mat-label>
+                        <input matInput [matDatepicker]="picker2" formControlName="endDate" [min]="startDateValue"
+                            [max]="maxEndDate" [disabled]="!sinistreForm.get('startDate')?.value" />
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <div class="form-row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Produit</mat-label>
+                    <mat-select formControlName="produit">
+                        <mat-option *ngFor="let p of produitsDec" [value]="p.idCodeProduit">
+                            {{ p.description }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Pack</mat-label>
+                    <mat-select formControlName="pack">
+                        <mat-option *ngFor="let pack of packsDec" [value]="pack.idPack0">
+                            {{ pack.description }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline" class="date-field">
+                    <mat-label>Garantie</mat-label>
+                    <mat-select formControlName="garantie">
+                        <mat-option *ngFor="let garantieObj of garantiesDec" [value]="garantieObj.garantie.idGarantie">
+                            {{ garantieObj.garantie.description }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </div>
+            <div class="form-row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Agence de souscription</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let agence of allAgencesDetails" [value]="agence.codeAgence">
+                            {{ agence.nomAgence }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Agence de déclarfation </mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let agence of allAgencesDetails" [value]="agence.codeAgence">
+                            {{ agence.nomAgence }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Compagnie Adverse</mat-label>
+                    <mat-select formControlName="CompagnieAdverse">
+                        <mat-option *ngFor="let company of CompagnieAdverse" [value]="company">
+                            {{ company }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-row">
+                <div class="one-mat">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Nature Dommage</mat-label>
+                        <mat-select formControlName="NatureDommage">
+                            <mat-option *ngFor="let Nature of NatureDommage" [value]="Nature">
+                                {{ Nature }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                </div>
+            </div>
+            <div class="form-row right">
+                <button mat-raised-button class="btn-rap" (click)="exportFormData('sinistresdec')">
+                    Exporter en Excel
+                </button>
+            </div>
+
+
+        </form>
+    </div>
+
+
+
+
+
+    <div *ngIf="selectedForm === 'sinistreprov'">
+        <h2>Rapport Sinistre en provision</h2>
+        <form [formGroup]="sinistreprovForm">
+            <div class="form-row">
+                <div class="date-fields">
+                    <mat-form-field appearance="outline" class="date-field" style="width: 100%;">
+                        <mat-label>Date de Mouvement</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="startDate" [min]="minDate"
+                            [max]="today" />
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Produit</mat-label>
+                    <mat-select formControlName="produit">
+                        <mat-option *ngFor="let p of produits" [value]="p.idCodeProduit">{{ p.description
+                            }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- <mat-form-field appearance="outline">
+                    <mat-label>Pack</mat-label>
+                    <mat-select formControlName="pack">
+                        <mat-option *ngFor="let pack of packsprov" [value]="pack.idPack0">{{ pack.description
+                            }}</mat-option>
+                    </mat-select>
+                </mat-form-field> -->
+                <mat-form-field appearance="outline">
+                    <mat-label>Pack</mat-label>
+                    <mat-select formControlName="pack">
+                        <mat-option *ngFor="let pack of packsprov" [value]="pack.idPack0">
+                            {{ pack.description }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline">
+                    <mat-label>AgencesDeSouscription</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let agence of allAgencesDetails" [value]="agence.codeAgence">
+                            {{ agence.nomAgence }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="form-row">
+                <mat-form-field appearance="outline">
+                    <mat-label>Agence de déclarfation </mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let agence of allAgencesDetails" [value]="agence.codeAgence">
+                            {{ agence.nomAgence }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Nature Dommage</mat-label>
+                    <mat-select formControlName="NatureDommage">
+                        <mat-option *ngFor="let Nature of NatureDommage" [value]="Nature">
+                            {{ Nature }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div>
+                </div>
+                <mat-form-field appearance="outline">
+                    <mat-label>Situation sinistre</mat-label>
+                    <mat-select>
+                        <mat-option *ngFor="let item of dictionnaires" [value]="item.description">
+                            {{ item.description }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </div>
+            <div class="form-row right">
+                <button mat-raised-button class="btn-rap" (click)="exportFormData('sinistreprov')">
+                    Exporter en Excel
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+
+
+    <div *ngIf="selectedForm === 'sinistressuite'">
+        <h2>Rapport Sinistre sans suite</h2>
+        <form [formGroup]="sinistresuiteForm">
+            <div class="form-row date-range-row" [formGroup]="sinistreForm">
+                <div class="date-fields">
+                    <mat-form-field appearance="outline" class="date-field">
+                        <mat-label>Date émission Du</mat-label>
+                        <input matInput [matDatepicker]="picker1" formControlName="startDate" [min]="minDate"
+                            [max]="today" />
+                        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker #picker1></mat-datepicker>
+                    </mat-form-field>
+
+                    <!-- Date émission Au -->
+                    <mat-form-field appearance="outline" class="date-field">
+                        <mat-label>Date émission Au</mat-label>
+                        <input matInput [matDatepicker]="picker2" formControlName="endDate" [min]="startDateValue"
+                            [max]="maxEndDate" [disabled]="!sinistreForm.get('startDate')?.value" />
+                        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                        <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+            </div>
+            <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Produit</mat-label>
+                    <mat-select formControlName="produit">
+                        <mat-option *ngFor="let p of produitsSuite" [value]="p.idCodeProduit">
+                            {{ p.description }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Pack</mat-label>
+                    <mat-select formControlName="pack">
+                        <mat-option *ngFor="let pack of packsSuite" [value]="pack.idPack0">
+                            {{ pack.description }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Nature Dommage</mat-label>
+                    <mat-select formControlName="NatureDommage">
+                        <mat-option *ngFor="let Nature of NatureDommage" [value]="Nature">
+                            {{ Nature }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-row">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Garantie</mat-label>
+                    <mat-select formControlName="garantie">
+                        <mat-option *ngFor="let g of garantiesSuite" [value]="g.garantie.idGarantie">
+                            {{ g.garantie.description }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Nom Gestionnaire</mat-label>
+                    <mat-select formControlName="NomGestionnaire">
+                        <!-- <mat-option *ngFor="let nom of NomGestionnaire" [value]="nom.NomGestionnaire">
+                            {{ nom.NomGestionnaire }}
+                        </mat-option> -->
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Motif</mat-label>
+                    <mat-select formControlName="Motif">
+                        <!-- <mat-option *ngFor="let Motif of Motifs" [value]="Motif.IdMotif0">
+                            {{ Motif.description }}
+                        </mat-option> -->
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="form-row right">
+                <button mat-raised-button class="btn-rap" (click)="exportFormData('sinistressuite')">
+                    Exporter en Excel
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>

@@ -1,0 +1,177 @@
+<div class="container ">
+    <h2 class="header-title">
+        <mat-icon class="mat-icon notranslate
+            material-symbols-outlined material-icons mat-icon-no-color"
+            aria-label="directions_car"
+            (click)="goBack()">
+            arrow_circle_left
+        </mat-icon>
+        Création d'instance
+    </h2>
+    <form #formDirective="ngForm" [formGroup]="formInstance"
+        (ngSubmit)="addInstance(formDirective)"
+        class="row ">
+
+        <!--typeInstance -->
+        <mat-form-field class="col-md-5"
+            appearance="outline">
+            <mat-label>Type instance</mat-label>
+            <mat-select formControlName="typeInstance"
+                (selectionChange)="changeTypeInstance($event.value)">
+                <ng-container *ngFor="let type of typeInstancesArray">
+                    <mat-option [value]="type">{{type.description}}</mat-option>
+                </ng-container>
+            </mat-select>
+            <mat-error
+                *ngIf="formInstance.controls.typeInstance.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formInstance.controls.typeInstance.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+
+        <!--typeDocumentList -->
+        <mat-form-field class="col-md-5"
+            appearance="outline">
+            <mat-label>type document</mat-label>
+            <mat-select formControlName="typeDocumentList" multiple>
+                <ng-container *ngFor="let type of documentArray">
+                    <mat-option (click)="addDocument(type)" [value]="type">{{type.description}}</mat-option>
+                </ng-container>
+            </mat-select>
+            <mat-error
+                *ngIf="formInstance.controls.typeDocumentList.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formInstance.controls.typeDocumentList.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <div formArrayName="documents"
+            *ngFor="let doc of formInstance.get('documents').controls; let i = index;">
+            <div [formGroupName]="i" class="row">
+                <mat-form-field class="col-md-4"
+                    appearance="outline">
+                    <mat-label>document</mat-label>
+                    <input type="text"
+                        matInput
+                        formControlName=type>
+                    <!-- <mat-error
+                        *ngIf="infoPack.controls.pack.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="infoPack.controls.pack.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error> -->
+                </mat-form-field>
+                <!-- <mat-form-field class="col-md-4"
+                    appearance="outline">
+                    <mat-label>Statut document</mat-label>
+                    <mat-select formControlName="statut">
+                        <ng-container *ngFor="let type of statuDocumentArray">
+                            <mat-option [value]="type">{{type.description}}</mat-option>
+                        </ng-container>
+                    </mat-select>
+                   <mat-error
+                        *ngIf="formInstance.controls.statutDocument.errors"
+                        class="invalid-feedback">
+                        <div
+                            *ngIf="formInstance.controls.statutDocument.errors.required">
+                            ce champs est obligatoire</div>
+                    </mat-error> 
+                </mat-form-field> -->
+                <!--description -->
+                <mat-form-field class="col-md-4"
+                    appearance="outline">
+                    <mat-label>description</mat-label>
+                    <textarea formControlName="description"
+                        matInput
+                        cdkTextareaAutosize
+                        #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="1"
+                        cdkAutosizeMaxRows="10"></textarea>
+
+                </mat-form-field>
+            </div>
+
+        </div>
+        <!--statutDocument 
+        <mat-form-field class="col-md-5"
+            appearance="outline">
+            <mat-label>Statut document</mat-label>
+            <mat-select formControlName="statutDocument">
+                <ng-container *ngFor="let type of statuDocumentArray">
+                    <mat-option [value]="type.idParam">{{type.description}}</mat-option>
+                </ng-container>
+            </mat-select>
+            <mat-error
+                *ngIf="formInstance.controls.statutDocument.errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="formInstance.controls.statutDocument.errors.required">
+                    ce champs est obligatoire</div>
+            </mat-error>
+        </mat-form-field>-->
+        <div class="row-button">
+            <!--button class="btn btn-action" type="submit"
+                [disabled]="LoaderInstance"><span
+                    *ngIf="!LoaderInstance">Enregistrer</span>
+                <mat-spinner color="white" diameter=20 *ngIf="LoaderInstance"></mat-spinner>
+            </button-->
+            <button class="btn btn-secondary" type="submit"
+                [disabled]="LoaderInstance"><span
+                    *ngIf="!LoaderInstance">Ajouter</span>
+                <mat-spinner color="white" diameter=20 *ngIf="LoaderInstance"></mat-spinner>
+            </button>
+        </div>
+    </form>
+
+    <mat-divider class="table"></mat-divider>
+    <table mat-table [dataSource]="dataSourceDocuments" class="gestion-table">
+
+        <!--  typeInstance -->
+        <ng-container matColumnDef="typeInstance">
+            <th mat-header-cell *matHeaderCellDef>Type Instance </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.typeInstance.description}}
+            </td>
+        </ng-container>
+        <!--  typeDocument -->
+        <ng-container matColumnDef="typeDocument">
+            <th mat-header-cell *matHeaderCellDef>Type Document </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.document.description}}
+            </td>
+        </ng-container>
+        <!--  statutDocument -->
+        <ng-container matColumnDef="statutDocument">
+            <th mat-header-cell *matHeaderCellDef>Statut Document </th>
+            <td mat-cell *matCellDef="let element">
+                {{element.statutDocument.description}}
+            </td>
+        </ng-container>
+        <!--  descriptionDocument -->
+        <ng-container matColumnDef="descriptionDocument">
+            <th mat-header-cell *matHeaderCellDef>Description Document </th>
+            <td mat-cell *matCellDef="let element"> {{element.description}}
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"
+            class="example-second-header-row">
+        </tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10]"
+        aria-label="Select page of users"></mat-paginator>
+    <div class="row-button">
+
+        <button class="btn btn-action" type="button" (click)="submitInstance()"
+            [disabled]="LoaderInstance"><span
+                *ngIf="!LoaderInstance">Enregistrer</span>
+            <mat-spinner color="white" diameter=20 *ngIf="LoaderInstance"></mat-spinner>
+        </button>
+    </div>
+    <app-gestion-instances></app-gestion-instances>

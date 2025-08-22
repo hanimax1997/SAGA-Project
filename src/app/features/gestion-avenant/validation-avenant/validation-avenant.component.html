@@ -1,0 +1,30 @@
+<h2 class="heading">Approbation avenant
+    <span style="float: right; font-size: 24px;" >
+        <mat-icon aria-hidden="false" aria-label="" class="material-symbols-outlined"
+                matTooltip="" matTooltipPosition="right" mat-dialog-close> close
+              </mat-icon>
+    </span>
+</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content class="mat-typography">
+    <div class="row">
+        <!-- Commentaire -->
+        <mat-form-field appearance="outline" class="col-md-12 login-field">
+            <mat-label>Commentaire</mat-label>
+            <input matInput [(ngModel)]="commentaire" #ctrl="ngModel">
+        </mat-form-field>
+    </div>
+
+    <div class="row-button">
+        <button  class="btn btn-delete" (mouseup)="validationAvenant(false)">
+            <mat-spinner color="white" diameter=30
+                        *ngIf="loaderRefuser"></mat-spinner>
+                        <span *ngIf="!loaderRefuser"> Refuser </span>
+        </button>
+        <button class="btn btn-validation" (mouseup)="validationAvenant(true)">
+            <mat-spinner color="white" diameter=30
+                        *ngIf="loaderValider"></mat-spinner>
+                        <span *ngIf="!loaderValider"> Valider </span>
+        </button>
+    </div>
+</mat-dialog-content>

@@ -1,0 +1,24 @@
+//button action 
+.buttons.row{
+    justify-content: space-between;
+}
+//heading 
+h2.heading{
+    color: #00008f;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px;
+}
+.mat-dialog-content{
+    padding-top: 15px;
+}
+.mat-form-field{
+    padding-top: 15px;
+}
+.mat-error{
+    font-size: 11px;
+}
+.row-button {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+  }

@@ -1,0 +1,191 @@
+<div class="container ">
+    <div class="header">
+
+        <h2 class="title-table">Listes des véhicules</h2>
+
+       <button class="btn btn-secondary" style="display: flex;
+
+            align-items: center;" [routerLink]="['creation-vehicule']">
+
+            <mat-icon aria-hidden="false" aria-label="ajouter pack "
+                class="material-symbols-outlined">add_circle</mat-icon>
+
+            Ajouter véhicule(s)
+
+        </button>
+
+    </div>
+    <div class="filtre">
+        <form #formDirective="ngForm" [formGroup]="formFilterVehicule"
+            class="row
+            formFiltre"
+            (ngSubmit)="submitFilter()">
+
+            <div class="row">
+                <!--num devis-->
+                <mat-form-field appearance="outline"
+                    class="col-md-5">
+                    <mat-label>N° Véhicule</mat-label>
+                    <input type="text" matInput placeholder
+                        formControlName="idVehicule">
+                </mat-form-field>
+                <!-- Marque-->
+                <mat-form-field class="col-md-5" appearance="outline">
+                    <mat-label>Marque</mat-label>
+                    <mat-select formControlName="marque"
+                    (selectionChange)="getModele($event.value)" >
+                        <ng-container *ngFor="let marque of marques">
+                            <mat-option
+                                [value]="marque.idParam">
+                                {{marque.marque}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="row">
+                <!-- Genre-->
+                <mat-form-field class="col-md-5" appearance="outline">
+                    <mat-label>Type Vehicule</mat-label>
+                    <mat-select formControlName="genre">
+                        <ng-container *ngFor="let genre of genres">
+                            <mat-option
+                                [value]="genre.idParam">
+                                {{genre.description}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+
+
+                <mat-form-field class="col-md-5" appearance="outline">
+                    <mat-label>Modele</mat-label>
+                    <mat-select formControlName="modele">
+                        <ng-container *ngFor="let modele of models">
+                            <mat-option
+                                [value]="modele.idParam">
+                                {{modele.modele}}
+                            </mat-option>
+                        </ng-container>
+                    </mat-select>
+                </mat-form-field>
+                <!-- date création  -->
+          <!--    <mat-form-field class="col-md-4"
+                    appearance="outline">
+                    <mat-label>Date création </mat-label>
+                    <input matInput
+                        [matDatepicker]="pickerDu"
+                        formControlName="dateCreation">
+                    <mat-datepicker-toggle matSuffix
+                        [for]="pickerDu"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerDu></mat-datepicker>
+                </mat-form-field>-->
+            </div>
+
+            <div class="row buttons">
+                <button class="btn btn-action" type="submit">Filtrer</button>
+                <mat-icon class="material-symbols-outlined"
+                    (click)="resetTable(formDirective)"
+                    matTooltip="Rénitialisation" matTooltipPosition="right">restart_alt</mat-icon>
+            </div>
+
+        </form>
+    </div>
+    <table mat-table [dataSource]="dataSource" class="gestion-table">
+
+        <!-- idVehicule Column -->
+        <ng-container matColumnDef="idVehicule">
+            <th mat-header-cell *matHeaderCellDef> N°. Véhicule </th>
+            <td mat-cell *matCellDef="let element"> {{element.idVehicule}} </td>
+        </ng-container>
+        <!-- dateCreation Column -->
+       <!--<ng-container matColumnDef="dateCreation">
+            <th mat-header-cell *matHeaderCellDef> Date création </th>
+            <td mat-cell *matCellDef="let element"> {{element.dateDebut |
+                dateFormatPipe}} </td>
+        </ng-container>-->
+        <!-- Marque Column -->
+        <ng-container matColumnDef="marque">
+            <th mat-header-cell *matHeaderCellDef>Marque</th>
+            <td mat-cell *matCellDef="let element"> {{element.marque?.description ? element.marque?.description :  element.marque}} </td>
+        </ng-container>
+        <!-- Modele Column -->
+        <ng-container matColumnDef="modele">
+            <th mat-header-cell *matHeaderCellDef> Modele </th>
+            <td mat-cell *matCellDef="let element">{{element.modele?.description ? element.modele?.description :  element.modele}} </td>
+        </ng-container>
+  
+       <!-- <ng-container matColumnDef="genre">
+            <th mat-header-cell *matHeaderCellDef>Genre</th>
+            <td mat-cell *matCellDef="let element">{{element.typeVehicule?.description ? element.typeVehicule?.description :  element.typeVehicule}} </td>
+        </ng-container>
+        <ng-container matColumnDef="puissanceFiscale">
+            <th mat-header-cell *matHeaderCellDef> Puissance Fiscale </th>
+            <td mat-cell *matCellDef="let element">{{element.puissanceFiscale?.description ? element.puissanceFiscale?.description :  element.puissanceFiscale}}
+            </td>
+        </ng-container>
+        <ng-container matColumnDef="nbrPlaces">
+            <th mat-header-cell *matHeaderCellDef>Nombre de place </th>
+            <td mat-cell *matCellDef="let element"> {{element.nbPlace}} </td>
+        </ng-container>
+        <ng-container matColumnDef="poidTotale">
+            <th mat-header-cell *matHeaderCellDef> Poids total en charge </th>
+            <td mat-cell *matCellDef="let element"> {{element.poidsTotalEnCharge}}
+            </td>
+        </ng-container>
+         <ng-container matColumnDef="energie">
+            <th mat-header-cell *matHeaderCellDef>Energie </th>
+            <td mat-cell *matCellDef="let element">{{element.energie?.description ? element.energie?.description :  element.energie}} </td>
+        </ng-container>
+        
+        
+        -->
+       
+        <!-- Action Column -->
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+
+            <td mat-cell *matCellDef="let element">
+                <button mat-icon-button
+                    type="button"
+                    [matMenuTriggerFor]="menu"
+                    aria-label="menu devis list">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu"
+                    xPosition="after"
+                    class="menu-devis">
+                    <button mat-menu-item
+                        type="button"
+                        (click)="deleteVehicule(element.idVehicule)"
+                        >
+                        <mat-icon>delete</mat-icon>
+                        <span>Supprimer véhicule</span>
+                    </button>
+                    <button mat-menu-item
+                        type="button"
+                        (click)="editVehicule(element.idVehicule)">
+                        <mat-icon>edit</mat-icon>
+                        <span>Modifier véhicule </span>
+                    </button>
+                    <button mat-menu-item
+                    type="button"
+                    (click)="consulterVehicule(element.idVehicule)"
+                    >
+                    <mat-icon>consultar</mat-icon>
+                    <span>consulter véhicule</span>
+                </button>
+                </mat-menu>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"
+            class="example-second-header-row">
+        </tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10,50]"
+        aria-label="Select page of users"></mat-paginator>
+
+</div>

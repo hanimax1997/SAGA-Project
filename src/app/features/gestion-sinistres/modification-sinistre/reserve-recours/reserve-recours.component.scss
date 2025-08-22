@@ -1,0 +1,100 @@
+@import "../../../../shared/styles/tables-gestions.scss";
+//custom 
+.mat-column-garantie{
+    border-right-color: rgba(0,0,0,.12);
+    border-right-width: 1px;
+    border-right-style: solid;
+
+}
+.mat-column-reserve{
+padding-left: 1rem;
+}
+.gestion-table{
+padding: 10px;
+}
+.gestion-table td,.gestion-table  th {
+padding: 5px;
+}
+.garantie-line, .gestion-table  th {
+background-color: rgb(247, 247, 249);
+
+}
+thead, tbody, tfoot, tr, td, th {
+border-color: inherit;
+border-style: solid;
+border-width: 0;
+border: 1px solid #ebebeb;
+}
+.mat-expansion-panel {
+    box-shadow: none;
+}
+
+.mat-expansion-panel-header {
+    background: #c7c7c733 !important;
+    font-weight: 600;
+    font-size: 16px;
+    border: 1px solid rgb(199 199 199 / 82%) !important;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+    height: 48px;
+}
+.mat-expansion-panel ::ng-deep.mat-expansion-panel-content{
+    border-right: 1px solid rgba(199, 199, 199, 0.82) !important;
+    border-bottom: 1px solid rgba(199, 199, 199, 0.82) !important;
+    border-left: 1px solid rgba(199, 199, 199, 0.82) !important;
+    padding: 2rem;
+
+}
+::ng-deep.mat-step-header .mat-step-icon .mat-icon {
+    height: fit-content;
+    width: fit-content;
+
+}
+::ng-deep.mat-step-header .mat-step-icon-state-edit {
+    background-color: #d14624;
+}
+
+::ng-deep .mat-step-header.cdk-keyboard-focused,
+::ng-deep .mat-step-header.cdk-program-focused {
+    background-color: transparent !important;
+}
+.btn-action{
+    width: fit-content;
+    float: right;
+}
+.mat-expansion-panel-header-title {
+    color: #00008F;
+}
+
+.container {
+    background-color: #ffff;
+    padding: 40px 43px;
+    height: 100%;
+    // overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15)
+}
+
+h2.header-title {
+    padding: 0 24px;
+    font-size: 21px !important;
+    color: #00008f;
+    font-weight: 600 !important;
+    letter-spacing: 1px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.mat-radio-button {
+    margin-right: 2rem
+}
+
+.container-recouvrement {
+    display: flex;
+    flex-direction: column;
+}
+
+.container-recouvrement .mat-radio-group{
+    margin-bottom: 2rem;
+}

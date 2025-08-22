@@ -1,0 +1,29 @@
+<h2 class="heading">{{header}}</h2>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="mat-typography">
+    <form #formDirective="ngForm" class="row"
+        [formGroup]="data.type == 'marque' ? formCreationMarque : formCreationModele"
+        (ngSubmit)="submitForm()">
+        <mat-form-field class="col-md-5" appearance="outline">
+            <mat-label>{{ data.type == 'marque' ? 'Nouvelle marque' :
+                'Nouveau Modele' }}</mat-label>
+            <input type="text" matInput placeholder
+                [formControlName]="data.type == 'marque' ? 'marque' : 'modele'">
+            <mat-error
+                *ngIf="(data.type == 'marque' ? formCreationMarque : formCreationModele).controls[data.type == 'marque' ? 'marque' : 'modele'].errors"
+                class="invalid-feedback">
+                <div
+                    *ngIf="(data.type == 'marque' ? formCreationMarque : formCreationModele).controls[data.type == 'marque' ? 'marque' : 'modele'].errors.required">
+                    Ce champ est obligatoire</div>
+            </mat-error>
+        </mat-form-field>
+        <!-- Marque-->
+    
+        <div class="button-row">
+            <button class="btn btn-cancel" [mat-dialog-close]="false"
+                type="button">Retour</button>
+            <button class="btn btn-action" type="submit">Ajouter</button>
+        </div>
+    </form>
+</mat-dialog-content>

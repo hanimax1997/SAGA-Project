@@ -1,0 +1,1514 @@
+<div class="container" id="containerRef">
+    <h2 class="heading" style="padding-left: 3%;">Création de personne</h2>
+       
+    <mat-divider></mat-divider>
+    <mat-dialog-content class="mat-typography">
+        <mat-stepper #stepper>
+            <mat-step >
+                <div *ngIf="message" class="alert alert-danger"> Veuillez saisir adresses et contact</div>
+                <ng-template matStepLabel>Données personnelles</ng-template>
+                <div class="container">
+                    <mat-radio-group aria-label="Select an option" (change)="personne = !personne"> 
+                        <mat-radio-button [value]="false" checked>Personne moral</mat-radio-button>
+                        <mat-radio-button [value]="true">Personne physique</mat-radio-button>
+                    </mat-radio-group>
+                    
+                    <div *ngIf="personne" style="padding: 1%;"> 
+                        <form #formDirective="ngForm" [formGroup]="formCreationPersonnePhysique" class="login-form" *ngIf="formCreationPersonnePhysique">
+                            <mat-accordion class="example-headers-align" multi>
+                                <mat-expansion-panel [expanded]="true" disabled>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Informations générales
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields">
+                                        <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                            <mat-label> Genre </mat-label>
+                                            
+                                            <mat-select formControlName="sexe">
+                                                <ng-container *ngFor="let sexe of sexes">
+                                                    <mat-option [value]="sexe.idParam">{{sexe.description}}</mat-option>
+                                                  </ng-container>
+                                            </mat-select>
+    
+                                            <mat-error
+                                            *ngIf="formCreationPersonnePhysique.controls.sexe.errors"
+                                            class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCreationPersonnePhysique.controls.sexe.errors.required">
+                                                    ce champs est obligatoire</div>
+                                            </mat-error>
+                                        </mat-form-field>
+        
+                                        <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+                                            <mat-label> Civilité </mat-label>
+                                            
+                                            <mat-select formControlName="titre" [(value)]="selected">
+                                                <ng-container *ngFor="let titre of titres">
+                                                    <mat-option [value]="titre.idParam">{{titre.description}}</mat-option>
+                                                  </ng-container>
+                                            </mat-select>
+                                        </mat-form-field>
+    
+                                        <mat-form-field [class]="formCreationPersonnePhysique.value.sexe == 17 ? 'col-md-6': 'col-md-12'" appearance="outline" [style]="formCreationPersonnePhysique.value.sexe == 17 ? 'padding-right: 1%;': ''">
+                                            <mat-label>Nom</mat-label>
+                                            <input type="text" matInput placeholder="" pattern="[A-Za-z]+" formControlName="nom">
+                                            <mat-error
+                                            *ngIf="formCreationPersonnePhysique.controls.nom.errors"
+                                            class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCreationPersonnePhysique.controls.nom.errors.required">
+                                                    ce champs est obligatoire</div>
+                                            </mat-error>
+                                        </mat-form-field>
+        
+                                        <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline" *ngIf="formCreationPersonnePhysique.value.sexe == 17">
+                                            <mat-label>Nom jeune fille</mat-label>
+                                            <input type="text" matInput placeholder="" pattern="[A-Za-z]+" formControlName="nomJeuneFille">
+                                        </mat-form-field>
+        
+                                        <mat-form-field class="col-md-4" appearance="outline" style="padding-right: 1%;">
+                                            <mat-label>Prénom 1</mat-label>
+                                            <input type="text" matInput placeholder="" pattern="[A-Za-z]+" formControlName="prenom1">
+                                            <mat-error
+                                            *ngIf="formCreationPersonnePhysique.controls.prenom1.errors"
+                                            class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCreationPersonnePhysique.controls.prenom1.errors.required">
+                                                    ce champs est obligatoire</div>
+                                            </mat-error>
+                                        </mat-form-field>
+            
+                                        <mat-form-field class="col-md-4" appearance="outline" style="padding-left: 1%; padding-right: 1%;">
+                                            <mat-label>Prénom 2</mat-label>
+                                            <input type="text" matInput placeholder="" pattern="[A-Za-z]+" formControlName="prenom2">
+                                        </mat-form-field>
+                                        
+                                        <mat-form-field class="col-md-4" appearance="outline" style="padding-left: 1%;">
+                                            <mat-label>Prénom 3</mat-label>
+                                            <input type="text" matInput placeholder="" pattern="[A-Za-z]+" formControlName="prenom3">
+                                        </mat-form-field>
+    
+                                    </div>
+                                </mat-expansion-panel>
+    
+                                <mat-expansion-panel [expanded]="true" disabled>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Informations complémentaires
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields">
+                                        <mat-form-field class="col-md-4" style="padding-right: 1%;" appearance="outline">
+                                            <mat-label> Situation familiale </mat-label>
+                                            
+                                            <mat-select formControlName="situationFamiliale">
+                                                <ng-container *ngFor="let situation of situationsFamiliale">
+                                                    <mat-option [value]="situation.idParam">{{situation.description}}</mat-option>
+                                                  </ng-container>
+                                            </mat-select>
+                                        </mat-form-field>
+            
+                                        <mat-form-field class="col-md-4" appearance="outline" style="padding-left: 1%; padding-right: 1%;">
+                                            <mat-label>NIN</mat-label>
+                                            <input type="number" matInput placeholder="" pattern="[0-9]{18}" formControlName="nin">
+                                            <mat-error *ngIf="formCreationPersonnePhysique.controls.nin.errors"
+                                                class="invalid-feedback">
+                                                <div *ngIf="formCreationPersonnePhysique.controls.nin.errors.pattern"> Format NIN invalide </div>
+                                            </mat-error>
+                                        </mat-form-field>
+    
+                                        <mat-form-field class="col-md-4" style="padding-left: 1%;" appearance="outline">
+                                            <mat-label>Date Naissance</mat-label>
+                                            <input matInput [max]="minDate" [matDatepicker]="pickerDateNaissance" formControlName="dateNaissance">
+                                            <mat-datepicker-toggle matSuffix [for]="pickerDateNaissance"></mat-datepicker-toggle>
+                                            <mat-datepicker #pickerDateNaissance></mat-datepicker>
+                                            <mat-error
+                                            *ngIf="formCreationPersonnePhysique.controls.dateNaissance.errors"
+                                            class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCreationPersonnePhysique.controls.dateNaissance.errors.required">
+                                                    ce champs est obligatoire</div>
+                                                <div
+                                                    *ngIf="formCreationPersonnePhysique.controls.dateNaissance.errors.matDatepickerParse">
+                                                    Format Date invalide </div>
+                                            </mat-error>
+                                        </mat-form-field>
+    
+                                        <mat-form-field class="col-md-12" appearance="outline">
+                                            <mat-label> Nationalite </mat-label>
+                                            
+                                            <mat-select formControlName="nationalite" multiple>
+                                                <ng-container *ngFor="let nationalite of nationalites">
+                                                    <mat-option [value]="nationalite">{{nationalite.description}}</mat-option>
+                                                  </ng-container>
+                                            </mat-select>
+    
+                                            <mat-error
+                                            *ngIf="formCreationPersonnePhysique.controls.nationalite.errors"
+                                            class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCreationPersonnePhysique.controls.nationalite.errors.required">
+                                                    ce champs est obligatoire</div>
+                                            </mat-error>
+                                        </mat-form-field>
+    
+                                        <!-- <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+                                            <mat-label> Pays de naissance </mat-label>
+                                            
+                                            <mat-select formControlName="pays">
+                                                <ng-container *ngFor="let p of pays">
+                                                    <mat-option [value]="p.idPays">{{p.description}}</mat-option>
+                                                  </ng-container>
+                                            </mat-select>
+                                            <mat-error
+                                            *ngIf="formCreationPersonnePhysique.controls.pays.errors"
+                                            class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCreationPersonnePhysique.controls.pays.errors.required">
+                                                    ce champs est obligatoire</div>
+                                            </mat-error>
+                                        </mat-form-field>
+    
+                                        <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                            <mat-label> Wilaya de naissance </mat-label>
+                                            
+                                            <mat-select formControlName="wilaya" (selectionChange)="getCommuneByWilaya($event.value)">
+                                                <ng-container *ngFor="let wilaya of wilayas">
+                                                    <mat-option [value]="wilaya.idWilaya">{{wilaya.description}}</mat-option>
+                                                  </ng-container>
+                                            </mat-select>
+                                            <mat-error
+                                            *ngIf="formCreationPersonnePhysique.controls.wilaya.errors"
+                                            class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCreationPersonnePhysique.controls.wilaya.errors.required">
+                                                    ce champs est obligatoire</div>
+                                            </mat-error>
+                                        </mat-form-field>
+            
+                                        <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+                                            <mat-label> Commune de naissance </mat-label>
+                                            
+                                            <mat-select formControlName="commune" (selectionChange)="getCodeByCommune($event.value)">
+                                                <ng-container *ngFor="let commune of communes">
+                                                    <mat-option [value]="commune.idCommune">{{commune.description}}</mat-option>
+                                                  </ng-container>
+                                            </mat-select>
+                                            <mat-hint>Veuillez saisir la wilaya avant !</mat-hint>
+                                            <mat-error
+                                            *ngIf="formCreationPersonnePhysique.controls.commune.errors"
+                                            class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCreationPersonnePhysique.controls.commune.errors.required">
+                                                    ce champs est obligatoire</div>
+                                            </mat-error>
+                                        </mat-form-field> -->
+                                    </div>
+                                </mat-expansion-panel>
+    
+                                <!-- <mat-expansion-panel [expanded]="true" disabled>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Statut
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields"> -->
+                                        <!-- <mat-checkbox class="col-md-6" formControlName="idBlackListe" style="padding-right: 1%;">Cette personne est-elle black listé</mat-checkbox> -->
+    
+                                        <!-- <mat-checkbox class="col-md-12" formControlName="vip">Cette personne est-elle VIP</mat-checkbox> -->
+    
+                                        <!-- <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                            <mat-label>Date debut</mat-label>
+                                            <input matInput [matDatepicker]="pickerDateDebut" formControlName="dateDebut" (dateChange)="debutDateChange($event.value)">
+                                            <mat-datepicker-toggle matSuffix [for]="pickerDateDebut"></mat-datepicker-toggle>
+                                            <mat-datepicker #pickerDateDebut></mat-datepicker>
+                                        </mat-form-field>
+            
+                                        <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+                                            <mat-label>Date fin</mat-label>
+                                            <input matInput [matDatepicker]="pickerDateFin" formControlName="dateFin">
+                                            <mat-datepicker-toggle matSuffix [for]="pickerDateFin"></mat-datepicker-toggle>
+                                            <mat-datepicker #pickerDateFin></mat-datepicker>
+                                        </mat-form-field> -->
+                                    <!-- </div>
+                                </mat-expansion-panel> -->
+    
+                                <mat-expansion-panel [expanded]="true" disabled>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Adresses
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields">
+                                        <form #formDirectiveAdresse="ngForm" [formGroup]="formCreationAdresse" class="login-form" *ngIf="formCreationAdresse">
+                                            <div class="row">
+                                                <mat-form-field class="col-md-12" appearance="outline">
+                                                    <mat-label>Adresse</mat-label>
+                                                    <input type="text" matInput placeholder="" formControlName="description">
+                                                </mat-form-field>
+            
+                                                <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                                    <mat-label> Pays </mat-label>
+                                                    
+                                                    <mat-select formControlName="pays">
+                                                        <ng-container *ngFor="let p of pays">
+                                                            <mat-option [value]="p">{{p.description}}</mat-option>
+                                                          </ng-container>
+                                                    </mat-select>
+                                                </mat-form-field>
+            
+                                                <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+                                                    <mat-label> Wilaya </mat-label>
+                                                    
+                                                    <mat-select formControlName="wilaya" (selectionChange)="getCommuneByWilaya($event.value)">
+                                                        <ng-container *ngFor="let wilaya of wilayas">
+                                                            <mat-option [value]="wilaya">{{wilaya.description}}</mat-option>
+                                                          </ng-container>
+                                                    </mat-select>
+                                                </mat-form-field>
+        
+                                                <div class="col-md-9">
+                                                    <div class="row">
+                                                        <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                                            <mat-label> Commune </mat-label>
+                                                            
+                                                            <mat-select formControlName="commune" (selectionChange)="getCodeByCommune($event.value)">
+                                                                <ng-container *ngFor="let commune of communes">
+                                                                    <mat-option [value]="commune">{{commune.description}}</mat-option>
+                                                                  </ng-container>
+                                                            </mat-select>
+                                                            <mat-hint>Veuillez saisir la wilaya avant !</mat-hint>
+                                                        </mat-form-field>
+                    
+                                                        <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+                                                            <mat-label> Code postal </mat-label>
+                                                            
+                                                            <mat-select formControlName="codePostal">
+                                                                <ng-container *ngFor="let code of codesPostal">
+                                                                    <mat-option [value]="code">{{code.codePostal}}</mat-option>
+                                                                  </ng-container>
+                                                            </mat-select>
+                                                            <mat-hint>Veuillez saisir la commune avant !</mat-hint>
+                                                        </mat-form-field>
+                                                    </div>
+                                                </div>
+        
+                                                <div class="col-md-3 add-col">
+                                                    <button *ngIf="formCreationAdresse.value.description != '' && formCreationAdresse.value.pays != '' && formCreationAdresse.value.wilaya != '' && formCreationAdresse.value.commune != '' && formCreationAdresse.value.codePostal != ''" class="btn btn-secondary" (click)="ajouterAdresse(formDirectiveAdresse)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter une adresse" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter l'adresse
+                                                    </button>
+                                                    <button *ngIf="formCreationAdresse.value.description == '' || formCreationAdresse.value.pays == '' || formCreationAdresse.value.wilaya == '' || formCreationAdresse.value.commune == '' || formCreationAdresse.value.codePostal == ''" class="btn btn-disable" disabled (click)="ajouterAdresse(formDirectiveAdresse)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter une adresse" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter l'adresse
+                                                    </button>
+                                                </div>
+                                            </div>
+    
+                                            <div class="col-md-12" *ngIf="adresses.data.length != 0">
+                                                <table mat-table [dataSource]="adresses" class="mat-elevation-z8
+                                                    adresse-table">
+                                            
+                                                <ng-container matColumnDef="header-adresse">
+                                                    <th mat-header-cell *matHeaderCellDef attr.colspan={{lengthColumnsAdresse}}>
+                                                    <div class="header-tab">
+                                                        <span>Liste des adresses </span>
+                                                    </div>
+                                            
+                                                    </th>
+                                                </ng-container>
+                                            
+                                                <!-- description Column -->
+                                                <ng-container matColumnDef="description">
+                                                    <th mat-header-cell *matHeaderCellDef> Description </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- pays Column -->
+                                                <ng-container matColumnDef="pays">
+                                                    <th mat-header-cell *matHeaderCellDef> Pays </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.pays.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- wilaya Column -->
+                                                <ng-container matColumnDef="wilaya">
+                                                    <th mat-header-cell *matHeaderCellDef> Wilaya </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.wilaya.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- commune Column -->
+                                                <ng-container matColumnDef="commune">
+                                                    <th mat-header-cell *matHeaderCellDef> Commune </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.commune.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- codePostal Column -->
+                                                <ng-container matColumnDef="codePostal">
+                                                    <th mat-header-cell *matHeaderCellDef> Code postal </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.codePostal.codePostal}} </td>
+                                                </ng-container>
+    
+                                                <!-- Action Column -->
+                                                <ng-container matColumnDef="action">
+                                                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                                                    <td mat-cell *matCellDef="let element;index as i;">
+                                                    <mat-icon aria-hidden="false" aria-label="delete address" class="material-symbols-outlined" style="margin-left: 4px;" (click)="delete('adresse', i)"
+                                                        matTooltip="Supprimer adresse" matTooltipPosition="right">
+                                                        delete</mat-icon>
+                                                    </td>
+                                                </ng-container>
+                                            
+                                                <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+                                                <tr mat-header-row *matHeaderRowDef="['header-adresse']" class="example-first-header-row">
+                                                </tr>
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumnsAdresse" class="example-second-header-row">
+                                                </tr>
+                                            
+                                            
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumnsAdresse;"></tr>
+                                            
+                                                </table>
+                                                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" aria-label="Select page  of users"></mat-paginator>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </mat-expansion-panel>
+    
+                                <!-- <mat-expansion-panel [expanded]="true" disabled>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Modalités
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields">
+                                        <form #formDirectiveModalite="ngForm" [formGroup]="formCreationModalite" class="login-form" *ngIf="formCreationModalite">
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                                        <mat-label> Type modalité </mat-label>
+                                                        
+                                                        <mat-select formControlName="typeModalite" (selectionChange)="formCreationModalite.get('tauxModalite').enable()">
+                                                            <ng-container *ngFor="let type of types_modalite" >
+                                                                <mat-option [value]="type">{{type.description}}</mat-option>
+                                                              </ng-container>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                
+                                                    <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+                                                        <mat-label>Taux modalité</mat-label>
+                                                        <input type="text" matInput placeholder="" formControlName="tauxModalite">
+                                                    </mat-form-field>
+                                                </div>
+    
+                                                <div class="col-md-3 add-col">
+                                                    <button class="btn btn-secondary" (click)="ajouterModalite(formDirectiveModalite)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter une modalité" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter la modalité
+                                                    </button>
+                                                </div>
+                                            </div>
+    
+    
+                                            <div class="col-md-12" *ngIf="modalites.data.length != 0">
+                                                <table mat-table [dataSource]="modalites" class="mat-elevation-z8
+                                                    modalite-table">
+                                            
+                                                <ng-container matColumnDef="header-modalite">
+                                                    <th mat-header-cell *matHeaderCellDef attr.colspan={{lengthColumnsModalite}}>
+                                                    <div class="header-tab">
+                                                        <span>Liste des modalités </span>
+                                                    </div>
+                                            
+                                                    </th>
+                                                </ng-container>
+                                            
+                                                <ng-container matColumnDef="typeModalite">
+                                                    <th mat-header-cell *matHeaderCellDef> Type modalite </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.typeModalite.description}} </td>
+                                                </ng-container>
+                                            
+                                                <ng-container matColumnDef="tauxModalite">
+                                                    <th mat-header-cell *matHeaderCellDef> Taux modalité </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.tauxModalite}} </td>
+                                                </ng-container>
+    
+                                                <ng-container matColumnDef="action">
+                                                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                                                    <td mat-cell *matCellDef="let element;index as i;">
+                                                    <mat-icon aria-hidden="false" aria-label="delete modality" class="material-symbols-outlined" style="margin-left: 4px;" (click)="delete('modalite', i)"
+                                                        matTooltip="Supprimer modalité" matTooltipPosition="right">
+                                                        delete</mat-icon>
+                                                    </td>
+                                                </ng-container>
+                                            
+                                                <tr mat-header-row *matHeaderRowDef="['header-modalite']" class="example-first-header-row">
+                                                </tr>
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumnsModalite" class="example-second-header-row">
+                                                </tr>
+                                            
+                                            
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumnsModalite;"></tr>
+                                            
+                                                </table>
+                                                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" aria-label="Select page  of users"></mat-paginator>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </mat-expansion-panel> -->
+    
+                                <mat-expansion-panel [expanded]="true" disabled>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Contacts
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields">
+                                        <form #formDirectiveContact="ngForm" [formGroup]="formCreationContact" class="login-form" *ngIf="formCreationContact">
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                                        <mat-label> Type contact </mat-label>
+                                                        
+                                                        <mat-select formControlName="typeContact" (selectionChange)="enableContact($event.value?.description)">
+                                                            <ng-container *ngFor="let type of types_contact">
+                                                                <mat-option [value]="type">{{type.description}}</mat-option>
+                                                              </ng-container>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                
+                                                    <mat-form-field class="col-md-6" style="padding-left: 1%; padding-right: 1%;" appearance="outline">
+                                                        <mat-label>Contact</mat-label>
+                                                        <input type="text"  matInput [placeholder]="somePlaceholder" formControlName="description" >
+                                                            <mat-error *ngIf="formCreationContact.controls.description.errors"
+                                                                class="invalid-feedback">
+                                                                <div *ngIf="formCreationContact.controls.description.errors.pattern && (formCreationContact.value.typeContact.description == 'fix' || formCreationContact.value.typeContact.description == 'fax')"> Le format du numero est invalide </div>
+                                                                <div *ngIf="formCreationContact.controls.description.errors.pattern && formCreationContact.value.typeContact.description != 'fix' && formCreationContact.value.typeContact.description != 'fax' && formCreationContact.value.typeContact.description != 'email'"> Le format du numero est invalide </div>
+                                                                <div *ngIf="formCreationContact.controls.description.errors.pattern && formCreationContact.value.typeContact.description == 'email'">Format email invalide  </div>
+                                                            </mat-error> 
+                                                    </mat-form-field>
+                                                </div>
+    
+                                                <div class="col-md-3 add-col">
+                                                    <button *ngIf="formCreationContact.value.typeContact != '' && formCreationContact.value.description != ''" class="btn btn-secondary" (click)="ajouterContact(formDirectiveContact)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter un contact" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter le contact
+                                                    </button>
+                                                    <button *ngIf="formCreationContact.value.typeContact == '' || formCreationContact.value.description == ''" class="btn btn-disable" disabled (click)="ajouterContact(formDirectiveContact)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter un contact" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter le contact
+                                                    </button>
+                                                </div>
+                                            </div>
+    
+                                            <div class="col-md-12" *ngIf="contacts.data.length != 0">
+                                                <table mat-table [dataSource]="contacts" class="mat-elevation-z8
+                                                    contact-table">
+                                            
+                                                <ng-container matColumnDef="header-contact">
+                                                    <th mat-header-cell *matHeaderCellDef attr.colspan={{lengthColumnsContact}}>
+                                                    <div class="header-tab">
+                                                        <span>Liste des contacts </span>
+                                                    </div>
+                                            
+                                                    </th>
+                                                </ng-container>
+                                            
+                                                <!-- typeContact Column -->
+                                                <ng-container matColumnDef="typeContact">
+                                                    <th mat-header-cell *matHeaderCellDef> Type contact </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.typeContact.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- description Column -->
+                                                <ng-container matColumnDef="description">
+                                                    <th mat-header-cell *matHeaderCellDef> Contact </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- dateDebut Column -->
+                                                <ng-container matColumnDef="dateDebut">
+                                                    <th mat-header-cell *matHeaderCellDef> Date debut </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.dateDebut | date:"dd/MM/yyyy"}} </td>
+                                                </ng-container>
+    
+                                                <!-- Action Column -->
+                                                <ng-container matColumnDef="action">
+                                                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                                                    <td mat-cell *matCellDef="let element;index as i;">
+                                                    <mat-icon aria-hidden="false" aria-label="delete contact" class="material-symbols-outlined" style="margin-left: 4px;" (click)="delete('contact', i)"
+                                                        matTooltip="Supprimer contact" matTooltipPosition="right">
+                                                        delete</mat-icon>
+                                                    </td>
+                                                </ng-container>
+                                            
+                                                <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+                                                <tr mat-header-row *matHeaderRowDef="['header-contact']" class="example-first-header-row">
+                                                </tr>
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumnsContact" class="example-second-header-row">
+                                                </tr>
+                                            
+                                            
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumnsContact;"></tr>
+                                            
+                                                </table>
+                                                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" aria-label="Select page  of users"></mat-paginator>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </mat-expansion-panel>
+                            </mat-accordion>
+
+                            <div class="row-button">
+                                <button class="btn btn-cancel" (mouseup)="back()">Retour</button>
+                                <button *ngIf="formDirective.invalid || adresses.data.length == 0 || contacts.data.length == 0" class="btn btn-action" (mouseup)="changePage(true)">Suivant</button>
+                                <button *ngIf="!formDirective.invalid && adresses.data.length != 0 && contacts.data.length != 0" matStepperNext class="btn btn-action" (mouseup)="changePage(false)">Suivant</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div *ngIf="!personne" style="padding: 1%;"> 
+                        <form #formDirective="ngForm" [formGroup]="formCreationPersonneMorale" class="login-form" *ngIf="formCreationPersonneMorale">
+                            <mat-accordion class="example-headers-align" multi>
+                                <mat-expansion-panel [expanded]="true" disabled>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Informations générales
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields">
+                                        <mat-form-field class="col-md-4" appearance="outline" style="padding-right: 1%;">
+                                            <mat-label>Raison sociale</mat-label>
+                                            <input type="text" matInput placeholder="" formControlName="raisonSocial">
+                                            <mat-error
+                                            *ngIf="formCreationPersonneMorale.controls.raisonSocial.errors"
+                                            class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCreationPersonneMorale.controls.raisonSocial.errors.required">
+                                                    ce champs est obligatoire</div>
+                                            </mat-error>
+                                        </mat-form-field>
+    
+                                        <mat-form-field class="col-md-4" appearance="outline" style="padding-right: 1%; padding-left: 1%;">
+                                            <mat-label>NIF</mat-label>
+                                            <input type="text" matInput placeholder="" pattern="[0-9]{15}" formControlName="nif">
+                                            <mat-error *ngIf="formCreationPersonneMorale.controls.nif.errors"
+                                                class="invalid-feedback">
+                                                <div *ngIf="formCreationPersonneMorale.controls.nif.errors.pattern"> Format NIF invalide </div>
+                                            </mat-error>
+                                        </mat-form-field>
+    
+                                        <mat-form-field class="col-md-4" style="padding-left: 1%;" appearance="outline">
+                                            <mat-label>Date ouverture</mat-label>
+                                            <input matInput [max]="minDate" [matDatepicker]="pickerDateOuverture" formControlName="dateOuverture">
+                                            <mat-datepicker-toggle matSuffix [for]="pickerDateOuverture"></mat-datepicker-toggle>
+                                            <mat-datepicker #pickerDateOuverture></mat-datepicker>
+                                            <mat-error
+                                            *ngIf="formCreationPersonneMorale.controls.dateOuverture.errors"
+                                            class="invalid-feedback">
+                                                <div
+                                                    *ngIf="formCreationPersonneMorale.controls.dateOuverture.errors.required">
+                                                    ce champs est obligatoire</div>
+                                                <div
+                                                    *ngIf="formCreationPersonneMorale.controls.dateOuverture.errors.matDatepickerParse">
+                                                    Format Date invalide </div>
+                                            </mat-error>
+                                        </mat-form-field>
+    
+                                        <!-- <mat-form-field class="col-md-4" style="padding-left: 1%;" appearance="outline">
+                                            <mat-label> secteur d'activité </mat-label>
+                                            
+                                            <mat-select formControlName="secteurActivite">
+                                                <ng-container *ngFor="let secteurActivite of secteursActivite">
+                                                    <mat-option [value]="secteurActivite.idSecteur">{{secteurActivite.description}}</mat-option>
+                                                  </ng-container>
+                                            </mat-select>
+                                        </mat-form-field> -->
+    
+                                        <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                            <mat-label> Segment </mat-label>
+                                            
+                                            <mat-select formControlName="typeEntreprise">
+                                                <ng-container *ngFor="let type of typesEntreprise">
+                                                    <mat-option [value]="type.idParam">{{type.description}}</mat-option>
+                                                  </ng-container>
+                                            </mat-select>
+                                        </mat-form-field>
+    
+                                        <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+                                            <mat-label> Statut juridique </mat-label>
+                                            
+                                            <mat-select formControlName="statue"  (selectionChange)="changeStatut($event.value)">
+                                                <ng-container *ngFor="let statut of statuts" >
+                                                    <mat-option [value]="statut">{{statut}}</mat-option>
+                                                  </ng-container>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </mat-expansion-panel>
+    
+                                <mat-expansion-panel [expanded]="true" disabled>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Informations complémentaires
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields">
+                                        <mat-form-field class="col-md-4" appearance="outline" style="padding-right: 1%;">
+                                            <mat-label>Chiffre d'affaire</mat-label>
+                                            <input type="number" matInput placeholder="" formControlName="chiffreAffaire">
+                                        </mat-form-field>
+            
+                                        <mat-form-field class="col-md-4" appearance="outline" style="padding-left: 1%; padding-right: 1%;">
+                                            <mat-label>Capital social</mat-label>
+                                            <input type="number" matInput placeholder="" formControlName="capitaleSocial">
+                                        </mat-form-field>
+            
+                                        <mat-form-field class="col-md-4" appearance="outline" style="padding-left: 1%; padding-right: 1%;">
+                                            <mat-label>Nombre de salariés</mat-label>
+                                            <input type="number" matInput placeholder="" formControlName="nombreSalarie">
+                                        </mat-form-field>
+                                    </div>
+                                </mat-expansion-panel>
+<!--     
+                                <mat-expansion-panel [expanded]="true" disabled>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Statut
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields">
+                                        <mat-checkbox class="col-md-12" formControlName="vip">Cette personne est-elle VIP</mat-checkbox>
+                                    </div>
+                                </mat-expansion-panel> -->
+    
+                                <mat-expansion-panel [expanded]="true" disabled>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Adresses
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields">
+                                        <form #formDirectiveAdresse="ngForm" [formGroup]="formCreationAdresse" class="login-form" *ngIf="formCreationAdresse">
+                                            <div class="row">
+                                                <mat-form-field class="col-md-12" appearance="outline">
+                                                    <mat-label>Adresse</mat-label>
+                                                    <input type="text" matInput placeholder="" formControlName="description">
+                                                </mat-form-field>
+            
+                                                <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                                    <mat-label> Pays </mat-label>
+                                                    
+                                                    <mat-select formControlName="pays">
+                                                        <ng-container *ngFor="let p of pays">
+                                                            <mat-option [value]="p">{{p.description}}</mat-option>
+                                                          </ng-container>
+                                                    </mat-select>
+                                                </mat-form-field>
+            
+                                                <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+                                                    <mat-label> Wilaya </mat-label>
+                                                    
+                                                    <mat-select formControlName="wilaya" (selectionChange)="getCommuneByWilaya($event.value)">
+                                                        <ng-container *ngFor="let wilaya of wilayas">
+                                                            <mat-option [value]="wilaya">{{wilaya.description}}</mat-option>
+                                                          </ng-container>
+                                                    </mat-select>
+                                                </mat-form-field>
+    
+                                                <div class="col-md-9">
+                                                    <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                                        <mat-label> Commune </mat-label>
+                                                        
+                                                        <mat-select formControlName="commune" (selectionChange)="getCodeByCommune($event.value)">
+                                                            <ng-container *ngFor="let commune of communes">
+                                                                <mat-option [value]="commune">{{commune.description}}</mat-option>
+                                                              </ng-container>
+                                                        </mat-select>
+                                                        <mat-hint>Veuillez saisir la wilaya avant !</mat-hint>
+                                                    </mat-form-field>
+                
+                                                    <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+                                                        <mat-label> Code postal </mat-label>
+                                                        
+                                                        <mat-select formControlName="codePostal">
+                                                            <ng-container *ngFor="let code of codesPostal">
+                                                                <mat-option [value]="code">{{code.codePostal}}</mat-option>
+                                                              </ng-container>
+                                                        </mat-select>
+                                                        <mat-hint>Veuillez saisir la commune avant !</mat-hint>
+                                                    </mat-form-field>
+                                                </div>
+    
+                                                <div class="col-md-3 add-col">
+                                                    <button *ngIf="formCreationAdresse.value.description != '' && formCreationAdresse.value.pays != '' && formCreationAdresse.value.wilaya != '' && formCreationAdresse.value.commune != '' && formCreationAdresse.value.codePostal != ''" class="btn btn-secondary" (click)="ajouterAdresse(formDirectiveAdresse)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter une adresse" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter l'adresse
+                                                    </button>
+                                                    <button *ngIf="formCreationAdresse.value.description == '' || formCreationAdresse.value.pays == '' || formCreationAdresse.value.wilaya == '' || formCreationAdresse.value.commune == '' || formCreationAdresse.value.codePostal == ''" class="btn btn-disable" disabled (click)="ajouterAdresse(formDirectiveAdresse)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter une adresse" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter l'adresse
+                                                    </button>
+                                                </div>
+                                            </div>
+    
+                                            <div class="col-md-12" *ngIf="adresses.data.length != 0">
+                                                <table mat-table [dataSource]="adresses" class="mat-elevation-z8
+                                                    adresse-table">
+                                            
+                                                <ng-container matColumnDef="header-adresse">
+                                                    <th mat-header-cell *matHeaderCellDef attr.colspan={{lengthColumnsAdresse}}>
+                                                    <div class="header-tab">
+                                                        <span>Liste des adresses </span>
+                                                    </div>
+                                            
+                                                    </th>
+                                                </ng-container>
+                                            
+                                                <!-- description Column -->
+                                                <ng-container matColumnDef="description">
+                                                    <th mat-header-cell *matHeaderCellDef> Description </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- pays Column -->
+                                                <ng-container matColumnDef="pays">
+                                                    <th mat-header-cell *matHeaderCellDef> Pays </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.pays.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- wilaya Column -->
+                                                <ng-container matColumnDef="wilaya">
+                                                    <th mat-header-cell *matHeaderCellDef> Wilaya </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.wilaya.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- commune Column -->
+                                                <ng-container matColumnDef="commune">
+                                                    <th mat-header-cell *matHeaderCellDef> Commune </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.commune.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- codePostal Column -->
+                                                <ng-container matColumnDef="codePostal">
+                                                    <th mat-header-cell *matHeaderCellDef> Code postal </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.codePostal.codePostal}} </td>
+                                                </ng-container>
+    
+                                                <!-- Action Column -->
+                                                <ng-container matColumnDef="action">
+                                                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                                                    <td mat-cell *matCellDef="let element;index as i;">
+                                                    <mat-icon aria-hidden="false" aria-label="delete address" class="material-symbols-outlined" style="margin-left: 4px;" (click)="delete('adresse', i)"
+                                                        matTooltip="Supprimer adresse" matTooltipPosition="right">
+                                                        delete</mat-icon>
+                                                    </td>
+                                                </ng-container>
+                                            
+                                                <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+                                                <tr mat-header-row *matHeaderRowDef="['header-adresse']" class="example-first-header-row">
+                                                </tr>
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumnsAdresse" class="example-second-header-row">
+                                                </tr>
+                                            
+                                            
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumnsAdresse;"></tr>
+                                            
+                                                </table>
+                                                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" aria-label="Select page  of users"></mat-paginator>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </mat-expansion-panel>
+    
+                                <mat-expansion-panel [expanded]="true" disabled>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Contacts
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields">
+                                        <form #formDirectiveContact="ngForm" [formGroup]="formCreationContact" class="login-form" *ngIf="formCreationContact">
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                                        <mat-label> Type contact </mat-label>
+                                                        
+                                                        <mat-select formControlName="typeContact"  (selectionChange)="enableContact($event.value?.description)">
+                                                            <ng-container *ngFor="let type of types_contact">
+                                                                <mat-option [value]="type">{{type.description}}</mat-option>
+                                                              </ng-container>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                
+                                                    <mat-form-field class="col-md-6" style="padding-left: 1%; padding-right: 1%;" appearance="outline">
+                                                        <mat-label>Contact</mat-label>
+                                                            <input type="text"  matInput [placeholder]="somePlaceholder" formControlName="description" >
+                                                            <mat-error *ngIf="formCreationContact.controls.description.errors"
+                                                                class="invalid-feedback">
+                                                                <div *ngIf="formCreationContact.controls.description.errors.pattern && formCreationContact.value.typeContact.description != 'email'"> Le format du N°Téléphone est invalide </div>
+                                                                <div *ngIf="formCreationContact.controls.description.errors.pattern && formCreationContact.value.typeContact.description == 'email'">Format email invalide  </div>
+                                                            </mat-error> 
+                                                    </mat-form-field>
+                                                </div>
+    
+                                                <div class="col-md-3 add-col">
+                                                    <button *ngIf="formCreationContact.value.typeContact != '' && formCreationContact.value.description != ''" class="btn btn-secondary" (click)="ajouterContact(formDirectiveContact)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter un contact" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter le contact
+                                                    </button>
+                                                    <button *ngIf="formCreationContact.value.typeContact == '' || formCreationContact.value.description == ''" class="btn btn-disable" disabled (click)="ajouterContact(formDirectiveContact)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter un contact" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter le contact
+                                                    </button>
+                                                </div>
+                                            </div>
+    
+                                            <div class="col-md-12" *ngIf="contacts.data.length != 0">
+                                                <table mat-table [dataSource]="contacts" class="mat-elevation-z8
+                                                    contact-table">
+                                            
+                                                <ng-container matColumnDef="header-contact">
+                                                    <th mat-header-cell *matHeaderCellDef attr.colspan={{lengthColumnsContact}}>
+                                                    <div class="header-tab">
+                                                        <span>Liste des contacts </span>
+                                                    </div>
+                                            
+                                                    </th>
+                                                </ng-container>
+                                            
+                                                <!-- typeContact Column -->
+                                                <ng-container matColumnDef="typeContact">
+                                                    <th mat-header-cell *matHeaderCellDef> Type contact </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.typeContact.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- description Column -->
+                                                <ng-container matColumnDef="description">
+                                                    <th mat-header-cell *matHeaderCellDef> Contact </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- dateDebut Column -->
+                                                <ng-container matColumnDef="dateDebut">
+                                                    <th mat-header-cell *matHeaderCellDef> Date debut </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.dateDebut | date:"dd/MM/yyyy"}} </td>
+                                                </ng-container>
+    
+                                                <!-- Action Column -->
+                                                <ng-container matColumnDef="action">
+                                                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                                                    <td mat-cell *matCellDef="let element;index as i;">
+                                                    <mat-icon aria-hidden="false" aria-label="delete contact" class="material-symbols-outlined" style="margin-left: 4px;" (click)="delete('contact', i)"
+                                                        matTooltip="Supprimer contact" matTooltipPosition="right">
+                                                        delete</mat-icon>
+                                                    </td>
+                                                </ng-container>
+                                            
+                                                <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+                                                <tr mat-header-row *matHeaderRowDef="['header-contact']" class="example-first-header-row">
+                                                </tr>
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumnsContact" class="example-second-header-row">
+                                                </tr>
+                                            
+                                            
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumnsContact;"></tr>
+                                            
+                                                </table>
+                                                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" aria-label="Select page  of users"></mat-paginator>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </mat-expansion-panel>
+                            </mat-accordion>
+
+                            <div class="row-button">
+                                <button class="btn btn-cancel" (mouseup)="back()">Retour</button>
+                                <button *ngIf="formDirective.invalid || adresses.data.length == 0 || contacts.data.length == 0" class="btn btn-action" (mouseup)="changePage(true)">Suivant</button>
+                                <button *ngIf="!formDirective.invalid && adresses.data.length != 0 && contacts.data.length != 0" matStepperNext class="btn btn-action" (mouseup)="changePage(false)">Suivant</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </mat-step>
+            <mat-step>
+                <div class="">
+                    <ng-template matStepLabel>Données professionnelles</ng-template>
+                    <div class="container">
+                        <div style="padding: 1%;">
+                            <mat-accordion class="example-headers-align" multi>
+                                <mat-expansion-panel [expanded]="true" disabled>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Professions
+                                        </mat-panel-title> 
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields">
+                                        <form #formDirectiveProfession="ngForm" [formGroup]="formCreationProfession" class="login-form" *ngIf="formCreationProfession">
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                                        <mat-label> secteur d'activité </mat-label>
+                                                        
+                                                        <mat-select formControlName="secteurActivite">
+                                                            <ng-container *ngFor="let secteurActivite of secteursActivite">
+                                                                <mat-option [value]="secteurActivite">{{secteurActivite.description}}</mat-option>
+                                                              </ng-container>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                
+                                                    <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline" *ngIf="personne">
+                                                        <mat-label> Profession </mat-label>
+                                                        
+                                                        <mat-select formControlName="profession">
+                                                            <ng-container *ngFor="let profession of professions">
+                                                                <mat-option [value]="profession">{{profession.description}}</mat-option>
+                                                              </ng-container>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+    
+                                                <div class="col-md-3 add-col" *ngIf="personne">
+                                                    <button *ngIf="formCreationProfession.value.secteurActivite != '' && formCreationProfession.value.profession != ''" class="btn btn-secondary" (click)="ajouterSecteur(formDirectiveProfession)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter un secteur d'activité" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter le secteur d'activité
+                                                    </button>
+                                                    <button *ngIf="formCreationProfession.value.secteurActivite == '' || formCreationProfession.value.profession == ''" class="btn btn-disable" disabled (click)="ajouterSecteur(formDirectiveProfession)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter un secteur d'activité" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter le secteur d'activité
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        
+    
+                                            <div class="col-md-12" *ngIf="professionsPersonne.data.length != 0">
+                                                <table mat-table [dataSource]="professionsPersonne" class="mat-elevation-z8
+                                                    profession-table">
+                                            
+                                                <ng-container matColumnDef="header-profession">
+                                                    <th mat-header-cell *matHeaderCellDef attr.colspan={{lengthColumnsProfession}}>
+                                                    <div class="header-tab">
+                                                        <span>Liste des professions </span>
+                                                    </div>
+                                            
+                                                    </th>
+                                                </ng-container>
+                                            
+                                                <!-- secteurActivite Column -->
+                                                <ng-container matColumnDef="secteurActivite">
+                                                    <th mat-header-cell *matHeaderCellDef> Secteur d'activité </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.secteurActivite.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- profession Column -->
+                                                <ng-container matColumnDef="profession">
+                                                    <th mat-header-cell *matHeaderCellDef> Profession </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.profession.description}} </td>
+                                                </ng-container>
+    
+                                                <!-- Action Column -->
+                                                <ng-container matColumnDef="action">
+                                                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                                                    <td mat-cell *matCellDef="let element;index as i;">
+                                                    <mat-icon aria-hidden="false" aria-label="delete profession" class="material-symbols-outlined" style="margin-left: 4px;" (click)="delete('profession', i)"
+                                                        matTooltip="Supprimer profession" matTooltipPosition="right">
+                                                        delete</mat-icon>
+                                                    </td>
+                                                </ng-container>
+                                            
+                                                <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+                                                <tr mat-header-row *matHeaderRowDef="['header-profession']" class="example-first-header-row">
+                                                </tr>
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumnsProfession" class="example-second-header-row">
+                                                </tr>
+                                            
+                                            
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumnsProfession;"></tr>
+                                            
+                                                </table>
+                                                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" aria-label="Select page  of users"></mat-paginator>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </mat-expansion-panel>
+    
+                                <mat-expansion-panel [expanded]="true" disabled>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Documents
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields">
+                                        <form #formDirective="ngForm" [formGroup]="formCreationDocument" class="login-form" *ngIf="formCreationDocument">
+                                            <div class="row">
+                                                <mat-form-field [class]="formCreationDocument.value.typeDocument?.idParam == 5 ? 'col-md-4':'col-md-6'" style="padding-right: 1%;" appearance="outline">
+                                                    <mat-label> Type document </mat-label>
+                                                    
+                                                    <mat-select formControlName="typeDocument"  (selectionChange)="enableDocument()">
+                                                        <ng-container *ngFor="let type of types_document">
+                                                            <mat-option [value]="type">{{type.description}}</mat-option>
+                                                          </ng-container>
+                                                    </mat-select>
+                                                </mat-form-field>
+        
+                                                <mat-form-field class="col-md-4" style="padding-right: 1%; padding-left: 1%;" appearance="outline" *ngIf="formCreationDocument.value.typeDocument?.idParam == 5">
+                                                    <mat-label> Categories </mat-label>
+                                                    
+                                                    <mat-select formControlName="sousCategorie">
+                                                        <ng-container *ngFor="let type of categories">
+                                                            <mat-option [value]="type">{{type}}</mat-option>
+                                                          </ng-container>
+                                                    </mat-select>
+                                                </mat-form-field>
+            
+                                                <mat-form-field [class]="formCreationDocument.value.typeDocument?.idParam == 5 ? 'col-md-4':'col-md-6'" style="padding-left: 1%;" appearance="outline">
+                                                    <mat-label> Description document </mat-label>
+                                                        <input type="text" matInput placeholder="" pattern="[0-9]{2}[a-zA-Z]{2}[0-9]{5}" formControlName="description" *ngIf="formCreationDocument.value.typeDocument?.idParam == 6">
+                                                        <mat-error *ngIf="formCreationDocument.controls.description.errors && formCreationDocument.value.typeDocument?.idParam == 6"
+                                                        class="invalid-feedback">
+                                                            <div *ngIf="formCreationDocument.controls.description.errors.pattern"> Le N°Passport est incorrect </div>
+                                                        </mat-error>
+        
+                                                        <input type="text" matInput placeholder="" pattern="[0-9a-zA-Z]{1,15}" formControlName="description" *ngIf="formCreationDocument.value.typeDocument?.idParam == 5">
+                                                        <mat-error *ngIf="formCreationDocument.controls.description.errors && formCreationDocument.value.typeDocument?.idParam == 5"
+                                                        class="invalid-feedback">
+                                                            <div *ngIf="formCreationDocument.controls.description.errors.pattern"> Le N°Permis est incorrect </div>
+                                                        </mat-error>
+        
+                                                        <input type="text" matInput placeholder="" formControlName="description" *ngIf="formCreationDocument.value.typeDocument?.idParam != 5 && formCreationDocument.value.typeDocument?.idParam != 6">
+                                                </mat-form-field>
+            
+                                                <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                                    <mat-label>Date délivrance</mat-label>
+                                                    <input matInput [matDatepicker]="pickerDateDelivrance" formControlName="dateDelivrance" (dateChange)="debutDateChange($event.value)">
+                                                    <mat-datepicker-toggle matSuffix [for]="pickerDateDelivrance"></mat-datepicker-toggle>
+                                                    <mat-datepicker #pickerDateDelivrance></mat-datepicker>
+                                                </mat-form-field>
+                    
+                                                <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+                                                    <mat-label>Date expiration</mat-label>
+                                                    <input matInput [matDatepicker]="pickerDateExpiration" formControlName="dateExpiration">
+                                                    <mat-datepicker-toggle matSuffix [for]="pickerDateExpiration"></mat-datepicker-toggle>
+                                                    <mat-datepicker #pickerDateExpiration></mat-datepicker>
+                                                </mat-form-field>
+    
+                                                <div class="col-md-9">
+                                                    <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                                        <mat-label> Wilaya </mat-label>
+                                                        
+                                                        <mat-select formControlName="wilaya" (selectionChange)="getCommuneByWilaya($event.value)">
+                                                            <ng-container *ngFor="let wilaya of wilayas">
+                                                                <mat-option [value]="wilaya">{{wilaya.description}}</mat-option>
+                                                              </ng-container>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                        
+                                                    <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+                                                        <mat-label> Commune </mat-label>
+                                                        
+                                                        <mat-select formControlName="commune" (selectionChange)="getCodeByCommune($event.value)">
+                                                            <ng-container *ngFor="let commune of communes">
+                                                                <mat-option [value]="commune">{{commune.description}}</mat-option>
+                                                              </ng-container>
+                                                        </mat-select>
+                                                        <mat-hint>Veuillez saisir la wilaya avant !</mat-hint>
+                                                    </mat-form-field>
+                                                </div>
+    
+                                                <div class="col-md-3 add-col">
+                                                    <button *ngIf="formCreationDocument.value.typeDocument != '' && formCreationDocument.value.description != ''" class="btn btn-secondary" (click)="ajouterDocument(formDirective)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter un document" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter le document
+                                                    </button>
+                                                    <button *ngIf="formCreationDocument.value.typeDocument == '' || formCreationDocument.value.description == ''" class="btn btn-disable" disabled (click)="ajouterDocument(formDirective)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter un document" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter le document
+                                                    </button>
+                                                </div>
+                                            </div>
+    
+                                            <div class="col-md-12" *ngIf="documentPersonne.data.length != 0">
+                                                <table mat-table [dataSource]="documentPersonne" class="mat-elevation-z8
+                                                    document-table">
+                                            
+                                                <ng-container matColumnDef="header-document">
+                                                    <th mat-header-cell *matHeaderCellDef attr.colspan={{lengthColumnsDocument}}>
+                                                    <div class="header-tab">
+                                                        <span>Liste des documents </span>
+                                                    </div>
+                                            
+                                                    </th>
+                                                </ng-container>
+                                            
+                                                <!-- typeDocument Column -->
+                                                <ng-container matColumnDef="typeDocument">
+                                                    <th mat-header-cell *matHeaderCellDef> Type document </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.typeDocument.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- description Column -->
+                                                <ng-container matColumnDef="description">
+                                                    <th mat-header-cell *matHeaderCellDef> Description </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- dateDelivrance Column -->
+                                                <ng-container matColumnDef="dateDelivrance">
+                                                    <th mat-header-cell *matHeaderCellDef> Date delivrance </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.dateDelivrance | date:"dd/MM/yyyy"}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- dateExpiration Column -->
+                                                <ng-container matColumnDef="dateExpiration">
+                                                    <th mat-header-cell *matHeaderCellDef> Date expiration </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.dateExpiration | date:"dd/MM/yyyy"}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- wilaya Column -->
+                                                <ng-container matColumnDef="wilaya">
+                                                    <th mat-header-cell *matHeaderCellDef> Wilaya </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.wilaya.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- commune Column -->
+                                                <ng-container matColumnDef="commune">
+                                                    <th mat-header-cell *matHeaderCellDef> Commune </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.commune.description}} </td>
+                                                </ng-container>
+    
+                                                <!-- Action Column -->
+                                                <ng-container matColumnDef="action">
+                                                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                                                    <td mat-cell *matCellDef="let element;index as i;">
+                                                    <mat-icon aria-hidden="false" aria-label="delete document" class="material-symbols-outlined" style="margin-left: 4px;" (click)="delete('document', i)"
+                                                        matTooltip="Supprimer document" matTooltipPosition="right">
+                                                        delete</mat-icon>
+                                                    </td>
+                                                </ng-container>
+                                            
+                                                <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+                                                <tr mat-header-row *matHeaderRowDef="['header-document']" class="example-first-header-row">
+                                                </tr>
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumnsDocument" class="example-second-header-row">
+                                                </tr>
+                                            
+                                            
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumnsDocument;"></tr>
+                                            
+                                                </table>
+                                                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" aria-label="Select page  of users"></mat-paginator>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </mat-expansion-panel>
+                            </mat-accordion> 
+    
+                            <div class="row-button">
+                                <button class="btn btn-cancel" matStepperPrevious>Retour</button>
+                                <button matStepperNext class="btn btn-action">Suivant</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-step>
+            <mat-step>
+                <div class="">
+                    <ng-template matStepLabel>Données bancaires et relations</ng-template>
+                    <div class="container">
+                        <div style="padding: 1%;">
+                            <mat-accordion class="example-headers-align" multi>
+                                <mat-expansion-panel [expanded]="true" disabled>
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            RIB client
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields">
+                                        <form #formDirectiveRib="ngForm" [formGroup]="formCreationRib" class="login-form" *ngIf="formCreationRib">
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <mat-form-field class="col-md-6" style="padding-right: 1%;" appearance="outline">
+                                                        <mat-label>N° RIB</mat-label>
+                                                        <input type="text" matInput placeholder="" pattern="[0-9]{20}" formControlName="description">
+                                                        <mat-error *ngIf="formCreationRib.controls.description.errors"
+                                                            class="invalid-feedback">
+                                                            <div *ngIf="formCreationRib.controls.description.errors.pattern"> Format RIB invalide </div>
+                                                        </mat-error>
+                                                    </mat-form-field>
+                
+                                                    <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+                                                        <mat-label>N° Swift</mat-label>
+                                                        <input type="text" matInput placeholder="" pattern="[0-9]{8,11}" formControlName="swift">
+                                                        <mat-error *ngIf="formCreationRib.controls.swift.errors"
+                                                            class="invalid-feedback">
+                                                            <div *ngIf="formCreationRib.controls.swift.errors.pattern"> Format swift invalide </div>
+                                                        </mat-error>
+                                                    </mat-form-field>
+                                                </div>
+        
+                                                <div class="col-md-3 add-col">
+                                                    <button *ngIf="formCreationRib.value.description != '' && formCreationRib.controls.description.valid" class="btn btn-secondary" (click)="ajouterRib(formDirectiveRib)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter un compte RIB" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter le compte RIB
+                                                    </button>
+                                                    <button *ngIf="formCreationRib.value.description == '' || !formCreationRib.controls.description.valid" class="btn btn-disable" disabled (click)="ajouterRib(formDirectiveRib)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter un compte RIB" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter le compte RIB
+                                                    </button>
+                                                </div>
+                                            </div>
+        
+                                            <div class="col-md-12" *ngIf="ribPersonne.data.length != 0">
+                                                <table mat-table [dataSource]="ribPersonne" class="mat-elevation-z8 rib-table">
+                                            
+                                                <ng-container matColumnDef="header-rib">
+                                                    <th mat-header-cell *matHeaderCellDef attr.colspan={{lengthColumnsRIB}}>
+                                                    <div class="header-tab">
+                                                        <span>Liste des RIB </span>
+                                                    </div>
+                                            
+                                                    </th>
+                                                </ng-container>
+                                            
+                                                <!-- description Column -->
+                                                <ng-container matColumnDef="description">
+                                                    <th mat-header-cell *matHeaderCellDef> N° RIB </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- swift Column -->
+                                                <ng-container matColumnDef="swift">
+                                                    <th mat-header-cell *matHeaderCellDef> N° Swift </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.swift}} </td>
+                                                </ng-container>
+        
+                                                <!-- Action Column -->
+                                                <ng-container matColumnDef="action">
+                                                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                                                    <td mat-cell *matCellDef="let element;index as i;">
+                                                    <mat-icon aria-hidden="false" aria-label="delete rib" class="material-symbols-outlined" style="margin-left: 4px;" (click)="delete('rib', i)"
+                                                        matTooltip="Supprimer RIB" matTooltipPosition="right">
+                                                        delete</mat-icon>
+                                                    </td>
+                                                </ng-container>
+                                            
+                                                <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+                                                <tr mat-header-row *matHeaderRowDef="['header-rib']" class="example-first-header-row">
+                                                </tr>
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumnsRIB" class="example-second-header-row">
+                                                </tr>
+                                            
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumnsRIB;"></tr>
+                                            
+                                                </table>
+                                                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" aria-label="Select page  of users"></mat-paginator>
+                                            </div>
+        
+                                        </form>
+                                    </div>
+                                </mat-expansion-panel>
+        
+                                <mat-expansion-panel [expanded]="true" disabled *ngIf="personne">
+                                    <mat-expansion-panel-header>
+                                        <mat-panel-title>
+                                            Liens de parenté
+                                        </mat-panel-title>
+                                    </mat-expansion-panel-header>
+                                    <div class="row row-fields">
+                                        <form #formDirectiveRelation="ngForm" [formGroup]="formCreationRelation" class="login-form" *ngIf="formCreationRelation">
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <mat-form-field class="col-md-6" style="padding-right: 1%;" class="example-full-width" appearance="outline">
+                                                        <mat-label>Assignee</mat-label>
+                                                        <input type="text" matInput [formControl]="myControl" [matAutocomplete]="auto" *ngIf="myControl">
+                                                        <mat-autocomplete #auto="matAutocomplete">
+                                                          <mat-option *ngFor="let option of filteredOptions | async" [value]="option.idClient">
+                                                            {{option.nom != ' null'? option.nom+' '+option.prenom1: option.raisonSocial}}
+                                                          </mat-option>
+                                                        </mat-autocomplete>
+                                                    </mat-form-field>
+                
+                                                    <mat-form-field class="col-md-6" style="padding-left: 1%;" appearance="outline">
+                                                        <mat-label> Type relation </mat-label>
+                                                        
+                                                        <mat-select formControlName="typeRelation">
+                                                            <ng-container *ngFor="let type of types_relation">
+                                                                <mat-option [value]="type">{{type.description}}</mat-option>
+                                                              </ng-container>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                                
+                                                <div class="col-md-3 add-col">
+                                                    <button *ngIf="formCreationRelation.value.typeRelation != '' && myControl.value != ''" class="btn btn-secondary" (click)="ajouterRelation(formDirectiveRelation)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter un lien de parenté" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter le lien de parenté
+                                                    </button>
+                                                    <button *ngIf="formCreationRelation.value.typeRelation == '' || myControl.value == ''" class="btn btn-disable" disabled (click)="ajouterRelation(formDirectiveRelation)">
+                                                        <mat-icon aria-hidden="false" aria-label="Ajouter un lien de parenté" style="margin-right: 1rem;" class="material-symbols-outlined">add_circle</mat-icon>
+                                                        Ajouter le lien de parenté
+                                                    </button>
+                                                </div>
+                                            </div>
+        
+                                            <div class="col-md-12" *ngIf="relationPersonne.data.length != 0">
+                                                <table mat-table [dataSource]="relationPersonne" class="mat-elevation-z8 rib-table">
+                                            
+                                                <ng-container matColumnDef="header-rib">
+                                                    <th mat-header-cell *matHeaderCellDef attr.colspan={{lengthColumnsRelation}}>
+                                                    <div class="header-tab">
+                                                        <span>Liste des liens de parenté </span>
+                                                    </div>
+                                            
+                                                    </th>
+                                                </ng-container>
+                                            
+                                                <!-- DNI Column -->
+                                                <ng-container matColumnDef="DNI">
+                                                    <th mat-header-cell *matHeaderCellDef> N° Client </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.idClient}} </td>
+                                                </ng-container>
+                                            
+                                                <!-- typeRelation Column -->
+                                                <ng-container matColumnDef="typeRelation">
+                                                    <th mat-header-cell *matHeaderCellDef> Type relation </th>
+                                                    <td mat-cell *matCellDef="let element"> {{element.typeRelation.description}} </td>
+                                                </ng-container>
+        
+                                                <!-- Action Column -->
+                                                <ng-container matColumnDef="action">
+                                                    <th mat-header-cell *matHeaderCellDef> Action </th>
+                                                    <td mat-cell *matCellDef="let element;index as i;">
+                                                    <mat-icon aria-hidden="false" aria-label="delete relation" class="material-symbols-outlined" style="margin-left: 4px;" (click)="delete('relation', i)"
+                                                        matTooltip="Supprimer lien de parenté" matTooltipPosition="right">
+                                                        delete</mat-icon>
+                                                    </td>
+                                                </ng-container>
+                                            
+                                                <!-- The table will render two header rows, one data row per data object, and two footer rows. -->
+                                                <tr mat-header-row *matHeaderRowDef="['header-rib']" class="example-first-header-row">
+                                                </tr>
+                                                <tr mat-header-row *matHeaderRowDef="displayedColumnsRelation" class="example-second-header-row">
+                                                </tr>
+                                            
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumnsRelation;"></tr>
+                                            
+                                                </table>
+                                                <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" aria-label="Select page  of users"></mat-paginator>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </mat-expansion-panel>
+                            </mat-accordion>
+
+                            <div class="row-button">
+                                <button class="btn btn-cancel" matStepperPrevious>Retour</button>
+                                <button matStepperNext class="btn btn-action">Suivant</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-step>
+            <mat-step>
+                <div class="">
+                    <ng-template matStepLabel>Résumé</ng-template>
+                    <div class="container" *ngIf="personne">    
+                        <div class="row resume">
+                            <div class="col-md-3 title-resume">Nom :</div>
+                            <div class="col-md-3">{{ formCreationPersonnePhysique?.value.nom }}</div>
+
+                            <div class="col-md-3 title-resume">Prénom :</div>
+                            <div class="col-md-3">{{formCreationPersonnePhysique?.value.prenom1}}</div>
+                        </div>
+                        <div class="row resume even">
+                            <div class="col-md-3 title-resume">Date de naissance :</div>
+                            <div class="col-md-3">{{formCreationPersonnePhysique?.value.dateNaissance | date:"dd/MM/yyyy"}}</div>
+
+                            <div class="col-md-3 title-resume">Genre :</div>
+                            <div class="col-md-3">{{ formCreationPersonnePhysique?.value.sexe == 16 ? 'Homme': 'Femme'}}</div>
+                        </div>
+                        <div class="row resume">
+                            <div class="col-md-3 title-resume">Civilité :</div>
+                            <div class="col-md-3">{{ formCreationPersonnePhysique?.value.titre == 28 ? 'Monsieur': 'Madame' }}</div>
+
+                            <div class="col-md-3 title-resume">RIB :</div>
+                            <div class="col-md-3"> {{ ribPersonne.data.length != 0 ? ribPersonne.data[0].description:'' }} </div>
+
+                            <!-- <div class="col-md-3 title-resume">VIP :</div>
+                            <div class="col-md-3">{{formCreationPersonnePhysique?.value.vip ? 'Oui':'Non'}}</div> -->
+                        </div>
+                        <div class="row resume even">
+                            <div class="col-md-3 title-resume">Adresse :</div>
+                            <div class="col-md-3">{{adresses.data.length != 0 ? adresses.data[0].description:''}}</div>
+
+                            <div class="col-md-3 title-resume">Nationalité :</div>
+                            <div class="col-md-3">
+                                <ng-container *ngFor="let nat of formCreationPersonnePhysique?.value.nationalite">
+                                    {{ nat.description }}&nbsp;
+                                </ng-container>
+                            </div>
+                        </div>
+                        <div class="row resume">
+                            <div class="col-md-3 title-resume">Contact :</div>
+                            <div class="col-md-3">{{ contacts.data.length != 0 ? contacts.data[0].description:'' }}</div>
+
+                            <div class="col-md-3 title-resume">Profession :</div>
+                            <div class="col-md-3">{{ professionsPersonne.data.length != 0 ? professionsPersonne.data[0].profession.description:'' }}</div>
+                        </div>
+                        <div class="row resume even">
+                            <div class="col-md-3 title-resume">Secteur d'activité :</div>
+                            <div class="col-md-3">{{ professionsPersonne.data.length != 0 ? professionsPersonne.data[0].secteurActivite.description:'' }}</div>
+                        </div>
+
+                    </div>
+                    <div class="container" *ngIf="!personne">    
+                        <div class="row resume">
+                            <div class="col-md-3 title-resume">Raison sociale :</div>
+                            <div class="col-md-3">{{ formCreationPersonneMorale?.value.raisonSocial }}</div>
+
+                            <div class="col-md-3 title-resume">NIF :</div>
+                            <div class="col-md-3">{{formCreationPersonneMorale?.value.nif}}</div>
+                        </div>
+                        <div class="row resume even">
+                            <div class="col-md-3 title-resume">Date d'ouverture :</div>
+                            <div class="col-md-3">{{formCreationPersonneMorale?.value.dateOuverture | date:"dd/MM/yyyy"}}</div>
+
+                            <div class="col-md-3 title-resume">Capitale sociale :</div>
+                            <div class="col-md-3">{{ formCreationPersonneMorale?.value.capitaleSocial}}</div>
+                        </div>
+                        <div class="row resume">
+                            <div class="col-md-3 title-resume">Chiffre d'affaire :</div>
+                            <div class="col-md-3">{{ formCreationPersonneMorale?.value.chiffreAffaire}}</div>
+
+                            <div class="col-md-3 title-resume">Statut juridique :</div>
+                            <div class="col-md-3">{{formCreationPersonneMorale?.value.statue}}</div>
+                        </div>
+                        <div class="row resume even">
+                            <div class="col-md-3 title-resume">Adresse :</div>
+                            <div class="col-md-3">{{adresses.data.length != 0 ? adresses.data[0].description:''}}</div>
+
+                            <div class="col-md-3 title-resume">RIB :</div>
+                            <div class="col-md-3"> {{ ribPersonne.data.length != 0 ? ribPersonne.data[0].description:'' }} </div>
+
+                            <!-- <div class="col-md-3 title-resume">VIP :</div>
+                            <div class="col-md-3">{{formCreationPersonneMorale?.value.vip ? 'Oui':'Non'}}</div> -->
+                        </div>
+                        <div class="row resume">
+                            <div class="col-md-3 title-resume">Contact :</div>
+                            <div class="col-md-3">{{ contacts.data.length != 0 ? contacts.data[0].description:'' }}</div>
+
+                            <div class="col-md-3 title-resume">Secteur d'activité :</div>
+                            <div class="col-md-3">{{ formCreationProfession?.value.secteurActivite.description }}</div>
+                        </div>
+
+                        
+                    </div>
+                    <div class="row-button">
+                        <button class="btn btn-cancel" matStepperPrevious>Retour</button>
+                        <button class="btn btn-action" (click)="sauvegarderPersonne()">Valider</button>
+                    </div>
+                </div>
+            </mat-step>
+        </mat-stepper>
+    </mat-dialog-content>
+</div>
